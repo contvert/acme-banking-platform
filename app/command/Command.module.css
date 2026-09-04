@@ -1,0 +1,92 @@
+.main {
+  flex: 1;
+  display: grid;
+  place-items: center;
+  padding: var(--ds-space-400) var(--ds-space-200) 12vh;
+}
+@media (min-width: 768px) {
+  .main { padding: var(--ds-space-400) var(--layout-dashboard-horizontal-padding, 32px) 15vh; }
+}
+
+.inner {
+  width: 100%;
+  max-width: var(--command-message-list-width, 620px);
+  text-align: center;
+}
+
+.heading {
+  font-family: var(--ds-font-family-display);
+  font-size: clamp(22px, 6vw, 30px);
+  font-weight: 380;
+  letter-spacing: -0.015em;
+  color: var(--ds-text-title);
+  margin: 0 0 var(--ds-space-400);
+}
+
+.composer {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-gap-inline-md);
+  padding: var(--ds-space-150) var(--ds-space-200);
+  border: 1px solid var(--ds-border-input);
+  border-radius: var(--command-composer-surface-border-radius, 20px);
+  background: var(--ds-background-surface-raised);
+  color: var(--ds-icon-secondary);
+  transition: border-color var(--ds-motion-duration-100, 0.1s) linear;
+}
+.composer:focus-within { border-color: var(--ds-border-input-focused-underline); }
+
+.input {
+  flex: 1;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 16px;
+  color: var(--ds-text-default);
+  outline: none;
+}
+.input::placeholder { color: var(--ds-text-placeholder); }
+
+.send {
+  width: 30px; height: 30px;
+  display: grid; place-items: center;
+  border: 0; border-radius: 50%;
+  background: var(--ds-background-primary);
+  color: var(--ds-text-on-primary);
+  cursor: pointer;
+  transition: background var(--ds-motion-duration-100, 0.1s) linear;
+}
+.send:hover:not(:disabled) { background: var(--ds-background-primary-hovered); }
+.send:disabled { background: var(--ds-background-input-checked-disabled); cursor: default; }
+
+.promptsLabel {
+  margin: var(--ds-space-400) 0 var(--ds-space-150);
+  font-size: 15px;
+  color: var(--ds-text-tertiary);
+}
+
+.prompts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ds-space-gap-inline-md);
+  justify-content: center;
+}
+
+.prompt {
+  border: 1px solid var(--ds-border-default);
+  background: var(--ds-background-surface-raised);
+  color: var(--ds-text-default);
+  border-radius: var(--ds-border-radius-full);
+  padding: var(--ds-space-100) var(--ds-space-200);
+  font-size: 15px;
+  cursor: pointer;
+  transition: background var(--ds-motion-duration-100, 0.1s) linear;
+}
+.prompt:hover { background: var(--ds-background-default-hovered); }
+
+@media (pointer: coarse) {
+  .composer { padding: var(--ds-space-100) var(--ds-space-150); }
+  .input { min-height: 44px; }
+  .send { width: 44px; height: 44px; }
+  .prompt { min-height: 44px; }
+}

@@ -1,0 +1,48 @@
+@import './tokens.css';
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  /* min-height, not height: `height: 100%` clamps the body to the viewport and
+     any taller page then overflows it instead of scrolling. */
+  min-height: 100%;
+}
+
+/* Wide content scrolls inside its own container; the page itself never pans.
+   `clip` rather than `hidden`, and on body only: `overflow-x: hidden` forces
+   `overflow-y` to `auto`, which turns html and body into nested scroll
+   containers and stops the viewport from scrolling at all. `clip` does not
+   create a scroll container, so vertical scrolling is untouched. */
+body {
+  overflow-x: clip;
+  overscroll-behavior-y: none;
+  /* Arcadia is licensed; --font-substitute (Inter) stands in. */
+  font-family: var(--font-substitute), var(--ds-font-family-text);
+  font-size: 16px;
+  font-weight: 360;
+  line-height: 1.45;
+  color: var(--ds-text-default);
+  background: var(--ds-background-canvas);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-variant-numeric: tabular-nums;
+}
+
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; }
+
+::selection { background: var(--ds-background-emphasized); }
+
+:focus-visible {
+  outline: 2px solid var(--ds-border-focus-ring);
+  outline-offset: 2px;
+  border-radius: var(--ds-border-radius-small);
+}
+
+/* thin scrollbars, matching the original's restraint */
+* { scrollbar-width: thin; scrollbar-color: var(--ds-neutral-magic-400-alpha-4) transparent; }
+*::-webkit-scrollbar { width: 8px; height: 8px; }
+*::-webkit-scrollbar-thumb { background: var(--ds-neutral-magic-400-alpha-4); border-radius: 9999px; }
+*::-webkit-scrollbar-track { background: transparent; }

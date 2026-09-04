@@ -1,0 +1,162 @@
+.callout {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--ds-space-250);
+  background: var(--ds-background-surface-raised);
+  border: 1px solid var(--ds-border-default);
+  border-radius: var(--ds-border-radius-large);
+  padding: var(--ds-space-250);
+  margin-bottom: var(--ds-space-300);
+  overflow: hidden;
+}
+@media (min-width: 900px) {
+  .callout { grid-template-columns: 1fr 400px; align-items: center; }
+}
+
+.calloutBody { min-width: 0; }
+
+.badge {
+  display: inline-block;
+  font-size: 12px;
+  line-height: 1;
+  padding: 4px 8px;
+  border-radius: var(--ds-border-radius-full);
+  background: var(--ds-background-emphasized);
+  color: var(--ds-text-focused);
+  margin-bottom: var(--ds-space-150);
+}
+
+.calloutHead { display: flex; align-items: center; gap: var(--ds-space-200); }
+.calloutTitle {
+  font-family: var(--ds-font-family-display);
+  font-size: 20px;
+  font-weight: 380;
+  color: var(--ds-text-title);
+  margin: 0;
+}
+
+.switch {
+  flex: 0 0 auto;
+  width: 40px; height: 22px;
+  border: 0; border-radius: 9999px;
+  background: var(--ds-background-secondary-high-contrast);
+  cursor: pointer;
+  padding: 2px;
+  display: flex;
+  transition: background var(--ds-motion-duration-150, 0.15s) linear;
+}
+.switchOn { background: var(--ds-background-input-checked); }
+.knob {
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 2px var(--ds-neutral-magic-600-alpha-3);
+  transition: transform var(--ds-motion-duration-150, 0.15s) cubic-bezier(0.32, 0.72, 0, 1);
+}
+.switchOn .knob { transform: translateX(18px); }
+@media (pointer: coarse) {
+  /* Keep the 28px track, but give the control a 44px hit area around it. */
+  .switch {
+    width: 48px;
+    height: 28px;
+    min-height: 44px;
+    background-clip: content-box;
+    border-block: 8px solid transparent;
+  }
+  .switchOn .knob { transform: translateX(20px); }
+}
+
+.calloutText {
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--ds-text-secondary);
+  margin: var(--ds-space-100) 0 0;
+  max-width: 62ch;
+}
+.link { color: var(--ds-text-link); }
+.link:hover { color: var(--ds-text-link-hovered); }
+
+/* the muted still of the receipt prompt */
+.calloutArt {
+  display: none;
+  border-radius: var(--ds-border-radius-medium);
+  background: var(--ds-background-canvas);
+  padding: var(--ds-space-200);
+}
+@media (min-width: 900px) { .calloutArt { display: block; } }
+
+.artPanel {
+  background: var(--ds-background-surface-raised);
+  border: 1px solid var(--ds-border-default);
+  border-radius: var(--ds-border-radius-medium);
+  padding: var(--ds-space-150);
+}
+.artRow { display: flex; align-items: center; gap: var(--ds-space-100); margin-bottom: var(--ds-space-150); }
+.artLabel { font-size: 12px; color: var(--ds-text-tertiary); }
+.artFlag {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 11px;
+  padding: 2px 6px;
+  border-radius: var(--ds-border-radius-full);
+  background: var(--ds-background-warning);
+  color: var(--ds-text-warning);
+}
+.artDrop {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  border: 1px dashed var(--ds-border-emphasized);
+  border-radius: var(--ds-border-radius-medium);
+  padding: var(--ds-space-200);
+  font-size: 12px;
+  color: var(--ds-text-tertiary);
+  text-align: center;
+}
+
+.dismiss {
+  position: absolute;
+  top: var(--ds-space-150);
+  right: var(--ds-space-150);
+  width: 28px; height: 28px;
+  display: grid; place-items: center;
+  border: 0; background: none;
+  border-radius: var(--ds-border-radius-medium);
+  color: var(--ds-icon-secondary);
+  cursor: pointer;
+}
+.dismiss:hover { background: var(--ds-background-default-hovered); }
+@media (pointer: coarse) { .dismiss { width: 44px; height: 44px; } }
+
+.filterBar {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-200);
+  margin-bottom: var(--ds-space-200);
+  font-size: 15px;
+}
+
+/* --- table cells --- */
+.holder { display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; }
+.you {
+  font-size: 12px; line-height: 1;
+  padding: 3px 6px;
+  border-radius: var(--ds-border-radius-full);
+  background: var(--ds-background-secondary);
+  color: var(--ds-text-secondary);
+}
+
+.cardCell { display: inline-flex; align-items: center; gap: 10px; min-width: 0; }
+.cardNo { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.cardLabel { color: var(--ds-text-secondary); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.budgets { display: inline-flex; gap: 4px; }
+.budgetChip {
+  width: 22px; height: 22px;
+  display: grid; place-items: center;
+  border-radius: 50%;
+  background: var(--ds-red-magic-400-alpha-2);
+  color: var(--ds-red-magic-700);
+}
+.budgetChipAlt {
+  background: var(--ds-blue-magic-400-alpha-2);
+  color: var(--ds-blue-magic-700);
+}

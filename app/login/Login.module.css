@@ -1,0 +1,345 @@
+.screen {
+  --login-background: #ededf3;
+  --login-surface: #fff;
+  --login-input: #eaeffe;
+  --login-text: #1e1e2a;
+  --login-secondary: #535461;
+  --login-border: #dddde5;
+  --login-primary: #5266eb;
+  --login-primary-hover: #465bd1;
+
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow: auto;
+  color: var(--login-text);
+  background: var(--login-background);
+}
+
+.topbar {
+  position: absolute;
+  top: 39px;
+  right: 32px;
+  z-index: 2;
+}
+
+.openAccount {
+  display: inline-flex;
+  min-height: 28px;
+  align-items: center;
+  gap: 7px;
+  padding: 0 1px;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.openAccount:hover {
+  color: var(--login-secondary);
+}
+
+.center {
+  display: flex;
+  min-height: 100%;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+}
+
+.stage {
+  width: min(880px, 100%);
+}
+
+.card {
+  width: 100%;
+  max-width: 470px;
+  margin: 0;
+  overflow: hidden;
+  background: var(--login-surface);
+  border: 1px solid rgba(112, 115, 147, 0.12);
+  border-radius: 12px;
+  box-shadow:
+    0 0 2px rgba(175, 178, 206, 0.48),
+    0 2px 5px rgba(4, 4, 52, 0.09);
+}
+
+.cardBody {
+  padding: 40px 40px 22px;
+}
+
+.title {
+  margin: 0 0 36px;
+  color: var(--login-text);
+  font-family: var(--font-substitute), var(--ds-font-family-display);
+  font-size: 19px;
+  font-weight: 400;
+  line-height: 28px;
+}
+
+.field + .field {
+  margin-top: 16px;
+}
+
+.label {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--login-secondary);
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 20px;
+  transition: color 100ms linear;
+}
+
+.field:focus-within .label {
+  color: var(--login-secondary);
+}
+
+.inputControl,
+.passwordControl {
+  display: flex;
+  height: 40px;
+  align-items: center;
+  overflow: hidden;
+  border: 1px solid var(--login-border);
+  border-radius: 8px;
+  background: #fbfcfd;
+}
+
+.inputControl {
+  padding: 7px 12px;
+}
+
+.passwordInput {
+  flex: 1;
+  min-width: 0;
+  padding: 7px 12px;
+}
+
+.inputControl:focus-within,
+.passwordControl:focus-within {
+  border-color: #a7b6f8;
+  box-shadow: 0 0 0 1px #a7b6f8;
+}
+
+.input {
+  display: block;
+  width: 100%;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  outline: 0;
+  background: var(--login-input);
+  color: #10101a;
+  font: inherit;
+  font-size: 14px;
+  line-height: 24px;
+}
+
+.eye {
+  display: grid;
+  width: 42px;
+  height: 38px;
+  flex: 0 0 42px;
+  place-items: center;
+  border: 0;
+  border-left: 1px solid var(--login-border);
+  background: #fbfcfd;
+  color: #70707d;
+  cursor: pointer;
+}
+
+.eye:hover {
+  color: var(--login-text);
+  background: #f4f5f9;
+}
+
+.forgot {
+  display: block;
+  width: max-content;
+  min-height: 18px;
+  margin: 5px 0 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--login-secondary);
+  font-size: 13px;
+  line-height: 18px;
+  cursor: pointer;
+}
+
+.forgot:hover {
+  color: var(--login-text);
+  text-decoration: underline;
+}
+
+.submit {
+  display: inline-flex;
+  height: 40px;
+  min-width: 104px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 30px;
+  padding: 0 24px;
+  border: 0;
+  border-radius: 9999px;
+  background: var(--login-primary);
+  color: #fff;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 100ms linear;
+}
+
+.submit:hover:not(:disabled) {
+  background: var(--login-primary-hover);
+}
+
+.submit:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.error {
+  margin: -22px 0 16px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: #d032751a;
+  color: #b0175f;
+  font-size: 13px;
+  line-height: 18px;
+}
+
+.footer {
+  padding: 26px 40px 34px;
+  border-top: 1px solid rgba(112, 115, 147, 0.14);
+}
+
+.passkey {
+  display: inline-flex;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 0 31px;
+  border: 0;
+  border-radius: 9999px;
+  background: #f1f1f4;
+  color: var(--login-text);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.passkey:hover {
+  background: #e7e8ee;
+}
+
+.passkeyCopy {
+  margin: 17px 0 0;
+  color: var(--login-secondary);
+  font-size: 13px;
+  line-height: 20px;
+  white-space: nowrap;
+}
+
+.inlineLink {
+  display: inline-flex;
+  min-height: 20px;
+  align-items: center;
+  gap: 5px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--login-secondary);
+  font: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+
+.inlineLink:hover,
+.privacy:hover {
+  color: var(--login-text);
+}
+
+.privacy {
+  display: block;
+  width: max-content;
+  margin-top: 18px;
+  color: var(--login-secondary);
+  font-size: 13px;
+  line-height: 20px;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+@media (max-width: 960px) {
+  .stage {
+    display: flex;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 560px) {
+  .topbar {
+    top: 20px;
+    right: 20px;
+  }
+
+  .center {
+    padding: 72px 16px 24px;
+  }
+
+  .cardBody,
+  .footer {
+    padding-inline: 28px;
+  }
+
+  .passkeyCopy {
+    white-space: normal;
+  }
+}
+
+@media (pointer: coarse) {
+  .openAccount,
+  .forgot,
+  .privacy {
+    min-height: 44px;
+  }
+
+  .openAccount,
+  .forgot,
+  .privacy {
+    display: flex;
+    align-items: center;
+  }
+
+  .openAccount {
+    padding-inline: 8px;
+  }
+
+  .inputControl,
+  .passwordControl {
+    height: 46px;
+  }
+
+  .inputControl,
+  .passwordInput {
+    padding-block: 0;
+  }
+
+  .input,
+  .eye {
+    height: 44px;
+  }
+
+  .submit,
+  .passkey {
+    height: 44px;
+  }
+}

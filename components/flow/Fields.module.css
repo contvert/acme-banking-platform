@@ -1,0 +1,203 @@
+.field { margin-bottom: var(--ds-space-250); }
+.label {
+  display: block;
+  font-size: 13px;
+  color: var(--ds-text-secondary);
+  margin-bottom: var(--ds-space-75);
+}
+
+/* --- amount --- */
+.amountWrap {
+  display: flex; align-items: center; gap: var(--ds-space-100);
+  border: 1px solid var(--ds-border-input);
+  border-radius: var(--ds-border-radius-medium);
+  background: var(--ds-background-input);
+  padding: var(--ds-space-150);
+  transition: border-color var(--ds-motion-duration-100, 0.1s) linear;
+}
+.amountWrap:focus-within { border-color: var(--ds-border-input-focused-underline); }
+.currency { font-size: 16px; color: var(--ds-text-tertiary); }
+.amount {
+  flex: 1; border: 0; background: none; outline: none;
+  font: inherit; font-size: 16px;
+  color: var(--ds-text-default);
+  font-variant-numeric: tabular-nums;
+}
+.amount::placeholder { color: var(--ds-text-placeholder); }
+@media (pointer: coarse) {
+  .amount { min-height: 44px; }
+  .amountWrap { padding: var(--ds-space-75) var(--ds-space-150); }
+}
+
+/* --- account combobox ---
+   A native select carries the behaviour; a painted face shows the balance line
+   the original displays, which a bare <option> cannot render. */
+.selectWrap {
+  position: relative;
+  border: 1px solid var(--ds-border-input);
+  border-radius: var(--ds-border-radius-medium);
+  background: var(--ds-background-input);
+  transition: border-color var(--ds-motion-duration-100, 0.1s) linear;
+}
+.selectWrap:focus-within { border-color: var(--ds-border-input-focused-underline); }
+.select {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  opacity: 0; cursor: pointer;
+  font: inherit;
+}
+.selectFace {
+  display: block;
+  padding: var(--ds-space-150);
+  min-height: 52px;
+  pointer-events: none;
+}
+.selectName { display: block; font-size: 16px; color: var(--ds-text-emphasized); }
+.selectMeta { display: block; font-size: 13px; color: var(--ds-text-tertiary); margin-top: 2px; }
+.placeholder { font-size: 16px; color: var(--ds-text-placeholder); }
+.chevron {
+  position: absolute; right: var(--ds-space-150); top: 50%;
+  transform: translateY(-50%);
+  color: var(--ds-icon-secondary);
+  pointer-events: none;
+}
+
+/* --- toggle --- */
+.toggleRow {
+  display: flex; align-items: center; gap: var(--ds-space-gap-inline-md);
+  border: 0; background: none; padding: 0; cursor: pointer;
+  margin-bottom: var(--ds-space-150);
+  min-height: 44px;
+}
+.track {
+  width: 36px; height: 20px; flex: 0 0 36px;
+  border-radius: 9999px;
+  background: var(--ds-neutral-magic-400-alpha-4);
+  position: relative;
+  transition: background var(--ds-motion-duration-150, 0.15s) linear;
+}
+.trackOn { background: var(--ds-background-primary); }
+.knob {
+  position: absolute; top: 2px; left: 2px;
+  width: 16px; height: 16px; border-radius: 50%;
+  background: #fff;
+  transition: transform var(--ds-motion-duration-150, 0.15s) cubic-bezier(0.32, 0.72, 0, 1);
+}
+.trackOn .knob { transform: translateX(16px); }
+.toggleLabel { font-size: 16px; color: var(--ds-text-default); }
+
+/* --- drop zone --- */
+.drop {
+  display: flex; align-items: center; justify-content: center;
+  gap: var(--ds-space-gap-inline-md);
+  border: 1px solid var(--ds-border-default);
+  border-radius: var(--ds-border-radius-medium);
+  background: var(--ds-background-input);
+  padding: var(--ds-space-400) var(--ds-space-200);
+  text-align: left;
+  color: var(--ds-icon-secondary);
+  cursor: pointer;
+  transition: background var(--ds-motion-duration-100, 0.1s) linear;
+}
+.drop:hover { background: var(--ds-background-default-hovered); }
+.fileInput { position: absolute; width: 1px; height: 1px; opacity: 0; }
+.dropText { display: block; }
+.dropTitle { display: block; font-size: 16px; color: var(--ds-text-default); }
+.dropHint { display: block; font-size: 13px; color: var(--ds-text-tertiary); margin-top: 2px; }
+
+/* --- radio cards --- */
+.radioRow { display: flex; gap: var(--ds-space-150); flex-wrap: wrap; }
+.radioCard {
+  flex: 1 1 140px;
+  display: inline-flex; align-items: center; gap: var(--ds-space-gap-inline-md);
+  border: 1px solid var(--ds-border-input);
+  border-radius: var(--ds-border-radius-medium);
+  background: var(--ds-background-input);
+  padding: var(--ds-space-150);
+  font-size: 16px;
+  cursor: pointer;
+  min-height: 48px;
+  transition: border-color var(--ds-motion-duration-100, 0.1s) linear;
+}
+.radioCardOn { border-color: var(--ds-background-primary); }
+.radioInput { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.radioDot {
+  width: 16px; height: 16px; flex: 0 0 16px;
+  border-radius: 50%;
+  border: 1px solid var(--ds-border-input-emphasized);
+  background: var(--ds-background-default);
+  position: relative;
+}
+.radioCardOn .radioDot { border-color: var(--ds-background-primary); border-width: 5px; }
+
+/* --- shared row/card chrome for the flow pages --- */
+.card {
+  border: 1px solid var(--ds-border-default);
+  border-radius: var(--ds-border-radius-large);
+  background: var(--ds-background-surface-raised);
+  padding: var(--ds-space-250);
+}
+.rowCard {
+  display: flex; align-items: center; gap: var(--ds-space-gap-inline-lg);
+  width: 100%; text-align: left;
+  border: 1px solid var(--ds-border-default);
+  border-radius: var(--ds-border-radius-large);
+  background: var(--ds-background-surface-raised);
+  padding: var(--ds-space-200);
+  cursor: pointer;
+  color: var(--ds-icon-secondary);
+  transition: background var(--ds-motion-duration-100, 0.1s) linear;
+}
+.rowCard:hover { background: var(--ds-background-default-hovered); }
+.rowIcon {
+  width: 32px; height: 32px; flex: 0 0 32px;
+  display: grid; place-items: center;
+  border-radius: 50%;
+  background: var(--ds-background-secondary);
+  color: var(--ds-icon-default);
+}
+.rowBody { flex: 1; min-width: 0; }
+.rowTitle {
+  display: flex; align-items: center; gap: var(--ds-space-gap-inline-sm);
+  font-size: 18px; color: var(--ds-text-emphasized);
+}
+.rowHint { display: block; font-size: 15px; color: var(--ds-text-secondary); margin-top: 2px; }
+.pill {
+  font-size: 12px; line-height: 1;
+  padding: 3px 7px;
+  border-radius: var(--ds-border-radius-small);
+  background: var(--ds-background-secondary);
+  color: var(--ds-text-secondary);
+}
+.stack { display: grid; gap: var(--ds-space-150); }
+.actions { display: flex; gap: var(--ds-space-100); margin-top: var(--ds-space-300); }
+.divider {
+  display: flex; align-items: center; gap: var(--ds-space-200);
+  color: var(--ds-text-tertiary); font-size: 13px;
+  margin: var(--ds-space-300) 0;
+}
+.divider::before, .divider::after {
+  content: ''; flex: 1; height: 1px; background: var(--ds-border-default);
+}
+
+/* A plain, visible form control.
+   Distinct from `.select`, which is the transparent native <select> that sits
+   on top of `.selectFace` inside AccountSelect — do not use that one directly. */
+.control {
+  width: 100%;
+  min-height: 40px;
+  padding: var(--ds-space-100) var(--ds-space-150);
+  border: 1px solid var(--ds-border-input);
+  border-radius: var(--ds-border-radius-medium);
+  background: var(--ds-background-input);
+  color: var(--ds-text-default);
+  font: inherit;
+  font-size: 16px;
+}
+.control::placeholder { color: var(--ds-text-placeholder); }
+.control:focus {
+  outline: none;
+  border-color: var(--ds-border-input-focused-underline);
+  background: var(--ds-background-input-focused);
+}
+@media (pointer: coarse) { .control { min-height: 44px; } }

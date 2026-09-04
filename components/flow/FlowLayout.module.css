@@ -1,0 +1,116 @@
+.root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--ds-background-default);
+}
+
+/* Same banner as the app shell, repeated here because flows have no top bar. */
+.banner {
+  display: flex; align-items: center; justify-content: center;
+  gap: var(--ds-space-gap-inline-md);
+  min-height: 40px; padding: var(--ds-space-75) var(--ds-space-200);
+  font-size: 15px; text-align: center;
+  background: var(--ds-background-inverted); color: var(--ds-text-on-inverted);
+}
+.bannerText { display: none; }
+@media (min-width: 768px) { .bannerText { display: inline; } }
+.bannerCta {
+  background: none; border: 0; padding: 0; cursor: pointer;
+  color: var(--ds-text-on-inverted); text-decoration: underline;
+  text-underline-offset: 2px; font-size: 15px;
+}
+.bannerRight { display: none; align-items: center; gap: var(--ds-space-gap-inline-md); margin-left: auto; }
+@media (min-width: 1024px) {
+  .bannerRight { display: flex; }
+  .banner { justify-content: flex-start; text-align: left; }
+}
+.viewingAs {
+  border: 1px solid var(--ds-border-on-inverted); background: transparent;
+  color: var(--ds-text-on-inverted); border-radius: var(--ds-border-radius-full);
+  padding: 4px var(--ds-space-150); font-size: 15px; cursor: pointer;
+}
+.bannerPrimary {
+  background: var(--ds-background-primary); color: var(--ds-text-on-primary);
+  border-radius: var(--ds-border-radius-full);
+  padding: 5px var(--ds-space-200); font-size: 15px;
+}
+
+.body { flex: 1; display: flex; flex-direction: column; }
+.split { flex: 1; display: flex; flex-direction: column; }
+@media (min-width: 900px) {
+  .split { flex-direction: row; }
+  .split .pane { flex: 1 1 55%; border-right: 1px solid var(--ds-border-default); }
+}
+.pane { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+
+.head {
+  display: flex; align-items: center;
+  padding: var(--ds-space-250) var(--ds-space-300);
+}
+.brand { display: inline-flex; align-items: center; gap: var(--ds-space-gap-inline-md); }
+.mark {
+  width: 30px; height: 30px; display: grid; place-items: center;
+  border-radius: var(--ds-border-radius-small);
+  background: var(--ds-background-inverted); color: var(--ds-text-on-inverted);
+  font-size: 15px;
+}
+.divider { width: 1px; height: 22px; background: var(--ds-border-default); }
+.org { font-size: 16px; color: var(--ds-text-emphasized); }
+
+.close, .closeAside {
+  margin-left: auto;
+  width: 44px; height: 44px;
+  display: grid; place-items: center;
+  border: 0; background: transparent; cursor: pointer;
+  border-radius: var(--ds-border-radius-medium);
+  color: var(--ds-icon-secondary);
+  transition: background var(--ds-motion-duration-100, 0.1s) linear;
+}
+.close:hover, .closeAside:hover { background: var(--ds-background-default-hovered); color: var(--ds-icon-default); }
+.closeAside { position: absolute; top: var(--ds-space-250); right: var(--ds-space-300); }
+
+.content {
+  flex: 1;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  padding: var(--ds-space-300) var(--ds-space-200) var(--ds-space-800);
+}
+.contentWide { max-width: 620px; }
+.contentRail { max-width: 940px; }
+@media (min-width: 900px) {
+  .split .content { margin: 0; padding-left: var(--ds-space-800); max-width: 560px; }
+}
+
+.title {
+  font-family: var(--ds-font-family-display);
+  font-size: clamp(24px, 5vw, 30px);
+  font-weight: 380;
+  letter-spacing: -0.015em;
+  color: var(--ds-text-title);
+  margin: 0 0 var(--ds-space-300);
+}
+
+.footer {
+  border-top: 1px solid var(--ds-border-default);
+  padding: var(--ds-space-200) var(--ds-space-300);
+  display: flex; justify-content: flex-end; gap: var(--ds-space-100);
+}
+
+/* Right-hand preview panel (Create a card). */
+.aside {
+  position: relative;
+  flex: 1 1 45%;
+  background: var(--ds-background-canvas);
+  display: grid;
+  place-items: center;
+  padding: var(--ds-space-600) var(--ds-space-300);
+  min-height: 320px;
+}
+
+@media (pointer: coarse) {
+  .bannerCta { min-height: 44px; padding: 0 var(--ds-space-100); }
+  .brand { min-height: 44px; }
+  .viewingAs, .bannerPrimary { min-height: 44px; }
+}

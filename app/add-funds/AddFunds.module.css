@@ -1,0 +1,128 @@
+.select {
+  width: 100%;
+  min-height: 40px;
+  padding: var(--ds-space-100) var(--ds-space-150);
+  border: 1px solid var(--ds-border-input);
+  border-radius: var(--ds-border-radius-medium);
+  background: var(--ds-background-input);
+  color: var(--ds-text-default);
+  font: inherit;
+  font-size: 16px;
+}
+.select:focus { outline: none; border-color: var(--ds-border-input-focused-underline); }
+@media (pointer: coarse) { .select { min-height: 44px; } }
+
+.accountHead {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--ds-space-200);
+  padding-bottom: var(--ds-space-200);
+  border-bottom: 1px solid var(--ds-border-default);
+  margin-bottom: var(--ds-space-250);
+}
+.accountName { font-size: 18px; color: var(--ds-text-emphasized); }
+.accountMeta { font-size: 15px; color: var(--ds-text-secondary); margin-top: 2px; }
+.primaryTag {
+  margin-left: auto;
+  font-size: 12px;
+  line-height: 1;
+  padding: 4px 8px;
+  border-radius: var(--ds-border-radius-full);
+  background: var(--ds-background-emphasized);
+  color: var(--ds-text-focused);
+  white-space: nowrap;
+}
+
+.copyGrid { display: grid; gap: var(--ds-space-200); }
+@media (min-width: 620px) {
+  .copyGrid { grid-template-columns: 1fr 1fr; }
+  /* An IBAN is long enough to want the whole row. */
+  .copyWide { grid-column: 1 / -1; }
+}
+
+.copyField { min-width: 0; }
+.copyLabel {
+  display: block;
+  font-size: 13px;
+  color: var(--ds-text-secondary);
+  margin-bottom: var(--ds-space-75);
+}
+.copyRow {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-100);
+  border: 1px solid var(--ds-border-input);
+  border-radius: var(--ds-border-radius-medium);
+  background: var(--ds-background-input);
+  padding: var(--ds-space-100) var(--ds-space-150);
+  min-height: 44px;
+}
+.copyValue {
+  flex: 1;
+  min-width: 0;
+  font-size: 16px;
+  font-variant-numeric: tabular-nums;
+  overflow-x: auto;
+  white-space: nowrap;
+  scrollbar-width: none;
+}
+.copyValue::-webkit-scrollbar { display: none; }
+.copyBtn {
+  flex: 0 0 auto;
+  width: 32px; height: 32px;
+  display: grid; place-items: center;
+  border: 0; background: transparent;
+  border-radius: var(--ds-border-radius-small);
+  color: var(--ds-icon-secondary);
+  cursor: pointer;
+}
+.copyBtn:hover { background: var(--ds-background-default-hovered); color: var(--ds-icon-default); }
+@media (pointer: coarse) { .copyBtn { width: 44px; height: 44px; } }
+
+.bankAddress {
+  font-size: 15px;
+  color: var(--ds-text-secondary);
+  margin: var(--ds-space-200) 0 0;
+}
+
+.wireActions {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-200);
+  margin-top: var(--ds-space-300);
+  flex-wrap: wrap;
+}
+.link { color: var(--ds-text-link); }
+.link:hover { color: var(--ds-text-link-hovered); }
+@media (pointer: coarse) { .wireActions .link { min-height: 44px; display: inline-flex; align-items: center; } }
+
+.methods { display: grid; gap: var(--ds-space-150); margin-top: var(--ds-space-250); }
+.method {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-150);
+  padding: var(--ds-space-200);
+  border: 1px solid var(--ds-border-default);
+  border-radius: var(--ds-border-radius-large);
+  background: var(--ds-background-surface-raised);
+}
+.methodIcon {
+  width: 34px; height: 34px; flex: 0 0 34px;
+  display: grid; place-items: center;
+  border-radius: var(--ds-border-radius-medium);
+  background: var(--ds-background-secondary);
+  color: var(--ds-icon-default);
+}
+.methodBody { flex: 1; min-width: 0; }
+.methodName {
+  display: flex; align-items: center; gap: var(--ds-space-100);
+  font-size: 16px; color: var(--ds-text-emphasized);
+}
+.methodTag {
+  font-size: 12px; line-height: 1;
+  padding: 3px 7px;
+  border-radius: var(--ds-border-radius-full);
+  background: var(--ds-background-secondary);
+  color: var(--ds-text-secondary);
+}
+.methodEta { display: block; font-size: 14px; color: var(--ds-text-tertiary); margin-top: 2px; }

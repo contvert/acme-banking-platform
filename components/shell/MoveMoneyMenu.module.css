@@ -1,0 +1,67 @@
+.wrap { position: relative; display: inline-flex; }
+
+.trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ds-space-gap-inline-sm);
+  height: 40px;
+  min-width: 44px;
+  padding: 0 var(--ds-space-150);
+  flex: 0 0 auto;
+  border: 0;
+  border-radius: var(--ds-border-radius-medium);
+  background: var(--ds-background-primary);
+  color: var(--ds-text-on-primary);
+  font-size: 15px;
+  font-weight: 400;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background var(--ds-motion-duration-100, 0.1s) linear;
+}
+.trigger:hover { background: var(--ds-background-primary-hovered); }
+
+/* The word appears once the bar has room; the icon carries it before that. */
+.triggerLabel { display: none; }
+@media (min-width: 900px) {
+  .triggerLabel { display: inline; }
+  .trigger { height: 32px; padding: 0 var(--ds-space-200); }
+}
+@media (pointer: coarse) { .trigger { min-height: 44px; } }
+
+.menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: var(--popup-menu-z-index, 4);
+  min-width: 208px;
+  padding: var(--ds-space-listbox-inset-block, 4px) var(--ds-space-listbox-inset-inline, 4px);
+  border: 1px solid var(--ds-border-default);
+  border-radius: var(--ds-border-radius-medium);
+  background: var(--ds-background-surface-floating);
+  box-shadow:
+    0 8px 24px var(--ds-neutral-magic-600-alpha-3),
+    0 1px 2px var(--ds-neutral-magic-600-alpha-2);
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-gap-inline-md);
+  padding: var(--ds-space-100) var(--ds-space-150);
+  border-radius: var(--ds-border-radius-small);
+  color: var(--ds-text-default);
+  font-size: 15px;
+  transition: background var(--ds-motion-duration-100, 0.1s) linear;
+}
+.item:hover { background: var(--ds-background-default-hovered); }
+.itemLabel { flex: 1; }
+@media (pointer: coarse) { .item { min-height: 44px; } }
+
+/* Upload bill starts from a document, not an amount — set it apart. */
+.itemDivided {
+  margin-top: var(--ds-space-50);
+  padding-top: calc(var(--ds-space-100) + var(--ds-space-50));
+  border-top: 1px solid var(--ds-border-default);
+  border-radius: 0 0 var(--ds-border-radius-small) var(--ds-border-radius-small);
+}

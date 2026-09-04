@@ -1,0 +1,172 @@
+/* Mobile first: the sidebar is an off-canvas drawer that owns the screen when
+   open. From 1024px up it becomes the persistent rail of the desktop layout. */
+.sidebar {
+  width: var(--layout-side-bar-width, 220px);
+  max-width: 86vw;
+  display: flex;
+  flex-direction: column;
+  background: var(--ds-background-sidebar);
+  border-right: 1px solid var(--ds-border-default);
+  overflow: hidden;
+
+  position: fixed;
+  inset: 0 auto 0 0;
+  z-index: 40;
+  transform: translateX(-100%);
+  visibility: hidden;
+  transition:
+    transform var(--ds-motion-duration-250, 0.25s) cubic-bezier(0.32, 0.72, 0, 1),
+    visibility var(--ds-motion-duration-250, 0.25s) linear;
+}
+.sidebar.open {
+  transform: translateX(0);
+  visibility: visible;
+  box-shadow: 0 0 40px var(--ds-neutral-magic-600-alpha-4);
+}
+
+.scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 39;
+  border: 0;
+  padding: 0;
+  background: var(--ds-background-modal-scrim);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--ds-motion-duration-250, 0.25s) linear;
+}
+.scrim.open { opacity: 1; pointer-events: auto; }
+
+/* The control that dismisses the drawer from inside it. */
+.closeBtn {
+  width: 44px; height: 44px;
+  display: grid; place-items: center;
+  border: 0; background: transparent;
+  border-radius: var(--ds-border-radius-medium);
+  color: var(--ds-icon-secondary);
+  cursor: pointer;
+  margin-left: auto;
+}
+.closeBtn:hover { background: var(--ds-background-default-hovered); }
+
+@media (min-width: 1024px) {
+  .sidebar {
+    position: sticky;
+    inset: auto;
+    top: 0;
+    height: 100vh;
+    flex: 0 0 var(--layout-side-bar-width, 220px);
+    max-width: none;
+    transform: none;
+    visibility: visible;
+    box-shadow: none;
+    z-index: auto;
+  }
+  .scrim, .closeBtn { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sidebar, .scrim { transition: none; }
+}
+
+.org {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-gap-inline-md);
+  padding: var(--ds-space-150) var(--ds-space-150);
+  margin: var(--ds-space-100) var(--ds-space-100) 0;
+  border-radius: var(--ds-border-radius-medium);
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+  width: calc(100% - var(--ds-space-200));
+  text-align: left;
+  transition: background var(--ds-motion-duration-100, 0.1s) linear;
+}
+.org:hover { background: var(--ds-background-default-hovered); }
+
+.orgMark {
+  width: 24px; height: 24px;
+  flex: 0 0 24px;
+  border-radius: var(--ds-border-radius-small);
+  background: var(--ds-background-inverted);
+  color: var(--ds-text-on-inverted);
+  display: grid; place-items: center;
+  font-size: 13px; font-weight: 480;
+}
+.orgName {
+  flex: 1; min-width: 0;
+  font-size: 15px; font-weight: 400;
+  color: var(--ds-text-emphasized);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.orgPlan {
+  font-size: 12px; font-weight: 400; line-height: 1;
+  padding: 3px 6px; border-radius: var(--ds-border-radius-small);
+  background: var(--ds-background-inverted); color: var(--ds-text-on-inverted);
+}
+
+.scroll { flex: 1; overflow-y: auto; padding: var(--ds-space-100) var(--ds-space-100) var(--ds-space-300); }
+
+.item {
+  display: flex; align-items: center; gap: var(--ds-space-gap-inline-md);
+  padding: var(--ds-space-75) var(--ds-space-100);
+  border-radius: var(--ds-border-radius-medium);
+  font-size: 15px; font-weight: 360;
+  color: var(--ds-text-default);
+  transition: background var(--ds-motion-duration-100, 0.1s) linear;
+  position: relative;
+}
+.item:hover { background: var(--ds-background-default-hovered); }
+@media (pointer: coarse) {
+  .item { min-height: 44px; }
+  .l2 { min-height: 40px; }
+}
+.item.active { background: var(--ds-background-secondary); color: var(--ds-text-emphasized); font-weight: 400; }
+.itemIcon { flex: 0 0 16px; color: var(--ds-icon-secondary); display: grid; place-items: center; }
+.item.active .itemIcon { color: var(--ds-icon-emphasized); }
+.itemLabel { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* bookmarks carry a balance under the label */
+.bookmark { align-items: flex-start; }
+.bookmarkText { flex: 1; min-width: 0; }
+.bookmarkLabel { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bookmarkValue { display: block; font-size: 12px; color: var(--ds-text-tertiary); margin-top: 1px; }
+
+.badge {
+  font-size: 12px; font-weight: 400; line-height: 1;
+  padding: 3px 6px;
+  border-radius: var(--ds-border-radius-full);
+  background: var(--ds-background-secondary);
+  color: var(--ds-text-secondary);
+}
+.badgeNew { background: var(--ds-background-emphasized); color: var(--ds-text-focused); }
+
+/* level-2 links sit against a hairline rail, as in the original */
+.children { margin: var(--ds-space-25) 0 var(--ds-space-50); padding-left: 18px; position: relative; }
+.rail {
+  position: absolute; left: 15px; top: 2px; bottom: 2px;
+  width: 1px; background: var(--ds-border-default);
+}
+.l2 {
+  display: flex; align-items: center; gap: var(--ds-space-gap-inline-sm);
+  padding: 5px var(--ds-space-100);
+  border-radius: var(--ds-border-radius-medium);
+  font-size: 15px; color: var(--ds-text-secondary);
+  transition: background var(--ds-motion-duration-100, 0.1s) linear;
+}
+.l2:hover { background: var(--ds-background-default-hovered); color: var(--ds-text-default); }
+.l2.active { background: var(--ds-background-secondary); color: var(--ds-text-emphasized); }
+
+.sectionLabel {
+  display: flex; align-items: center; justify-content: space-between;
+  font-size: 12px; font-weight: 400; letter-spacing: 0.02em;
+  color: var(--ds-text-tertiary);
+  padding: var(--ds-space-100) var(--ds-space-100) var(--ds-space-50);
+  margin-top: var(--ds-space-150);
+}
+
+/* Touch devices get full-size hit areas regardless of viewport width. */
+@media (pointer: coarse) {
+  .org { min-height: 48px; }
+}

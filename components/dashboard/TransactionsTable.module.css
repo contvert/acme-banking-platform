@@ -1,0 +1,128 @@
+.wrap {
+  background: var(--ds-background-surface-raised);
+  border: 1px solid var(--ds-border-default);
+  border-radius: var(--ds-border-radius-large);
+  overflow: hidden;
+}
+
+.views {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-gap-inline-xs);
+  padding: var(--ds-space-150) var(--ds-space-250);
+  border-bottom: 1px solid var(--ds-border-default);
+  overflow-x: auto;
+}
+.view {
+  border: 0;
+  background: transparent;
+  color: var(--ds-text-secondary);
+  font-size: 15px;
+  padding: 5px var(--ds-space-150);
+  border-radius: var(--ds-border-radius-medium);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background var(--ds-motion-duration-100, 0.1s) linear;
+}
+.view:hover { background: var(--ds-background-default-hovered); color: var(--ds-text-default); }
+.view[aria-selected='true'] {
+  background: var(--ds-background-secondary);
+  color: var(--ds-text-emphasized);
+}
+.viewsRight { margin-left: auto; display: flex; gap: var(--ds-space-gap-inline-xs); }
+
+.scroll { overflow-x: auto; }
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 16px;
+}
+.table th {
+  text-align: left;
+  font-weight: 360;
+  font-size: 13px;
+  color: var(--ds-text-tertiary);
+  padding: var(--ds-space-100) var(--ds-space-150);
+  border-bottom: 1px solid var(--ds-border-default);
+  white-space: nowrap;
+  position: sticky;
+  top: 0;
+  background: var(--ds-background-surface-raised);
+  z-index: 1;
+}
+.sortable { cursor: pointer; user-select: none; }
+.sortable:hover { color: var(--ds-text-default); }
+.sortIcon { display: inline-flex; vertical-align: -2px; margin-left: 4px; opacity: 0.55; }
+.sortActive { opacity: 1; color: var(--ds-icon-primary); }
+
+.table td {
+  padding: var(--ds-space-100) var(--ds-space-150);
+  border-bottom: 1px solid var(--ds-border-default);
+  vertical-align: middle;
+}
+.table tbody tr {
+  transition: background var(--ds-motion-duration-50, 0.05s) linear;
+  cursor: pointer;
+}
+.table tbody tr:hover { background: var(--ds-background-default-hovered); }
+.table tbody tr:last-child td { border-bottom: 0; }
+
+.numeric { text-align: right; white-space: nowrap; }
+.date { color: var(--ds-text-secondary); white-space: nowrap; width: 1%; }
+.party { display: flex; align-items: center; gap: var(--ds-space-gap-inline-md); min-width: 0; }
+.avatar {
+  width: 24px; height: 24px; flex: 0 0 24px; border-radius: 50%;
+  background: var(--ds-background-secondary); color: var(--ds-text-secondary);
+  display: grid; place-items: center; font-size: 11px; font-weight: 400;
+}
+.partyName { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.muted { color: var(--ds-text-secondary); white-space: nowrap; }
+/* Same colour, but for prose that must wrap — `.muted` is nowrap for table cells. */
+.mutedWrap { color: var(--ds-text-secondary); white-space: normal; overflow-wrap: anywhere; }
+
+.status {
+  font-size: 12px;
+  padding: 1px 6px;
+  border-radius: var(--ds-border-radius-full);
+  margin-left: 6px;
+  white-space: nowrap;
+}
+.statusFailed { background: var(--ds-background-error); color: var(--ds-text-error); }
+.statusPending { background: var(--ds-background-warning); color: var(--ds-text-warning); }
+.statusOk { background: var(--ds-background-success); color: var(--ds-text-success); }
+.statusNeutral { background: var(--ds-background-secondary); color: var(--ds-text-secondary); }
+
+.empty {
+  padding: var(--ds-space-600) var(--ds-space-250);
+  text-align: center;
+  color: var(--ds-text-tertiary);
+  font-size: 16px;
+}
+
+.toolbar {
+  display: flex; align-items: center; gap: var(--ds-space-gap-inline-md);
+  padding: var(--ds-space-150) var(--ds-space-250);
+  border-bottom: 1px solid var(--ds-border-default);
+}
+.searchInput {
+  flex: 1; max-width: 320px; height: 30px;
+  padding: 0 var(--ds-space-150);
+  border-radius: var(--ds-border-radius-medium);
+  border: 1px solid var(--ds-border-input);
+  background: var(--ds-background-input);
+  font-size: 15px; color: var(--ds-text-default);
+}
+.searchInput::placeholder { color: var(--ds-text-placeholder); }
+.searchInput:focus {
+  outline: none;
+  border-color: var(--ds-border-input-focused-underline);
+  background: var(--ds-background-input-focused);
+}
+.count { margin-left: auto; font-size: 13px; color: var(--ds-text-tertiary); }
+
+@media (pointer: coarse) {
+  .view { min-height: 44px; }
+  .searchInput { height: 44px; }
+  .table td { padding-top: var(--ds-space-150); padding-bottom: var(--ds-space-150); }
+}

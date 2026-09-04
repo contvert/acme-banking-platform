@@ -1,0 +1,21 @@
+/* Ported verbatim from DSMoneyAmount-_eu36-in.css on the reference interface. */
+.dollarDisplay {
+  font-feature-settings: "tnum";
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.03em;
+  white-space: nowrap;
+}
+.green { color: var(--ds-text-money-in); }
+.red { color: var(--ds-text-money-out); }
+.muted { color: var(--ds-text-money-pending-or-null); }
+.strikethrough {
+  background: linear-gradient(#0000, #0000 58%, currentColor 58% 65%, #0000 65%, #0000);
+}
+.integerDelimiter { padding-right: 0.03em; }
+.superscript {
+  letter-spacing: 0.0005em;
+  font-size: 0.73em;
+  position: relative;
+  top: -0.265em;
+}
+.superscript .fractionalDelimiter { padding-left: 0.07em; }

@@ -1,0 +1,77 @@
+.sectionTitle {
+  font-size: 18px;
+  font-weight: 400;
+  color: var(--ds-text-emphasized);
+  margin: 0 0 4px;
+}
+.sectionHint {
+  font-size: 15px;
+  color: var(--ds-text-secondary);
+  margin: 0 0 var(--ds-space-200);
+}
+
+.search {
+  width: 100%;
+  padding: var(--ds-space-150);
+  font: inherit;
+  font-size: 16px;
+  color: var(--ds-text-default);
+  background: var(--ds-background-input);
+  border: 1px solid var(--ds-border-input);
+  border-bottom: 2px solid var(--ds-border-input-focused-underline);
+  border-radius: var(--ds-border-radius-medium);
+  outline: none;
+}
+.search:focus { border-color: var(--ds-border-input-focused-underline); }
+
+.actionRow {
+  display: flex;
+  gap: var(--ds-space-150);
+  margin-bottom: var(--ds-space-300);
+  flex-wrap: wrap;
+}
+.actionRow > * { flex: 1 1 auto; justify-content: center; }
+
+.listLabel {
+  font-size: 13px;
+  color: var(--ds-text-secondary);
+  padding-bottom: var(--ds-space-100);
+  border-bottom: 1px solid var(--ds-border-default);
+}
+
+.list { display: block; }
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-gap-inline-lg);
+  padding: var(--ds-space-150) 0;
+  border-bottom: 1px solid var(--ds-border-default);
+  color: var(--ds-icon-secondary);
+  transition: background var(--ds-motion-duration-100, 0.1s) linear;
+}
+.row:hover { background: var(--ds-background-default-hovered); }
+@media (pointer: coarse) { .row { min-height: 56px; } }
+
+.avatar {
+  width: 34px; height: 34px; flex: 0 0 34px;
+  display: grid; place-items: center;
+  border-radius: 50%;
+  background: var(--ds-green-magic-400-alpha-3);
+  color: var(--ds-text-secondary);
+  font-size: 12px;
+}
+.rowBody { flex: 1; min-width: 0; }
+.rowName { display: block; font-size: 16px; color: var(--ds-text-emphasized); }
+.rowMeta {
+  display: flex; gap: var(--ds-space-gap-inline-md);
+  font-size: 13px; color: var(--ds-text-tertiary);
+  margin-top: 1px;
+}
+.rowRole { color: var(--ds-text-secondary); }
+
+.empty {
+  padding: var(--ds-space-400) 0;
+  text-align: center;
+  color: var(--ds-text-tertiary);
+  font-size: 15px;
+}

@@ -1,0 +1,83 @@
+.label {
+  display: block;
+  font-size: 13px;
+  color: var(--ds-text-secondary);
+  margin: var(--ds-space-200) 0 var(--ds-space-75);
+}
+.label:first-child { margin-top: 0; }
+
+.amountWrap {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  border: 1px solid var(--ds-border-input);
+  border-radius: var(--ds-border-radius-medium);
+  background: var(--ds-background-input);
+  padding: var(--ds-space-150);
+  transition: border-color var(--ds-motion-duration-100, 0.1s) linear;
+}
+.amountWrap:focus-within { border-color: var(--ds-border-input-focused-underline); }
+.currency {
+  font-family: var(--ds-font-family-display);
+  font-size: 26px;
+  color: var(--ds-text-tertiary);
+}
+.amount {
+  flex: 1;
+  border: 0;
+  background: none;
+  outline: none;
+  font-family: var(--ds-font-family-display);
+  font-size: 26px;
+  font-weight: 380;
+  color: var(--ds-text-title);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+.amount::placeholder { color: var(--ds-text-placeholder); }
+
+.select {
+  width: 100%;
+  height: 36px;
+  padding: 0 var(--ds-space-150);
+  border-radius: var(--ds-border-radius-medium);
+  border: 1px solid var(--ds-border-input);
+  background: var(--ds-background-input);
+  color: var(--ds-text-default);
+  font: inherit;
+  font-size: 16px;
+}
+.select:focus {
+  outline: none;
+  border-color: var(--ds-border-input-focused-underline);
+}
+
+.hint {
+  font-size: 13px;
+  color: var(--ds-text-tertiary);
+  margin-top: var(--ds-space-75);
+}
+
+.error {
+  margin-top: var(--ds-space-200);
+  padding: var(--ds-space-100) var(--ds-space-150);
+  border-radius: var(--ds-border-radius-medium);
+  background: var(--ds-background-error);
+  color: var(--ds-text-error);
+  font-size: 15px;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--ds-space-100);
+  margin-top: var(--ds-space-300);
+}
+.actions button:disabled { opacity: 0.5; cursor: default; }
+
+@media (pointer: coarse) {
+  .select { height: 44px; }
+  .amount { min-height: 44px; font-size: 28px; }
+  .currency { font-size: 28px; }
+  .amountWrap { padding: var(--ds-space-100) var(--ds-space-150); }
+}
