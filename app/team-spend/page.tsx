@@ -6,6 +6,7 @@ import { Icon } from '@/components/ds/Icon';
 import { BUDGETS, SPEND_SUMMARY, REVIEW_REQUIRED, type Budget } from '@/lib/mock/teamSpend';
 import t from '@/components/dashboard/TransactionsTable.module.css';
 import p from '@/components/ds/Page.module.css';
+import { useT } from '@/components/i18n/I18nProvider';
 
 const columns: Column<Budget>[] = [
   {
@@ -63,33 +64,34 @@ const columns: Column<Budget>[] = [
 ];
 
 export default function TeamSpendPage() {
+  const translate = useT();
   const tabs = useTabs([
-    { label: 'Employee budgets', count: BUDGETS.length },
-    { label: 'Team members' },
-    { label: 'Status' },
-    { label: 'Active dates' },
+    { label: translate('Employee budgets'), count: BUDGETS.length },
+    { label: translate('Team members') },
+    { label: translate('Status') },
+    { label: translate('Active dates') },
   ]);
 
   return (
     <Page
-      title="Team Spend"
-      pill="Beta"
-      actions={[{ label: 'Create budget', icon: 'plus', primary: true, href: '/team-spend/budget/create' }]}
+      title={translate('Team Spend')}
+      pill={translate('Beta')}
+      actions={[{ label: translate('Create budget'), icon: 'plus', primary: true, href: '/team-spend/budget/create' }]}
     >
       <StatTiles
         tiles={[
           {
-            label: 'Budget spend summary',
+            label: translate('Budget spend summary'),
             value: <Money value={SPEND_SUMMARY.total} />,
             meta: SPEND_SUMMARY.period,
           },
           {
-            label: 'Review required',
+            label: translate('Review required'),
             value: REVIEW_REQUIRED.expenses,
             meta: `${REVIEW_REQUIRED.expenses} expenses · ${REVIEW_REQUIRED.receiptExceptions} receipt exception request`,
           },
           {
-            label: 'Categories',
+            label: translate('Categories'),
             value: SPEND_SUMMARY.categories.length,
             meta: SPEND_SUMMARY.categories.join(' · '),
           },
@@ -106,9 +108,7 @@ export default function TeamSpendPage() {
           <div style={{ marginTop: 8 }}>Nothing to show under {tabs.active}.</div>
         </Empty>
       )}
-      <p className={p.tileMeta} style={{ marginTop: 12 }}>
-        Budgets shown are sample data.
-      </p>
+      <p className={p.tileMeta} style={{ marginTop: 12 }}>{translate('Budgets shown are sample data.')}</p>
     </Page>
   );
 }

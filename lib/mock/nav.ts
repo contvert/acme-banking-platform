@@ -1,16 +1,20 @@
 // Sidebar structure for the application.
 
+import type { Message } from '@/lib/i18n/messages/catalog';
+
 export interface NavItem {
-  label: string;
+  /** Catalogued so every navigation label is guaranteed a translation. */
+  label: Message;
   href: string;
   icon: string;
-  badge?: string;
+  /** A translated word, or a plain count that reads the same everywhere. */
+  badge?: Message | number;
   children?: NavItem[];
 }
 
 export const PRIMARY_NAV: NavItem[] = [
   { label: 'Home', href: '/dashboard', icon: 'house' },
-  { label: 'Tasks', href: '/tasks', icon: 'clipboard-check', badge: '10' },
+  { label: 'Tasks', href: '/tasks', icon: 'clipboard-check', badge: 10 },
   { label: 'Command', href: '/command', icon: 'terminal', badge: 'New' },
   {
     label: 'Accounts', href: '/accounts', icon: 'building-columns',
@@ -60,7 +64,7 @@ export const QUICK_ACTIONS: NavItem[] = [
   { label: 'Send', href: '/send-money/pay/start', icon: 'paper-plane' },
   { label: 'Transfer', href: '/send-money/transfer', icon: 'arrow-right-arrow-left' },
   { label: 'Deposit', href: '/add-funds', icon: 'arrow-down-to-line' },
-  { label: 'Request', href: '/invoicing/create-invoice', icon: 'envelope-open-dollar' },
+  { label: 'Add RIB', href: '/payments/recipients/create', icon: 'plus' },
   { label: 'Upload bill', href: '/bill-pay', icon: 'file-arrow-up' },
 ];
 
@@ -73,8 +77,12 @@ export const ACCOUNT_MENU: NavItem[] = [
   { label: 'All Accounts', href: '/panorama', icon: 'grid-2' },
 ];
 
-/** Bookmarks rail at the foot of the sidebar. */
-export const BOOKMARKS: NavItem[] = [
+/**
+ * Bookmarks rail at the foot of the sidebar. These labels name accounts the
+ * company chose, so they are content rather than interface: they read the same
+ * in every language, and two of them are matched against account names.
+ */
+export const BOOKMARKS: { label: string; href: string; icon: string }[] = [
   { label: 'Ops / Payroll', href: '/accounts/depository/party-bankid2', icon: 'bookmark' },
   { label: 'Credit Card', href: '/accounts/credit', icon: 'bookmark' },
   { label: 'Bill Pay', href: '/bill-pay', icon: 'bookmark' },

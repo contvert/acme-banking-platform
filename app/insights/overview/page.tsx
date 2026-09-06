@@ -7,10 +7,11 @@ import {
   TOP_SOURCES, TOP_RECIPIENTS, INSIGHTS_SUMMARY, INSIGHTS_NARRATIVE, type FlowRow,
 } from '@/lib/mock/insights';
 import p from '@/components/ds/Page.module.css';
+import { useT } from '@/components/i18n/I18nProvider';
 
 function flowColumns(nameHeader: string): Column<FlowRow>[] {
   return [
-    { key: 'name', header: nameHeader, sortValue: (r) => r.name, cell: (r) => <NameCell name={r.name} /> },
+    { key: 'name', headerText: nameHeader, sortValue: (r) => r.name, cell: (r) => <NameCell name={r.name} /> },
     {
       key: 'pct', header: '% of total', numeric: true, sortValue: (r) => r.pct,
       cell: (r) => (
@@ -41,43 +42,44 @@ function flowColumns(nameHeader: string): Column<FlowRow>[] {
 }
 
 export default function InsightsPage() {
+  const tr = useT();
   return (
     <Page
-      title="Insights"
-      actions={[{ label: 'Export', icon: 'arrow-down-to-line' }]}
+      title={tr('Insights')}
+      actions={[{ label: tr('Export'), icon: 'arrow-down-to-line' }]}
     >
       <StatTiles
         tiles={[
           {
-            label: 'Net cashflow',
+            label: tr('Net cashflow'),
             value: <MoneyCompact value={INSIGHTS_SUMMARY.netCashflow} tone="green" />,
             meta: INSIGHTS_SUMMARY.range,
           },
-          { label: 'Money in', value: <MoneyCompact value={INSIGHTS_SUMMARY.moneyIn} tone="green" /> },
-          { label: 'Money out', value: <MoneyCompact value={INSIGHTS_SUMMARY.moneyOut} tone="red" /> },
+          { label: tr('Money in'), value: <MoneyCompact value={INSIGHTS_SUMMARY.moneyIn} tone="green" /> },
+          { label: tr('Money out'), value: <MoneyCompact value={INSIGHTS_SUMMARY.moneyOut} tone="red" /> },
         ]}
       />
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 20, marginBottom: 8 }}>
         <Card>
-          <div className={p.tileLabel}>Runway and cash position</div>
+          <div className={p.tileLabel}>{tr('Runway and cash position')}</div>
           <p style={{ margin: '8px 0 0', fontSize: 15, lineHeight: 1.5 }}>{INSIGHTS_NARRATIVE.runway}</p>
         </Card>
         <Card>
-          <div className={p.tileLabel}>Money out trends</div>
+          <div className={p.tileLabel}>{tr('Money out trends')}</div>
           <p style={{ margin: '8px 0 0', fontSize: 15, lineHeight: 1.5 }}>{INSIGHTS_NARRATIVE.moneyOut}</p>
         </Card>
         <Card>
-          <div className={p.tileLabel}>Money in trends</div>
+          <div className={p.tileLabel}>{tr('Money in trends')}</div>
           <p style={{ margin: '8px 0 0', fontSize: 15, lineHeight: 1.5 }}>{INSIGHTS_NARRATIVE.moneyIn}</p>
         </Card>
       </div>
-      <p className={p.tileMeta}>Trends are generated and may include inaccuracies.</p>
+      <p className={p.tileMeta}>{tr('Trends are generated and may include inaccuracies.')}</p>
 
-      <SectionTitle>Top sources</SectionTitle>
+      <SectionTitle>{tr('Top sources')}</SectionTitle>
       <DataTable rows={TOP_SOURCES} columns={flowColumns('Source')} />
 
-      <SectionTitle>Top recipients</SectionTitle>
+      <SectionTitle>{tr('Top recipients')}</SectionTitle>
       <DataTable rows={TOP_RECIPIENTS} columns={flowColumns('Recipient')} />
     </Page>
   );

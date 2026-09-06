@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { BRAND } from '@/lib/brand';
 import s from './FlowLayout.module.css';
+import { useT } from '@/components/i18n/I18nProvider';
 
 /**
  * Money-movement flows are full-screen overlays on the original, not pages in
@@ -26,6 +27,7 @@ export function FlowLayout({
   aside?: React.ReactNode;
   footer?: React.ReactNode;
 }) {
+  const t = useT();
   const router = useRouter();
 
   return (
@@ -35,15 +37,13 @@ export function FlowLayout({
         <div className={s.pane}>
           <header className={s.head}>
             <Link href="/dashboard" className={s.brand} aria-label={`${BRAND.productName} home`}>
-              <span className={s.mark}>{BRAND.name.charAt(0)}</span>
-              <span className={s.divider} aria-hidden />
-              <span className={s.org}>{BRAND.productName}</span>
+              <img src="/logo.png" alt={BRAND.productName} className="logo-img" style={{ height: 28 }} />
             </Link>
             {!aside && (
               <button
                 className={s.close}
                 type="button"
-                aria-label="Close"
+                aria-label={t('Close')}
                 onClick={() => router.back()}
               >
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden>
@@ -70,7 +70,7 @@ export function FlowLayout({
             <button
               className={s.closeAside}
               type="button"
-              aria-label="Close"
+              aria-label={t('Close')}
               onClick={() => router.back()}
             >
               <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden>

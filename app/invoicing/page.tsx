@@ -4,6 +4,7 @@ import { Page, StatTiles, useTabs, Money, MoneyCompact } from '@/components/ds/P
 import { DataTable, Status, type Column } from '@/components/ds/DataTable';
 import { INVOICES, INVOICE_SUMMARY, type Invoice } from '@/lib/mock/invoices';
 import t from '@/components/dashboard/TransactionsTable.module.css';
+import { useT } from '@/components/i18n/I18nProvider';
 
 const columns: Column<Invoice>[] = [
   { key: 'dueDate', header: 'Due date', sortValue: (r) => r.dueDate, muted: true },
@@ -32,6 +33,7 @@ const columns: Column<Invoice>[] = [
 const TABS = ['All', 'Overdue', 'Scheduled', 'Active', 'Paid'];
 
 export default function InvoicingPage() {
+  const translate = useT();
   const tabs = useTabs(TABS.map((label) => ({ label })));
   const rows =
     tabs.active === 'All'
@@ -40,27 +42,27 @@ export default function InvoicingPage() {
 
   return (
     <Page
-      title="Invoicing"
+      title={translate('Invoicing')}
       pill="Pro"
       actions={[
-        { label: 'Invoice settings', icon: 'gear', href: '/invoicing/invoice-settings' },
-        { label: 'Request money', icon: 'envelope-open-dollar', primary: true, href: '/invoicing/create-invoice' },
+        { label: translate('Invoice settings'), icon: 'gear', href: '/invoicing/invoice-settings' },
+        { label: translate('Request money'), icon: 'envelope-open-dollar', primary: true, href: '/invoicing/create-invoice' },
       ]}
     >
       <StatTiles
         tiles={[
           {
-            label: 'Total open',
+            label: translate('Total open'),
             value: <MoneyCompact value={INVOICE_SUMMARY.open} />,
             meta: `${INVOICE_SUMMARY.openInvoices} invoices · ${INVOICE_SUMMARY.openLinks} payment link`,
           },
           {
-            label: 'Overdue',
+            label: translate('Overdue'),
             value: <MoneyCompact value={INVOICE_SUMMARY.overdue} />,
             meta: `${INVOICE_SUMMARY.overdueInvoices} invoices`,
           },
           {
-            label: 'Paid',
+            label: translate('Paid'),
             value: <MoneyCompact value={INVOICE_SUMMARY.paid} />,
             meta: `${INVOICE_SUMMARY.paidInvoices} invoices · ${INVOICE_SUMMARY.paidLinks} payment link`,
           },

@@ -5,6 +5,15 @@
   letter-spacing: -0.03em;
   white-space: nowrap;
 }
+
+/* Privacy mode: the eye toggle in the top bar sets body[data-private] and every
+   amount is blurred at once. Layout is preserved so nothing shifts. */
+:global(body[data-private='true']) .dollarDisplay {
+  filter: blur(7px);
+  user-select: none;
+  pointer-events: none;
+  transition: filter 0.12s ease;
+}
 .green { color: var(--ds-text-money-in); }
 .red { color: var(--ds-text-money-out); }
 .muted { color: var(--ds-text-money-pending-or-null); }

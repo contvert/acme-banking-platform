@@ -3,6 +3,7 @@
 import { Page, StatTiles, SectionTitle, useTabs, Money, Empty } from '@/components/ds/Page';
 import { DataTable, type Column } from '@/components/ds/DataTable';
 import { SCHEDULE, LOAN_ACTIVITY, LOAN, type ScheduleRow, type ActivityRow } from '@/lib/mock/financing';
+import { useT } from '@/components/i18n/I18nProvider';
 
 const scheduleColumns: Column<ScheduleRow>[] = [
   { key: 'date', header: 'Date', muted: true },
@@ -22,18 +23,19 @@ const activityColumns: Column<ActivityRow>[] = [
 ];
 
 export default function FinancingPage() {
+  const tr = useT();
   const tabs = useTabs([
-    { label: 'Working Capital' },
-    { label: 'Venture Debt' },
-    { label: 'SAFEs' },
+    { label: tr('Working Capital') },
+    { label: tr('Venture Debt') },
+    { label: tr('SAFEs') },
   ]);
 
   return (
     <Page
-      title="Financing"
+      title={tr('Financing')}
       actions={[
-        { label: 'Edit autopay', icon: 'repeat' },
-        { label: 'Download loan agreement', icon: 'arrow-down-to-line' },
+        { label: tr('Edit autopay'), icon: 'repeat' },
+        { label: tr('Download loan agreement'), icon: 'arrow-down-to-line' },
       ]}
     >
       {tabs.node}
@@ -43,17 +45,17 @@ export default function FinancingPage() {
           <StatTiles
             tiles={[
               {
-                label: 'Outstanding balance',
+                label: tr('Outstanding balance'),
                 value: <Money value={LOAN.outstanding} />,
                 meta: `${LOAN.paymentsLeft} payments left`,
               },
             ]}
           />
 
-          <SectionTitle>Upcoming payments</SectionTitle>
+          <SectionTitle>{tr('Upcoming payments')}</SectionTitle>
           <DataTable rows={SCHEDULE} columns={scheduleColumns} />
 
-          <SectionTitle>Activity</SectionTitle>
+          <SectionTitle>{tr('Activity')}</SectionTitle>
           <DataTable rows={LOAN_ACTIVITY} columns={activityColumns} />
         </>
       ) : (

@@ -1,5 +1,7 @@
 /** IBAN helpers: formatting and the ISO 13616 / ISO 7064 mod-97 check. */
 
+import type { Message } from '@/lib/i18n/messages/catalog';
+
 /** Expected total length per country, for the codes a European reference is likely to use. */
 const LENGTHS: Record<string, number> = {
   AD: 24, AT: 20, BE: 16, BG: 22, CH: 21, CY: 28, CZ: 24, DE: 22, DK: 18, EE: 20,
@@ -16,21 +18,36 @@ export const formatIban = (value: string) =>
 
 export interface IbanCheck {
   valid: boolean;
-  reason?: string;
+  /**
+   * Why it failed, as a catalogue key rather than a sentence: this runs on
+   * both sides of the wire, and neither side knows the reader's language
+   * until it renders.
+   */
+  reason?: Message;
+  /** Values for the placeholders in `reason`. */
+  reasonValues?: Record<string, string | number>;
   country?: string;
 }
 
 export function checkIban(input: string): IbanCheck {
   const iban = normaliseIban(input);
-  if (!iban) return { valid: false, reason: 'IBAN vide' };
+  if (!iban) return { valid: false, reason: 'Enter an IBAN.' };
   if (!/^[A-Z]{2}\d{2}[A-Z0-9]+$/.test(iban)) {
-    return { valid: false, reason: 'Format attendu : 2 lettres, 2 chiffres, puis alphanumérique' };
+    return {
+      valid: false,
+      reason: 'Expected format: 2 letters, 2 digits, then letters or digits.',
+    };
   }
 
   const country = iban.slice(0, 2);
   const expected = LENGTHS[country];
   if (expected && iban.length !== expected) {
-    return { valid: false, reason: `Un IBAN ${country} fait ${expected} caractères (reçu ${iban.length})`, country };
+    return {
+      valid: false,
+      reason: 'A {country} IBAN is {expected} characters ({actual} given).',
+      reasonValues: { country, expected, actual: iban.length },
+      country,
+    };
   }
 
   // Move the first four characters to the end, map letters to numbers, mod 97.
@@ -44,7 +61,7 @@ export function checkIban(input: string): IbanCheck {
 
   return remainder === 1
     ? { valid: true, country }
-    : { valid: false, reason: 'Clé de contrôle invalide', country };
+    : { valid: false, reason: 'Invalid check digits.', country };
 }
 
 /** BIC / SWIFT: 8 or 11 characters. */
@@ -53,5 +70,5 @@ export function checkBic(input: string): IbanCheck {
   if (!bic) return { valid: true };
   return /^[A-Z]{6}[A-Z0-9]{2}([A-Z0-9]{3})?$/.test(bic)
     ? { valid: true }
-    : { valid: false, reason: 'BIC attendu : 8 ou 11 caractères' };
+    : { valid: false, reason: 'A BIC is 8 or 11 characters.' };
 }

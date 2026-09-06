@@ -4,6 +4,7 @@ import { Page, SectionTitle, Money } from '@/components/ds/Page';
 import { useAccounts } from '@/lib/config/adapters';
 import { Card } from '@/components/ds/Card';
 import p from '@/components/ds/Page.module.css';
+import { useT } from '@/components/i18n/I18nProvider';
 
 const ALLOCATIONS = [
   { name: 'US Treasury bills', pct: 62, yield: 4.21 },
@@ -12,15 +13,16 @@ const ALLOCATIONS = [
 ];
 
 export default function PortfolioEditPage() {
+  const t = useT();
   const ACCOUNTS = useAccounts();
   const treasury = ACCOUNTS.find((a) => a.kind === 'treasury');
   return (
-    <Page title="Edit portfolio" actions={[{ label: 'Save changes', icon: 'check', primary: true }]}>
+    <Page title={t('Edit portfolio')} actions={[{ label: t('Save changes'), icon: 'check', primary: true }]}>
       <Card style={{ maxWidth: 640, marginBottom: 24 }}>
-        <div className={p.tileLabel}>Invested balance</div>
+        <div className={p.tileLabel}>{t('Invested balance')}</div>
         <div className={p.tileValue}><Money value={treasury?.balance ?? 0} /></div>
       </Card>
-      <SectionTitle>Allocation</SectionTitle>
+      <SectionTitle>{t('Allocation')}</SectionTitle>
       <div style={{ display: 'grid', gap: 12, maxWidth: 640 }}>
         {ALLOCATIONS.map((a) => (
           <Card key={a.name} style={{ padding: 16 }}>

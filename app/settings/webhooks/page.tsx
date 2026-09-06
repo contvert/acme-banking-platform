@@ -3,6 +3,7 @@
 import { Page } from '@/components/ds/Page';
 import { DataTable, Status, type Column } from '@/components/ds/DataTable';
 import { WEBHOOKS, type Webhook } from '@/lib/mock/settingsData';
+import { useT } from '@/components/i18n/I18nProvider';
 
 const columns: Column<Webhook>[] = [
   { key: 'url', header: 'URL', sortValue: (r) => r.url },
@@ -12,8 +13,9 @@ const columns: Column<Webhook>[] = [
 ];
 
 export default function WebhooksPage() {
+  const tr = useT();
   return (
-    <Page title="Webhooks" actions={[{ label: 'Add webhook', icon: 'plus', primary: true }]}>
+    <Page title={tr('Webhooks')} actions={[{ label: tr('Add webhook'), icon: 'plus', primary: true }]}>
       <DataTable rows={WEBHOOKS} columns={columns} countLabel={(n) => `${n} webhooks`} />
     </Page>
   );

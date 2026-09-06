@@ -5,28 +5,28 @@ import { Card } from '@/components/ds/Card';
 import { ACH_FLAGGED } from '@/lib/mock/payments';
 import p from '@/components/ds/Page.module.css';
 import t from '@/components/dashboard/TransactionsTable.module.css';
+import { useT } from '@/components/i18n/I18nProvider';
 
 export default function ControlsPage() {
+  const translate = useT();
   return (
-    <Page title="Controls">
+    <Page title={translate('Controls')}>
       <Card>
         <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16 }}>
           <div style={{ flex: 1 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 6 }}>
-              <span style={{ fontSize: 16, color: 'var(--ds-text-emphasized)' }}>ACH authorization</span>
-              <span className={`${t.status} ${t.statusOk}`}>Active</span>
+              <span style={{ fontSize: 16, color: 'var(--ds-text-emphasized)' }}>{translate('ACH authorization')}</span>
+              <span className={`${t.status} ${t.statusOk}`}>{translate('Active')}</span>
             </div>
             <p style={{ margin: 0, fontSize: 15, color: 'var(--ds-text-secondary)', lineHeight: 1.5 }}>
               Designate which vendors may initiate ACH pulls (debits) from your account.
               Unauthorized pulls are flagged for review. {ACH_FLAGGED} currently flagged.
             </p>
-            <p style={{ marginBottom: 0, fontSize: 15, color: 'var(--ds-text-tertiary)' }}>
-              If the manual review window expires for a flagged transaction: automatically approve.
-            </p>
+            <p style={{ marginBottom: 0, fontSize: 15, color: 'var(--ds-text-tertiary)' }}>{translate('If the manual review window expires for a flagged transaction: automatically approve.')}</p>
           </div>
           <div style={{ display: 'flex', gap: 8 }}>
-            <button className={p.btn} type="button">Edit</button>
-            <button className={p.btn} type="button">Disable</button>
+            <button className={p.btn} type="button">{translate('Edit')}</button>
+            <button className={p.btn} type="button">{translate('Disable')}</button>
           </div>
         </div>
       </Card>

@@ -1,4 +1,4 @@
-export const SESSION_COOKIE = 'acme_session';
+export const SESSION_COOKIE = 'Mercury_session';
 
 export const DEFAULT_ADMIN_PORTAL_HOST = 'admin.localhost';
 export const DEFAULT_CLIENT_PORTAL_HOST = 'client.localhost';

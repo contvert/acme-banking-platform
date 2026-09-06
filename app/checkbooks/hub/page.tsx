@@ -3,6 +3,7 @@
 import { Page, SectionTitle, Money } from '@/components/ds/Page';
 import { DataTable, Status, type Column } from '@/components/ds/DataTable';
 import { CHECKS, type Check } from '@/lib/mock/checks';
+import { useT } from '@/components/i18n/I18nProvider';
 
 const columns: Column<Check>[] = [
   { key: 'checkNo', header: 'Check no.', sortValue: (r) => r.checkNo },
@@ -17,15 +18,16 @@ const columns: Column<Check>[] = [
 ];
 
 export default function CheckbooksPage() {
+  const tr = useT();
   return (
     <Page
-      title="Checkbooks"
+      title={tr('Checkbooks')}
       actions={[
-        { label: 'Settings', icon: 'gear', href: '/checkbooks/settings' },
-        { label: 'Order Checkbook', icon: 'money-check', primary: true, href: '/checkbooks/settings' },
+        { label: tr('Settings'), icon: 'gear', href: '/checkbooks/settings' },
+        { label: tr('Order Checkbook'), icon: 'money-check', primary: true, href: '/checkbooks/settings' },
       ]}
     >
-      <SectionTitle>Checks needing review</SectionTitle>
+      <SectionTitle>{tr('Checks needing review')}</SectionTitle>
       <DataTable
         rows={CHECKS}
         columns={columns}

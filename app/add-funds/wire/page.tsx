@@ -10,10 +10,11 @@ import { formatIban } from '@/lib/config/iban';
 import type { BankDetail } from '@/lib/config/types';
 import p from '@/components/ds/Page.module.css';
 import s from './Wire.module.css';
+import { useT } from '@/components/i18n/I18nProvider';
 
 const STEPS = [
-  { label: 'Choisir une méthode', href: '/add-funds' },
-  { label: 'Détails du paiement', href: '/add-funds/wire' },
+  { label: 'Choose a method', href: '/add-funds' },
+  { label: 'Payment details', href: '/add-funds/wire' },
 ];
 
 function Row({ label, value }: { label: string; value: React.ReactNode }) {
@@ -54,7 +55,8 @@ function Section({
 }
 
 export default function WireDetailsPage() {
-  const { config } = useConfig();
+  const tr = useT();
+  const { config, isAdmin } = useConfig();
   const details = config.bankDetails ?? [];
   const [selectedId, setSelectedId] = useState<string>(
     details.find((d) => d.primary)?.id ?? details[0]?.id ?? '',
@@ -64,7 +66,7 @@ export default function WireDetailsPage() {
   return (
     <FlowLayout rail>
       <div className={s.layout}>
-        <nav className={s.rail} aria-label="Étapes">
+        <nav className={s.rail} aria-label={tr('Steps')}>
           {STEPS.map((step, i) => (
             <Link
               key={step.label}
@@ -78,31 +80,34 @@ export default function WireDetailsPage() {
 
         <div className={s.main}>
           <header className={s.head}>
-            <h1 className={s.title}>Détails du paiement</h1>
+            <h1 className={s.title}>{tr('Payment details')}</h1>
           </header>
 
           <div className={s.notice}>
             <Icon name="circle-exclamation" size={15} />
             <span>
-              Informations bancaires : ces coordonnées sont celles saisies dans
-              l’administration et ne correspondent à aucun compte réel.
+              {tr('Bank information')} : {tr('These details are the ones entered in the administration and match no real account.')}
             </span>
           </div>
 
           {!rib ? (
             <p style={{ fontSize: 16 }}>
-              Aucune coordonnée enregistrée.{' '}
-              <Link href="/admin" className={s.link}>En ajouter</Link>.
+              {tr('No bank details are registered.')}{' '}
+              {isAdmin ? (
+                <Link href="/admin" className={s.link}>{tr('Add one')}</Link>
+              ) : (
+                tr('Ask your administrator to add them.')
+              )}
             </p>
           ) : (
             <>
               {details.length > 1 && (
-                <Field label="Compte à créditer">
+                <Field label={tr('Account to credit')}>
                   <select
                     className={s.select}
                     value={selectedId}
                     onChange={(e) => setSelectedId(e.target.value)}
-                    aria-label="Compte à créditer"
+                    aria-label={tr('Account to credit')}
                   >
                     {details.map((d) => (
                       <option key={d.id} value={d.id}>
@@ -114,33 +119,33 @@ export default function WireDetailsPage() {
               )}
 
               <Section
-                title="Virement national"
-                intro={`Utilisez ces informations pour un virement SEPA vers le compte de ${rib.holder}.`}
+                title={tr('Domestic Wire')}
+                intro={tr('Use these details for a SEPA transfer to the account of {holder}.', { holder: rib.holder })}
               >
-                <Row label="Titulaire" value={rib.holder} />
-                <Row label="IBAN" value={formatIban(rib.iban)} />
-                {rib.bic && <Row label="BIC / SWIFT" value={rib.bic} />}
-                <Row label="Devise" value={rib.currency} />
+                <Row label={tr('Account holder')} value={rib.holder} />
+                <Row label={tr('IBAN')} value={formatIban(rib.iban)} />
+                {rib.bic && <Row label={tr('BIC / SWIFT')} value={rib.bic} />}
+                <Row label={tr('Currency')} value={rib.currency} />
               </Section>
 
               <Section
-                title="Virement international"
+                title={tr('International Wire')}
                 intro="Pour un formulaire de virement, les libellés ci-dessous correspondent aux champs MT103."
               >
-                <Row label="BIC / SWIFT" value={rib.bic || '—'} />
-                <Row label="IBAN" value={formatIban(rib.iban)} />
-                <Row label="Banque" value={rib.bankName || '—'} />
-                {rib.bankAddress && <Row label="Adresse de la banque" value={rib.bankAddress} />}
-                <Row label="Bénéficiaire" value={rib.holder} />
+                <Row label={tr('BIC / SWIFT')} value={rib.bic || '—'} />
+                <Row label={tr('IBAN')} value={formatIban(rib.iban)} />
+                <Row label={tr('Bank')} value={rib.bankName || '—'} />
+                {rib.bankAddress && <Row label={tr('Bank address')} value={rib.bankAddress} />}
+                <Row label={tr('Beneficiary')} value={rib.holder} />
               </Section>
 
               <div className={f.actions}>
                 <Link className={p.btn} href="/add-funds">
-                  <Icon name="chevron-left" size={12} /> Retour
-                </Link>
-                <Link className={`${p.btn} ${p.btnPrimary}`} href="/admin">
-                  <Icon name="pencil" size={13} /> Modifier les coordonnées
-                </Link>
+                  <Icon name="chevron-left" size={12} />{tr('Back')}</Link>
+                {isAdmin && (
+                  <Link className={`${p.btn} ${p.btnPrimary}`} href="/admin">
+                    <Icon name="pencil" size={13} />{tr('Edit the details')}</Link>
+                )}
               </div>
             </>
           )}

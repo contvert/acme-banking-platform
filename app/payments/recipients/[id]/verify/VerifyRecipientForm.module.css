@@ -1,0 +1,48 @@
+.form {
+  max-width: 460px;
+  margin: 0 auto;
+  padding: var(--ds-space-400);
+  border: 1px solid var(--ds-border-default);
+  border-radius: var(--ds-border-radius-large);
+  background: var(--ds-background-surface-raised);
+  text-align: center;
+}
+.icon {
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  margin: 0 auto var(--ds-space-200);
+  border-radius: 50%;
+  background: var(--ds-background-secondary);
+  color: var(--ds-icon-default);
+}
+.form h2 { margin: 0; color: var(--ds-text-emphasized); font-size: 21px; font-weight: 480; }
+.copy { margin: var(--ds-space-100) 0 var(--ds-space-250); color: var(--ds-text-secondary); font-size: 14px; line-height: 1.5; }
+.label { display: block; margin-bottom: var(--ds-space-75); text-align: left; color: var(--ds-text-default); font-size: 14px; font-weight: 480; }
+.code {
+  width: 100%;
+  min-height: 54px;
+  border: 1px solid var(--ds-border-input);
+  border-radius: var(--ds-border-radius-medium);
+  background: var(--ds-background-input);
+  color: var(--ds-text-emphasized);
+  font-family: var(--ds-font-family-display);
+  font-size: 28px;
+  font-weight: 480;
+  letter-spacing: 0.35em;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+.code:focus { outline: none; border-color: var(--ds-border-input-focused-underline); }
+.hint { margin: var(--ds-space-75) 0 0; color: var(--ds-text-tertiary); font-size: 13px; line-height: 1.4; }
+.status { margin: 0 0 var(--ds-space-200); color: var(--ds-text-secondary); font-size: 13px; line-height: 1.4; }
+.error { margin-bottom: var(--ds-space-150); padding: var(--ds-space-150); border-radius: var(--ds-border-radius-medium); background: var(--ds-background-error); color: var(--ds-text-error); font-size: 14px; text-align: left; }
+.confirm { width: 100%; justify-content: center; margin-top: var(--ds-space-300); }
+.footer { display: flex; justify-content: space-between; gap: var(--ds-space-100); margin-top: var(--ds-space-150); }
+.footer button:disabled { opacity: 0.5; cursor: not-allowed; }
+@media (max-width: 480px) {
+  .form { padding: var(--ds-space-250); }
+  .footer { flex-direction: column-reverse; }
+  .footer a, .footer button { width: 100%; justify-content: center; }
+}

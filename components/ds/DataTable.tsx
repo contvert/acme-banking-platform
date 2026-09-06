@@ -2,11 +2,16 @@
 
 import { useMemo, useState } from 'react';
 import { Icon } from './Icon';
-import t from '@/components/dashboard/TransactionsTable.module.css';
+import x from '@/components/dashboard/TransactionsTable.module.css';
+import { useT, useTx } from '@/components/i18n/I18nProvider';
+import type { Message } from '@/lib/i18n/messages/catalog';
 
 export interface Column<T> {
   key: string;
-  header: string;
+  /** Catalogued, so every fixed column heading is guaranteed a translation. */
+  header?: Message;
+  /** A heading that comes from data, or is already in the reader's language. */
+  headerText?: string;
   /** Render the cell. Falls back to the raw value at `key`. */
   cell?: (row: T) => React.ReactNode;
   /** Value used for sorting; enables the sort control on this column. */
@@ -20,7 +25,7 @@ export function DataTable<T>({
   columns,
   searchable,
   searchKeys,
-  emptyMessage = 'Nothing here yet.',
+  emptyMessage,
   countLabel,
 }: {
   rows: T[];
@@ -30,6 +35,7 @@ export function DataTable<T>({
   emptyMessage?: string;
   countLabel?: (n: number) => string;
 }) {
+  const t = useT();
   const [query, setQuery] = useState('');
   const [sort, setSort] = useState<{ key: string; dir: 'asc' | 'desc' } | null>(null);
 
@@ -64,29 +70,29 @@ export function DataTable<T>({
   }
 
   return (
-    <div className={t.wrap}>
+    <div className={x.wrap}>
       {searchable && (
-        <div className={t.toolbar}>
+        <div className={x.toolbar}>
           <input
-            className={t.searchInput}
-            placeholder="Search"
+            className={x.searchInput}
+            placeholder={t('Search')}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            aria-label="Search"
+            aria-label={t('Search')}
           />
-          <span className={t.count}>
-            {countLabel ? countLabel(view.length) : `${view.length} items`}
+          <span className={x.count}>
+            {countLabel ? countLabel(view.length) : t('{count} items', { count: view.length })}
           </span>
         </div>
       )}
 
-      <div className={t.scroll}>
-        <table className={t.table}>
+      <div className={x.scroll}>
+        <table className={x.table}>
           <thead>
             <tr>
               {columns.map((c) => {
                 const active = sort?.key === c.key;
-                const cls = [c.sortValue && t.sortable, c.numeric && t.numeric].filter(Boolean).join(' ');
+                const cls = [c.sortValue && x.sortable, c.numeric && x.numeric].filter(Boolean).join(' ');
                 return (
                   <th
                     key={c.key}
@@ -94,9 +100,9 @@ export function DataTable<T>({
                     onClick={c.sortValue ? () => toggleSort(c.key) : undefined}
                     aria-sort={active ? (sort!.dir === 'asc' ? 'ascending' : 'descending') : undefined}
                   >
-                    {c.header}
+                    {c.headerText ?? (c.header ? t(c.header) : '')}
                     {c.sortValue && (
-                      <span className={[t.sortIcon, active && t.sortActive].filter(Boolean).join(' ')}>
+                      <span className={[x.sortIcon, active && x.sortActive].filter(Boolean).join(' ')}>
                         <Icon name={active && sort!.dir === 'asc' ? 'arrow-up-right' : 'chevron-down'} size={11} />
                       </span>
                     )}
@@ -111,7 +117,7 @@ export function DataTable<T>({
                 {columns.map((c) => (
                   <td
                     key={c.key}
-                    className={[c.numeric && t.numeric, c.muted && t.muted].filter(Boolean).join(' ') || undefined}
+                    className={[c.numeric && x.numeric, c.muted && x.muted].filter(Boolean).join(' ') || undefined}
                   >
                     {c.cell ? c.cell(row) : String((row as Record<string, unknown>)[c.key] ?? '')}
                   </td>
@@ -121,7 +127,9 @@ export function DataTable<T>({
           </tbody>
         </table>
 
-        {view.length === 0 && <div className={t.empty}>{emptyMessage}</div>}
+        {view.length === 0 && (
+          <div className={x.empty}>{emptyMessage ?? t('Nothing here yet.')}</div>
+        )}
       </div>
     </div>
   );
@@ -137,14 +145,14 @@ export function Avatar({ name }: { name: string }) {
     .map((w) => w[0])
     .join('')
     .toUpperCase();
-  return <span className={t.avatar}>{initials}</span>;
+  return <span className={x.avatar}>{initials}</span>;
 }
 
 export function NameCell({ name }: { name: string }) {
   return (
-    <span className={t.party}>
+    <span className={x.party}>
       <Avatar name={name} />
-      <span className={t.partyName}>{name}</span>
+      <span className={x.partyName}>{name}</span>
     </span>
   );
 }
@@ -155,13 +163,16 @@ const NEUTRAL = /pending|processing|review|scheduled|draft|started|applied|upcom
 
 /** Status chip. Colour is derived from the word, so new statuses degrade gracefully. */
 export function Status({ value }: { value: string | null | undefined }) {
-  if (!value) return <span className={t.muted}>—</span>;
+  // The colour is decided on the source word, so a translated chip keeps the
+  // colour the English one would have had.
+  const tx = useTx();
+  if (!value) return <span className={x.muted}>—</span>;
   const cls = NEGATIVE.test(value)
-    ? t.statusFailed
+    ? x.statusFailed
     : NEUTRAL.test(value)
-      ? t.statusPending
+      ? x.statusPending
       : POSITIVE.test(value)
-        ? t.statusOk
-        : t.statusNeutral;
-  return <span className={`${t.status} ${cls}`}>{value}</span>;
+        ? x.statusOk
+        : x.statusNeutral;
+  return <span className={`${x.status} ${cls}`}>{tx(value)}</span>;
 }

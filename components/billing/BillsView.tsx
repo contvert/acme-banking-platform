@@ -4,6 +4,7 @@ import { Page, StatTiles, useTabs, Money, Note } from '@/components/ds/Page';
 import { DataTable, Status, NameCell, type Column } from '@/components/ds/DataTable';
 import { BILLS, BILL_SUMMARY, BILL_TABS, AP_EMAIL, type Bill } from '@/lib/mock/bills';
 import p from '@/components/ds/Page.module.css';
+import { useT } from '@/components/i18n/I18nProvider';
 
 const columns: Column<Bill>[] = [
   { key: 'dueDate', header: 'Due date', sortValue: (r) => r.dueDate, muted: true },
@@ -14,7 +15,6 @@ const columns: Column<Bill>[] = [
   { key: 'lastUpdated', header: 'Last updated', muted: true },
   {
     key: 'action',
-    header: '',
     numeric: true,
     cell: () => <button className={p.btn} type="button">Review</button>,
   },
@@ -22,40 +22,36 @@ const columns: Column<Bill>[] = [
 
 /** Bill Pay and Payments render the same view in the reference interface. */
 export function BillsView({ title }: { title: string }) {
+  const tr = useT();
   const tabs = useTabs(BILL_TABS);
 
   return (
     <Page
       title={title}
       actions={[
-        { label: 'Upload bill', icon: 'file-arrow-up' },
-        { label: 'Send money', icon: 'paper-plane', primary: true },
+        { label: tr('Upload bill'), icon: 'file-arrow-up' },
+        { label: tr('Send money'), icon: 'paper-plane', primary: true },
       ]}
     >
       <StatTiles
         tiles={[
           {
-            label: 'Total outstanding',
+            label: tr('Total outstanding'),
             value: BILL_SUMMARY.outstanding,
             meta: <Money value={BILL_SUMMARY.outstandingAmount} />,
           },
           {
-            label: 'Overdue',
+            label: tr('Overdue'),
             value: BILL_SUMMARY.overdue,
             meta: <Money value={BILL_SUMMARY.overdueAmount} />,
           },
           {
-            label: 'Due in next 7 days',
+            label: tr('Due in next 7 days'),
             value: BILL_SUMMARY.dueSoon,
             meta: <Money value={BILL_SUMMARY.dueSoonAmount} />,
           },
         ]}
       />
-
-      <Note>
-        Forward bills to <strong>{AP_EMAIL}</strong> and they are scanned and populated
-        automatically.
-      </Note>
 
       {tabs.node}
 

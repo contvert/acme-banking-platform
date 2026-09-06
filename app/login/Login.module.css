@@ -1,7 +1,7 @@
 .screen {
   --login-background: #ededf3;
   --login-surface: #fff;
-  --login-input: #eaeffe;
+  --login-control: #fbfcfd;
   --login-text: #1e1e2a;
   --login-secondary: #535461;
   --login-border: #dddde5;
@@ -21,8 +21,27 @@
 .topbar {
   position: absolute;
   top: 39px;
+  left: 32px;
   right: 32px;
   z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+/* Brand mark pinned to the far left of the top bar. Fixed light page, so no
+   theme inversion — the black logo stays visible in every theme. */
+.topbarLogo {
+  height: 26px;
+  width: auto;
+  display: block;
+}
+
+.topbarRight {
+  display: flex;
+  align-items: center;
+  gap: 16px;
 }
 
 .openAccount {
@@ -104,7 +123,7 @@
   overflow: hidden;
   border: 1px solid var(--login-border);
   border-radius: 8px;
-  background: #fbfcfd;
+  background: var(--login-control);
 }
 
 .inputControl {
@@ -131,7 +150,7 @@
   border: 0;
   border-radius: 0;
   outline: 0;
-  background: var(--login-input);
+  background: transparent;
   color: #10101a;
   font: inherit;
   font-size: 14px;
@@ -243,7 +262,8 @@
   color: var(--login-secondary);
   font-size: 13px;
   line-height: 20px;
-  white-space: nowrap;
+  /* No nowrap: the sentence fits on one line in English and in no other
+     language, and the explicit <br> already puts the link on its own row. */
 }
 
 .inlineLink {
@@ -271,6 +291,11 @@
   display: block;
   width: max-content;
   margin-top: 18px;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  cursor: pointer;
   color: var(--login-secondary);
   font-size: 13px;
   line-height: 20px;
@@ -288,6 +313,7 @@
 @media (max-width: 560px) {
   .topbar {
     top: 20px;
+    left: 20px;
     right: 20px;
   }
 
@@ -342,4 +368,17 @@
   .passkey {
     height: 44px;
   }
+}
+
+/* If the browser fills the field anyway — from its own menu, or because it
+   ignores the hint — it paints its own background over the design. Keep the
+   field looking like the field. */
+.input:-webkit-autofill,
+.input:-webkit-autofill:hover,
+.input:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--login-text);
+  -webkit-box-shadow: 0 0 0 1000px var(--login-control) inset;
+  box-shadow: 0 0 0 1000px var(--login-control) inset;
+  caret-color: var(--login-text);
+  transition: background-color 100000s ease-in-out 0s;
 }

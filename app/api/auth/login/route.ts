@@ -3,15 +3,17 @@ import { findByUsername, verifyPassword, updateUsers } from '@/lib/auth/store';
 import { createSessionToken, setSessionCookie } from '@/lib/auth/session';
 import { isProfileComplete, toPublicUser } from '@/lib/auth/types';
 import { portalForHostname, roleMatchesPortal } from '@/lib/auth/portal';
+import { getTranslator } from '@/lib/i18n/server';
 
 export const dynamic = 'force-dynamic';
 
 export async function POST(request: NextRequest) {
+  const t = await getTranslator();
   let body: { username?: string; password?: string };
   try {
     body = await request.json();
   } catch {
-    return NextResponse.json({ error: 'Body must be JSON' }, { status: 400 });
+    return NextResponse.json({ error: t('Body must be JSON.') }, { status: 400 });
   }
 
   const username = (body.username ?? '').trim().toLowerCase();
@@ -21,7 +23,7 @@ export async function POST(request: NextRequest) {
   // One message for every failure, so the response cannot be used to learn
   // which usernames exist.
   const refuse = () =>
-    NextResponse.json({ error: 'Identifiant ou mot de passe incorrect' }, { status: 401 });
+    NextResponse.json({ error: t('Incorrect username or password.') }, { status: 401 });
 
   if (!user || user.disabled) {
     // Still spend the hashing time, so a missing user is not faster to probe.
@@ -52,8 +54,8 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         error: portal === 'admin'
-          ? 'Cet accès appartient au portail client.'
-          : 'Cet accès appartient au portail administrateur.',
+          ? t('This access belongs to the client portal.')
+          : t('This access belongs to the administrator portal.'),
       },
       { status: 403 },
     );

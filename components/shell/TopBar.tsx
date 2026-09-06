@@ -1,17 +1,18 @@
 'use client';
 
-import { useState } from 'react';
 import { Icon } from '@/components/ds/Icon';
 import Link from 'next/link';
 import { ThemeToggle } from './ThemeToggle';
 import { AccountMenu } from './AccountMenu';
 import { MoveMoneyMenu } from './MoveMoneyMenu';
 import { useShell } from './ShellContext';
+import { useT } from '@/components/i18n/I18nProvider';
+import { LanguageSwitcher } from '@/components/i18n/LanguageSwitcher';
 import s from './TopBar.module.css';
 
 export function TopBar() {
-  const [privateMode, setPrivateMode] = useState(false);
-  const { toggleNav, navOpen } = useShell();
+  const { toggleNav, navOpen, privateMode, togglePrivate } = useShell();
+  const t = useT();
 
   return (
     <>
@@ -19,7 +20,7 @@ export function TopBar() {
         <button
           className={s.menuBtn}
           type="button"
-          aria-label="Open menu"
+          aria-label={t('Open menu')}
           aria-expanded={navOpen}
           onClick={toggleNav}
         >
@@ -27,9 +28,9 @@ export function TopBar() {
         </button>
 
         {/* Icon-only below 640px; the label is kept for assistive tech. */}
-        <button className={s.search} type="button" aria-label="Search for anything">
+        <button className={s.search} type="button" aria-label={t('Search for anything')}>
           <Icon name="magnifying-glass" size={16} />
-          <span className={s.searchLabel}>Search for anything</span>
+          <span className={s.searchLabel}>{t('Search for anything')}</span>
           <span className={s.kbd}>⌘K</span>
         </button>
 
@@ -38,18 +39,16 @@ export function TopBar() {
         <button
           className={s.iconBtn}
           type="button"
-          aria-label="Toggle private mode"
+          aria-label={t('Toggle private mode')}
           aria-pressed={privateMode}
-          onClick={() => setPrivateMode((v) => !v)}
+          onClick={togglePrivate}
         >
           <Icon name={privateMode ? 'eye-slash' : 'eye'} size={16} />
         </button>
+        <LanguageSwitcher />
         <ThemeToggle />
-        <button className={s.iconBtn} type="button" aria-label="Notifications">
-          <Icon name="bell" size={16} />
-        </button>
         <MoveMoneyMenu />
-        <Link className={s.iconBtn} href="/settings" aria-label="Settings">
+        <Link className={s.iconBtn} href="/settings" aria-label={t('Settings')}>
           <Icon name="gear" size={16} />
         </Link>
         <AccountMenu />

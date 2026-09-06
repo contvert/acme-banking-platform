@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { requireUser, isDenied } from '@/lib/auth/guard';
 import { readUsers, createUser } from '@/lib/auth/store';
 import { toPublicUser } from '@/lib/auth/types';
+import { getTranslator } from '@/lib/i18n/server';
 
 export const dynamic = 'force-dynamic';
 
@@ -20,6 +21,7 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
+  const t = await getTranslator();
   const auth = await requireUser('admin');
   if (isDenied(auth)) return auth.response;
 
@@ -27,7 +29,7 @@ export async function POST(request: Request) {
   try {
     body = await request.json();
   } catch {
-    return NextResponse.json({ error: 'Body must be JSON' }, { status: 400 });
+    return NextResponse.json({ error: t('Body must be JSON.') }, { status: 400 });
   }
 
   const role = body.role === 'admin' ? 'admin' : 'client';
@@ -39,6 +41,8 @@ export async function POST(request: Request) {
     accountIds: Array.isArray(body.accountIds) ? body.accountIds : [],
   });
 
-  if ('error' in result) return NextResponse.json({ error: result.error }, { status: 400 });
+  if ('error' in result) {
+    return NextResponse.json({ error: t(result.error) }, { status: 400 });
+  }
   return NextResponse.json({ user: toPublicUser(result.user) }, { status: 201 });
 }

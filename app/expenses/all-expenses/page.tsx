@@ -3,6 +3,7 @@
 import { Page, useTabs, Money } from '@/components/ds/Page';
 import { DataTable, Status, NameCell, type Column } from '@/components/ds/DataTable';
 import { EXPENSES, type Expense } from '@/lib/mock/expenses';
+import { useT } from '@/components/i18n/I18nProvider';
 
 const columns: Column<Expense>[] = [
   { key: 'date', header: 'Date', sortValue: (r) => r.date, muted: true },
@@ -14,20 +15,21 @@ const columns: Column<Expense>[] = [
 ];
 
 export default function ReimbursementsPage() {
+  const tr = useT();
   const mine = EXPENSES.filter((e) => e.member === 'Jane Black');
   const tabs = useTabs([
-    { label: 'All expenses', count: EXPENSES.length },
-    { label: 'My expenses', count: mine.length },
+    { label: tr('All expenses'), count: EXPENSES.length },
+    { label: tr('My expenses'), count: mine.length },
   ]);
 
   const rows = tabs.active === 'My expenses' ? mine : EXPENSES;
 
   return (
     <Page
-      title="Reimbursements"
+      title={tr('Reimbursements')}
       actions={[
-        { label: 'Settings', icon: 'gear', href: '/team-spend/policies/reimbursements' },
-        { label: 'Submit expense', icon: 'plus', primary: true, href: '/send-money/pay/start' },
+        { label: tr('Settings'), icon: 'gear', href: '/team-spend/policies/reimbursements' },
+        { label: tr('Submit expense'), icon: 'plus', primary: true, href: '/send-money/pay/start' },
       ]}
     >
       {tabs.node}

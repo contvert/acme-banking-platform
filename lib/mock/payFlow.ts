@@ -7,11 +7,7 @@ export interface PayeeSuggestion {
   email: string | null;
 }
 
-export const RECENTLY_PAID: PayeeSuggestion[] = [
-  { name: 'Jason Green', initials: 'JG', role: 'Contractor', email: 'jason@green.example' },
-  { name: 'Domestic Ads', initials: 'DA', role: null, email: null },
-  { name: 'Aliyah McMahon', initials: 'AM', role: 'Nutritionist', email: 'aliyah@mcmahon.example' },
-];
+export const RECENTLY_PAID: PayeeSuggestion[] = [];
 
 /** Deposit methods, in the order and wording the reference uses. */
 export interface FundingMethod {
@@ -29,7 +25,7 @@ export const FUNDING_METHODS: FundingMethod[] = [
   { name: 'SAFE Investment', pill: null, hint: 'Accept an investment into your account.', icon: 'file-contract' },
 ];
 
-export const WIRE_DETAILS = { routingNumber: '132456789', accountSuffix: '1038' };
+export const WIRE_DETAILS = { routingNumber: '', accountSuffix: '' };
 
 /** Spend-control options behind the Create a card select. */
 export const CARD_CONTROL_TYPES = [

@@ -8,6 +8,7 @@ import { Icon } from '@/components/ds/Icon';
 import { TRANSACTIONS } from '@/lib/mock/transactions';
 import p from '@/components/ds/Page.module.css';
 import t from '@/components/dashboard/TransactionsTable.module.css';
+import { useT } from '@/components/i18n/I18nProvider';
 
 /** Transaction ids in the reference are opaque; index into the ledger deterministically. */
 function pick(id: string) {
@@ -17,32 +18,32 @@ function pick(id: string) {
 }
 
 export default function TransactionDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const translate = useT();
   const { id } = use(params);
   const tx = pick(id);
 
   const rows: { label: string; value: React.ReactNode }[] = [
-    { label: 'Amount', value: <Money value={tx.amount} tone={(tx.amount ?? 0) > 0 ? 'green' : 'default'} /> },
-    { label: 'Date', value: tx.date },
-    { label: 'To / From', value: tx.party },
-    { label: 'Account', value: tx.account },
-    { label: 'Method', value: tx.method },
-    { label: 'Status', value: tx.status ? <span className={`${t.status} ${t.statusFailed}`}>{tx.status}</span> : 'Completed' },
-    { label: 'Reference', value: id },
+    { label: translate('Amount'), value: <Money value={tx.amount} tone={(tx.amount ?? 0) > 0 ? 'green' : 'default'} /> },
+    { label: translate('Date'), value: tx.date },
+    { label: translate('To / From'), value: tx.party },
+    { label: translate('Account'), value: tx.account },
+    { label: translate('Method'), value: tx.method },
+    { label: translate('Status'), value: tx.status ? <span className={`${t.status} ${t.statusFailed}`}>{tx.status}</span> : 'Completed' },
+    { label: translate('Reference'), value: id },
   ];
 
   return (
     <Page
       title={tx.party}
       actions={[
-        { label: 'Add note', icon: 'note' },
-        { label: 'Download receipt', icon: 'arrow-down-to-line' },
+        { label: translate('Add note'), icon: 'note' },
+        { label: translate('Download receipt'), icon: 'arrow-down-to-line' },
       ]}
     >
       <Link href="/transactions" className={p.btn} style={{ marginBottom: 20 }}>
-        <Icon name="chevron-left" size={12} /> All transactions
-      </Link>
+        <Icon name="chevron-left" size={12} />{translate('All transactions')}</Link>
 
-      <SectionTitle>Details</SectionTitle>
+      <SectionTitle>{translate('Details')}</SectionTitle>
       <Card style={{ maxWidth: 640 }}>
         {rows.map((r, i) => (
           <div

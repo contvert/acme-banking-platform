@@ -5,6 +5,7 @@ import { Card } from '@/components/ds/Card';
 import { Icon } from '@/components/ds/Icon';
 import { NOTIFICATION_GROUPS } from '@/lib/mock/settingsData';
 import t from '@/components/dashboard/TransactionsTable.module.css';
+import { useT } from '@/components/i18n/I18nProvider';
 
 function Channel({ label, on }: { label: string; on: boolean }) {
   return (
@@ -18,8 +19,9 @@ function Channel({ label, on }: { label: string; on: boolean }) {
 }
 
 export default function NotificationsPage() {
+  const translate = useT();
   return (
-    <Page title="Notifications">
+    <Page title={translate('Notifications')}>
       {NOTIFICATION_GROUPS.map((g) => (
         <div key={g.title}>
           <SectionTitle>{g.title}</SectionTitle>
@@ -34,8 +36,8 @@ export default function NotificationsPage() {
                     <span className={t.mutedWrap} style={{ fontSize: 13 }}>{i.description}</span>
                   </span>
                   <span style={{ display: 'flex', gap: 8 }}>
-                    <Channel label="Email" on={i.email} />
-                    <Channel label="Push" on={i.push} />
+                    <Channel label={translate('Email')} on={i.email} />
+                    <Channel label={translate('Push')} on={i.push} />
                   </span>
                 </div>
               </Card>

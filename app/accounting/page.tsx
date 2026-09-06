@@ -5,6 +5,7 @@ import { useTransactions } from '@/lib/config/adapters';
 import { DataTable, NameCell, type Column } from '@/components/ds/DataTable';
 import type {Transaction} from '@/lib/mock/transactions';
 import t from '@/components/dashboard/TransactionsTable.module.css';
+import { useT } from '@/components/i18n/I18nProvider';
 
 /** Accounting reuses the transaction ledger with bookkeeping columns bolted on. */
 const columns: Column<Transaction>[] = [
@@ -22,27 +23,27 @@ const columns: Column<Transaction>[] = [
 ];
 
 export default function AccountingPage() {
+  const translate = useT();
   const TRANSACTIONS = useTransactions();
   const tabs = useTabs([
-    { label: 'All', count: TRANSACTIONS.length },
-    { label: 'Needs review' },
-    { label: 'Ready to Export' },
-    { label: 'Sync Error', count: 3 },
-    { label: 'Exported' },
+    { label: translate('All'), count: TRANSACTIONS.length },
+    { label: translate('Needs review') },
+    { label: translate('Ready to Export') },
+    { label: translate('Sync Error'), count: 3 },
+    { label: translate('Exported') },
   ]);
 
   const rows = tabs.active === 'All' ? TRANSACTIONS : TRANSACTIONS.slice(0, 3);
 
   return (
     <Page
-      title="Accounting"
+      title={translate('Accounting')}
       actions={[
-        { label: 'Settings', icon: 'gear', href: '/accounting/mapping' },
-        { label: 'Export', icon: 'arrow-down-to-line', primary: true },
+        { label: translate('Settings'), icon: 'gear', href: '/accounting/mapping' },
+        { label: translate('Export'), icon: 'arrow-down-to-line', primary: true },
       ]}
     >
-      <Note>
-        Your sync is almost complete. Check the <strong>Sync Error</strong> tab to review items
+      <Note>{translate('Your sync is almost complete. Check the')}<strong>{translate('Sync Error')}</strong> tab to review items
         that need attention.
       </Note>
 

@@ -4,6 +4,7 @@ import { useId, useMemo, useRef, useState } from 'react';
 import { BALANCE_SERIES, BALANCE_RANGE } from '@/lib/mock/dashboard';
 import { MoneyCompact } from '@/components/ds/Money';
 import s from './BalanceChart.module.css';
+import { useI18n } from '@/components/i18n/I18nProvider';
 
 const W = 800;
 const H = 200;
@@ -28,6 +29,7 @@ function smoothPath(pts: { x: number; y: number }[]) {
 }
 
 export function BalanceChart() {
+  const { t: tr, tag } = useI18n();
   const gid = useId().replace(/:/g, '');
   const wrapRef = useRef<HTMLDivElement>(null);
   const [hover, setHover] = useState<number | null>(null);
@@ -45,7 +47,16 @@ export function BalanceChart() {
     return { pts, line, area: `${line} L${W},${H} L0,${H} Z` };
   }, []);
 
-  const ticks = [4, 9, 14, 19, 24].map((i) => BALANCE_SERIES[i]?.date).filter(Boolean);
+  // Month names belong to the reader's language, not to the data.
+  const dayLabel = useMemo(() => {
+    const format = new Intl.DateTimeFormat(tag, { month: 'short', day: 'numeric' });
+    return (iso: string) => format.format(new Date(iso + 'T00:00:00'));
+  }, [tag]);
+
+  const ticks = [4, 9, 14, 19, 24]
+    .map((i) => BALANCE_SERIES[i]?.date)
+    .filter(Boolean)
+    .map(dayLabel);
 
   function onMove(e: React.MouseEvent<SVGSVGElement>) {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -65,7 +76,7 @@ export function BalanceChart() {
         onMouseMove={onMove}
         onMouseLeave={() => setHover(null)}
         role="img"
-        aria-label="Balance over the last 30 days"
+        aria-label={tr('Balance over the last 30 days')}
       >
         <defs>
           <linearGradient id={`fill-${gid}`} x1="0" y1="0" x2="0" y2="1">
@@ -104,7 +115,7 @@ export function BalanceChart() {
           className={s.tooltip}
           style={{ left: `${(hp.x / W) * 100}%`, top: `${(hp.y / H) * 100}%` }}
         >
-          <div className={s.tooltipDate}>{BALANCE_SERIES[hover].date}</div>
+          <div className={s.tooltipDate}>{dayLabel(BALANCE_SERIES[hover].date)}</div>
           <MoneyCompact value={BALANCE_RANGE.low + BALANCE_SERIES[hover].value * (BALANCE_RANGE.high - BALANCE_RANGE.low)} />
         </div>
       )}

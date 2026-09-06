@@ -8,6 +8,7 @@ import {
 } from '@/lib/mock/settingsData';
 import p from '@/components/ds/Page.module.css';
 import t from '@/components/dashboard/TransactionsTable.module.css';
+import { useT } from '@/components/i18n/I18nProvider';
 
 function Row({ item, action }: { item: Integration; action: React.ReactNode }) {
   return (
@@ -35,9 +36,10 @@ function Row({ item, action }: { item: Integration; action: React.ReactNode }) {
 }
 
 export default function IntegrationsPage() {
+  const translate = useT();
   return (
-    <Page title="Integrations">
-      <SectionTitle>Connected</SectionTitle>
+    <Page title={translate('Integrations')}>
+      <SectionTitle>{translate('Connected')}</SectionTitle>
       <div style={{ display: 'grid', gap: 12, marginBottom: 8 }}>
         {CONNECTED_INTEGRATIONS.map((i) => (
           <Row
@@ -48,7 +50,7 @@ export default function IntegrationsPage() {
         ))}
       </div>
 
-      <SectionTitle>Available</SectionTitle>
+      <SectionTitle>{translate('Available')}</SectionTitle>
       <div style={{ display: 'grid', gap: 12 }}>
         {AVAILABLE_INTEGRATIONS.map((i) => (
           <Row
@@ -57,7 +59,7 @@ export default function IntegrationsPage() {
             action={
               <span style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                 <span className={`${t.status} ${t.statusNeutral}`}>{i.category}</span>
-                <button className={p.btn} type="button">Connect</button>
+                <button className={p.btn} type="button">{translate('Connect')}</button>
               </span>
             }
           />

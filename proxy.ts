@@ -1,4 +1,7 @@
 import { NextResponse, type NextRequest } from 'next/server';
+import { catalogFor } from '@/lib/i18n/catalogs';
+import { isLocale, LOCALE_COOKIE, negotiateLocale } from '@/lib/i18n/locales';
+import { makeTranslator } from '@/lib/i18n/translate';
 import {
   hostnameForPortal,
   portalForHostname,
@@ -12,7 +15,19 @@ import {
  * use and keeps the admin/client host realms separated.
  */
 
-const PUBLIC_PATHS = ['/login', '/api/auth/login', '/api/auth/logout', '/api/auth/first-run'];
+const PUBLIC_PATHS = [
+  '/login',
+  '/api/auth/login',
+  '/api/auth/logout',
+  '/api/auth/first-run',
+  // The sign-in page has to be readable before there is a session.
+  '/api/i18n',
+  // Template preview; the route itself refuses to run outside development.
+  '/api/dev/email-preview',
+  // External provisioning bridge; authenticates with a shared bearer secret
+  // rather than a portal session, so it is exempt from the session gate.
+  '/api/provisioning',
+];
 const PORTAL_HEADER = 'x-mercury-auth-portal';
 
 function nextWithPortal(request: NextRequest, portal: 'admin' | 'client' | 'shared') {
@@ -36,7 +51,20 @@ function decodePayload(
   }
 }
 
+/**
+ * The proxy runs before the app, so it resolves the language from the request
+ * itself rather than through `next/headers`. Its refusals are read by people.
+ */
+function translatorFor(request: NextRequest) {
+  const stored = request.cookies.get(LOCALE_COOKIE)?.value;
+  const locale = isLocale(stored)
+    ? stored
+    : negotiateLocale(request.headers.get('accept-language'));
+  return makeTranslator(catalogFor(locale));
+}
+
 export function proxy(request: NextRequest) {
+  const t = translatorFor(request);
   const { hostname, pathname } = request.nextUrl;
   // `nextUrl.hostname` can be the internal server host in development or
   // behind a proxy. The HTTP Host header is the public browser origin and the
@@ -63,7 +91,7 @@ export function proxy(request: NextRequest) {
 
   if (!signedIn) {
     if (pathname.startsWith('/api/')) {
-      return NextResponse.json({ error: 'Non authentifié' }, { status: 401 });
+      return NextResponse.json({ error: t('Not signed in.') }, { status: 401 });
     }
     const url = request.nextUrl.clone();
     url.pathname = '/login';
@@ -73,7 +101,7 @@ export function proxy(request: NextRequest) {
 
   if (wrongPortal) {
     if (pathname.startsWith('/api/')) {
-      return NextResponse.json({ error: 'Session incompatible avec ce portail' }, { status: 403 });
+      return NextResponse.json({ error: t('This session does not belong to this portal.') }, { status: 403 });
     }
     const url = request.nextUrl.clone();
     url.pathname = '/login';
@@ -106,7 +134,7 @@ export function proxy(request: NextRequest) {
 
   if (adminOnly && payload?.role !== 'admin') {
     if (pathname.startsWith('/api/')) {
-      return NextResponse.json({ error: 'Réservé à l’administrateur' }, { status: 403 });
+      return NextResponse.json({ error: t('Administrators only.') }, { status: 403 });
     }
     const url = request.nextUrl.clone();
     url.pathname = '/dashboard';

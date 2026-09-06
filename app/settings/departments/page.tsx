@@ -5,14 +5,16 @@ import { Card } from '@/components/ds/Card';
 import { Icon } from '@/components/ds/Icon';
 import { DEPARTMENTS } from '@/lib/mock/settingsData';
 import { TEAM } from '@/lib/mock/team';
+import { useT } from '@/components/i18n/I18nProvider';
 
 export default function DepartmentsPage() {
+  const tr = useT();
   return (
     <Page
-      title="Departments"
+      title={tr('Departments')}
       actions={[
-        { label: 'Connect HR system', icon: 'link' },
-        { label: 'Add department', icon: 'plus', primary: true, href: '/settings/users/invite/advisors/details' },
+        { label: tr('Connect HR system'), icon: 'link' },
+        { label: tr('Add department'), icon: 'plus', primary: true, href: '/settings/users/invite/advisors/details' },
       ]}
     >
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 16 }}>

@@ -4,9 +4,12 @@ import { Suspense, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { Icon } from '@/components/ds/Icon';
+import { useT } from '@/components/i18n/I18nProvider';
+import { LanguageSwitcher } from '@/components/i18n/LanguageSwitcher';
 import s from './Login.module.css';
 
 function LoginForm() {
+  const t = useT();
   const params = useSearchParams();
   const next = params.get('next') || '/dashboard';
 
@@ -31,11 +34,13 @@ function LoginForm() {
       .catch(() => {});
   }, []);
 
-  function showUnavailable(feature: 'password reset' | 'passkeys') {
+  function showUnavailable(feature: 'password reset' | 'passkeys' | 'privacy policy') {
     setError(
       feature === 'passkeys'
-        ? 'Passkey sign-in is not available in this environment. Use your email and password.'
-        : 'Contact your administrator to reset your password.',
+        ? t('Passkey sign-in is not available in this environment. Use your email and password.')
+        : feature === 'privacy policy'
+          ? t('This demonstration has no privacy policy of its own.')
+          : t('Contact your administrator to reset your password.'),
     );
   }
 
@@ -51,7 +56,7 @@ function LoginForm() {
       });
       const body = await res.json().catch(() => ({}));
       if (!res.ok) {
-        setError(body.error ?? 'Unable to log in.');
+        setError(body.error ?? t('Unable to log in.'));
         return;
       }
       // A full replace ensures the server layout is rebuilt with the new
@@ -63,26 +68,28 @@ function LoginForm() {
           : next;
       window.location.replace(destination);
     } catch {
-      setError('Unable to log in.');
+      setError(t('Unable to log in.'));
     } finally {
       setBusy(false);
     }
   }
 
   return (
-    <form className={s.card} onSubmit={submit}>
+    <form className={s.card} onSubmit={submit} autoComplete="off">
       <div className={s.cardBody}>
-        <h1 className={s.title}>Log in</h1>
+        <h1 className={s.title}>{t('Log in')}</h1>
 
         {error && <div className={s.error} role="alert">{error}</div>}
 
         <div className={s.field}>
-          <label className={s.label} htmlFor="username">Email</label>
+          <label className={s.label} htmlFor="username">{t('Email')}</label>
           <div className={s.inputControl}>
             <input
               id="username"
               className={s.input}
-              autoComplete="username"
+              // The browser should not drop a saved identity into an empty
+              // form on its own; a person signing in types who they are.
+              autoComplete="off"
               autoCapitalize="none"
               spellCheck={false}
               value={username}
@@ -93,14 +100,17 @@ function LoginForm() {
         </div>
 
         <div className={s.field}>
-          <label className={s.label} htmlFor="password">Password</label>
+          <label className={s.label} htmlFor="password">{t('Password')}</label>
           <div className={s.passwordControl}>
             <div className={s.passwordInput}>
               <input
                 id="password"
                 className={s.input}
                 type={reveal ? 'text' : 'password'}
-                autoComplete="current-password"
+                // `new-password` is what actually stops Chrome pre-filling a
+                // stored password: it ignores `off` on a field it reads as a
+                // sign-in one.
+                autoComplete="new-password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
@@ -109,7 +119,7 @@ function LoginForm() {
             <button
               className={s.eye}
               type="button"
-              aria-label={reveal ? 'Hide password' : 'Show password'}
+              aria-label={reveal ? t('Hide password') : t('Show password')}
               aria-pressed={reveal}
               onClick={() => setReveal((v) => !v)}
             >
@@ -121,12 +131,12 @@ function LoginForm() {
             type="button"
             onClick={() => showUnavailable('password reset')}
           >
-            Forgot password?
+            {t('Forgot password?')}
           </button>
         </div>
 
         <button className={s.submit} type="submit" disabled={busy || !username || !password}>
-          {busy ? 'Logging in…' : 'Log in'}
+          {busy ? t('Logging in…') : t('Log in')}
         </button>
       </div>
 
@@ -137,23 +147,38 @@ function LoginForm() {
           onClick={() => showUnavailable('passkeys')}
         >
           <Icon name="key" size={15} />
-          Continue with passkey
+          {t('Continue with passkey')}
         </button>
 
         <p className={s.passkeyCopy}>
-          Log in securely using one click, your face, or your fingerprint.
+          {t('Log in securely using one click, your face, or your fingerprint.')}
           <br />
           <button type="button" className={s.inlineLink} onClick={() => showUnavailable('passkeys')}>
-            Learn how to set it up
+            {t('Learn how to set it up')}
             <Icon name="arrow-up-right" size={11} />
           </button>
         </p>
 
-        <a className={s.privacy} href="https://mercury.com/legal/privacy" target="_blank" rel="noreferrer">
-          Privacy Policy
-        </a>
+        <button
+          className={s.privacy}
+          type="button"
+          onClick={() => showUnavailable('privacy policy')}
+        >
+          {t('Privacy Policy')}
+        </button>
       </div>
     </form>
+  );
+}
+
+/** Split out so the topbar can use the translator without the page being a hook. */
+function OpenAccountLink() {
+  const t = useT();
+  return (
+    <Link className={s.openAccount} href="/signup">
+      {t('Open account')}
+      <Icon name="chevron-right" size={15} />
+    </Link>
   );
 }
 
@@ -161,10 +186,11 @@ export default function LoginPage() {
   return (
     <div className={s.screen}>
       <div className={s.topbar}>
-        <Link className={s.openAccount} href="/signup">
-          Open Account
-          <Icon name="chevron-right" size={15} />
-        </Link>
+        <img src="/logo.png" alt="Mercury" className={s.topbarLogo} />
+        <div className={s.topbarRight}>
+          <LanguageSwitcher variant="standalone" />
+          <OpenAccountLink />
+        </div>
       </div>
       <div className={s.center}>
         <div className={s.stage}>

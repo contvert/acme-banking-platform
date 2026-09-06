@@ -87,6 +87,24 @@ export interface BankDetail {
   primary: boolean;
 }
 
+/** Bank details for a beneficiary a client can transfer money to. */
+export interface RecipientConfig {
+  id: string;
+  /** Keeps every saved beneficiary private to the client who created it. */
+  ownerUserId: string;
+  /** Account holder as it appears on the beneficiary's bank account. */
+  name: string;
+  iban: string;
+  bic: string;
+  bankName: string;
+  currency: Currency;
+  /** A beneficiary cannot be used for a transfer until the email OTP succeeds. */
+  verificationStatus: 'pending' | 'verified';
+  verifiedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface CompanyInfo {
   name: string;
   legalName: string;
@@ -120,6 +138,7 @@ export interface AppConfig {
   notifications: NotificationConfig[];
   chat: ChatMessage[];
   bankDetails: BankDetail[];
+  recipients: RecipientConfig[];
   sections: SectionFlags;
 }
 

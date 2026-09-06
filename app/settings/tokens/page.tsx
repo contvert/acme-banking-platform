@@ -3,6 +3,7 @@
 import { Page } from '@/components/ds/Page';
 import { DataTable, type Column } from '@/components/ds/DataTable';
 import { API_TOKENS, type ApiToken } from '@/lib/mock/settingsData';
+import { useT } from '@/components/i18n/I18nProvider';
 
 const columns: Column<ApiToken>[] = [
   { key: 'nickname', header: 'Nickname', sortValue: (r) => r.nickname },
@@ -14,8 +15,9 @@ const columns: Column<ApiToken>[] = [
 ];
 
 export default function TokensPage() {
+  const t = useT();
   return (
-    <Page title="API Tokens" actions={[{ label: 'Create an API token', icon: 'plus', primary: true }]}>
+    <Page title={t('API Tokens')} actions={[{ label: t('Create an API token'), icon: 'plus', primary: true }]}>
       <DataTable rows={API_TOKENS} columns={columns} countLabel={(n) => `${n} tokens`} />
     </Page>
   );

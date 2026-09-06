@@ -4,6 +4,7 @@ import { Page, Money } from '@/components/ds/Page';
 import { DataTable, Status, type Column } from '@/components/ds/DataTable';
 import { SERIES, type Series } from '@/lib/mock/invoicingExtras';
 import t from '@/components/dashboard/TransactionsTable.module.css';
+import { useT } from '@/components/i18n/I18nProvider';
 
 const columns: Column<Series>[] = [
   {
@@ -25,8 +26,9 @@ const columns: Column<Series>[] = [
 ];
 
 export default function SeriesPage() {
+  const translate = useT();
   return (
-    <Page title="Recurring Series" actions={[{ label: 'Create series', icon: 'plus', primary: true, href: '/invoicing/create-invoice' }]}>
+    <Page title={translate('Recurring Series')} actions={[{ label: translate('Create series'), icon: 'plus', primary: true, href: '/invoicing/create-invoice' }]}>
       <DataTable rows={SERIES} columns={columns} searchable
         searchKeys={(r) => `${r.customer} ${r.seriesId} ${r.status}`}
         countLabel={(n) => `${n} series`} />

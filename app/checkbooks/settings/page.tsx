@@ -6,6 +6,7 @@ import { DataTable, type Column } from '@/components/ds/DataTable';
 import { CHECKBOOKS, CHECK_REVIEW, CHECK_ACCOUNTS, type Checkbook } from '@/lib/mock/checkbookSettings';
 import p from '@/components/ds/Page.module.css';
 import t from '@/components/dashboard/TransactionsTable.module.css';
+import { useT } from '@/components/i18n/I18nProvider';
 
 const columns: Column<Checkbook>[] = [
   { key: 'ordered', header: 'Order date', muted: true, sortValue: (r) => r.ordered },
@@ -15,12 +16,11 @@ const columns: Column<Checkbook>[] = [
 ];
 
 export default function CheckbookSettingsPage() {
+  const translate = useT();
   return (
-    <Page title="Checkbook Settings" actions={[{ label: 'Order Checkbook', icon: 'money-check', primary: true, href: '/checkbooks/settings' }]}>
-      <SectionTitle>Enabled accounts</SectionTitle>
-      <p style={{ fontSize: 15, color: 'var(--ds-text-secondary)', marginTop: 0 }}>
-        Enabling an account lets you order checkbooks for it, including from third-party providers.
-      </p>
+    <Page title={translate('Checkbook Settings')} actions={[{ label: translate('Order Checkbook'), icon: 'money-check', primary: true, href: '/checkbooks/settings' }]}>
+      <SectionTitle>{translate('Enabled accounts')}</SectionTitle>
+      <p style={{ fontSize: 15, color: 'var(--ds-text-secondary)', marginTop: 0 }}>{translate('Enabling an account lets you order checkbooks for it, including from third-party providers.')}</p>
       <Card style={{ maxWidth: 700, marginBottom: 24 }}>
         {CHECK_ACCOUNTS.map((a, i) => (
           <div key={a.name} style={{
@@ -36,19 +36,19 @@ export default function CheckbookSettingsPage() {
         ))}
       </Card>
 
-      <SectionTitle>Check review settings</SectionTitle>
+      <SectionTitle>{translate('Check review settings')}</SectionTitle>
       <Card style={{ maxWidth: 700, marginBottom: 24 }}>
         <p style={{ marginTop: 0, fontSize: 15, color: 'var(--ds-text-secondary)', lineHeight: 1.5 }}>
           {CHECK_REVIEW.note}
         </p>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <span style={{ flex: 1, fontSize: 16 }}>Default review action</span>
+          <span style={{ flex: 1, fontSize: 16 }}>{translate('Default review action')}</span>
           <span className={`${t.status} ${t.statusOk}`}>{CHECK_REVIEW.defaultAction}</span>
-          <button className={p.btn} type="button">Edit</button>
+          <button className={p.btn} type="button">{translate('Edit')}</button>
         </div>
       </Card>
 
-      <SectionTitle>Ordered checkbooks</SectionTitle>
+      <SectionTitle>{translate('Ordered checkbooks')}</SectionTitle>
       <DataTable rows={CHECKBOOKS} columns={columns} countLabel={(n) => `${n} checkbooks`} />
     </Page>
   );

@@ -34,6 +34,7 @@ export const DEFAULT_CONFIG: AppConfig = {
   transactions: [],
   notifications: [],
   chat: [],
+  recipients: [],
   bankDetails: [
     {
       id: 'rib-main',
@@ -41,7 +42,7 @@ export const DEFAULT_CONFIG: AppConfig = {
       holder: BRAND.legalName,
       iban: 'FR7630006000011234567890189',
       bic: 'AGRIFRPP',
-      bankName: 'Banque Acme',
+      bankName: 'Banque Mercury',
       bankAddress: '1 rue de la Banque, 75001 Paris',
       currency: 'EUR',
       primary: true,

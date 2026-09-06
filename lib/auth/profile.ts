@@ -86,9 +86,18 @@ export function validateClientProfile(profile: ClientProfileDraft): ClientProfil
   return errors;
 }
 
-export function profileDraftForUser(user: Pick<User, 'displayName' | 'profile'>): ClientProfileDraft {
+export function profileDraftForUser(
+  user: Pick<User, 'username' | 'displayName' | 'profile'>,
+): ClientProfileDraft {
   if (!user.profile) {
-    return { ...EMPTY_CLIENT_PROFILE, preferredName: user.displayName };
+    // `displayName` falls back to the sign-in identity when the administrator
+    // left it blank. That is an address, not a name, and offering it as the
+    // client's preferred name is worse than offering nothing.
+    const named = user.displayName.trim().toLowerCase() !== user.username.trim().toLowerCase();
+    return {
+      ...EMPTY_CLIENT_PROFILE,
+      preferredName: named ? user.displayName : '',
+    };
   }
   return {
     preferredName: user.profile.preferredName,

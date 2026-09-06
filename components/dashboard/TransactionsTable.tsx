@@ -7,6 +7,7 @@ import type { Transaction } from '@/lib/mock/transactions';
 import { useTransactions } from '@/lib/config/adapters';
 import { TRANSACTION_VIEWS } from '@/lib/mock/dashboard';
 import s from './TransactionsTable.module.css';
+import { useT } from '@/components/i18n/I18nProvider';
 
 type SortKey = 'date' | 'party' | 'amount' | 'account';
 type Dir = 'asc' | 'desc';
@@ -45,6 +46,7 @@ export function TransactionsTable({
   showToolbar?: boolean;
   showViews?: boolean;
 }) {
+  const translate = useT();
   const TRANSACTIONS = useTransactions();
   const [view, setView] = useState<string>(TRANSACTION_VIEWS[0]);
   const [sort, setSort] = useState<{ key: SortKey; dir: Dir }>({ key: 'date', dir: 'desc' });
@@ -106,7 +108,7 @@ export function TransactionsTable({
   return (
     <div className={s.wrap}>
       {showViews && (
-        <div className={s.views} role="tablist" aria-label="Saved views">
+        <div className={s.views} role="tablist" aria-label={translate('Saved views')}>
           {TRANSACTION_VIEWS.map((v) => (
             <button
               key={v}
@@ -125,10 +127,10 @@ export function TransactionsTable({
         <div className={s.toolbar}>
           <input
             className={s.searchInput}
-            placeholder="Search transactions"
+            placeholder={translate('Search transactions')}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            aria-label="Search transactions"
+            aria-label={translate('Search transactions')}
           />
           <span className={s.count}>
             {rows.length} {rows.length === 1 ? 'transaction' : 'transactions'}
@@ -140,11 +142,11 @@ export function TransactionsTable({
         <table className={s.table}>
           <thead>
             <tr>
-              <Th label="Date" sortKey="date" />
-              <Th label="To/From" sortKey="party" />
-              <Th label="Amount" sortKey="amount" numeric />
-              <Th label="Account" sortKey="account" />
-              <Th label="Method" />
+              <Th label={translate('Date')} sortKey="date" />
+              <Th label={translate('To/From')} sortKey="party" />
+              <Th label={translate('Amount')} sortKey="amount" numeric />
+              <Th label={translate('Account')} sortKey="account" />
+              <Th label={translate('Method')} />
             </tr>
           </thead>
           <tbody>
@@ -155,8 +157,8 @@ export function TransactionsTable({
                   <span className={s.party}>
                     <span className={s.avatar}>{initials(t.party)}</span>
                     <span className={s.partyName}>{t.party}</span>
-                    {t.status === 'failed' && <span className={`${s.status} ${s.statusFailed}`}>Failed</span>}
-                    {t.status === 'pending' && <span className={`${s.status} ${s.statusPending}`}>Pending</span>}
+                    {t.status === 'failed' && <span className={`${s.status} ${s.statusFailed}`}>{translate('Failed')}</span>}
+                    {t.status === 'pending' && <span className={`${s.status} ${s.statusPending}`}>{translate('Pending')}</span>}
                   </span>
                 </td>
                 <td className={s.numeric}>
@@ -169,7 +171,7 @@ export function TransactionsTable({
           </tbody>
         </table>
 
-        {rows.length === 0 && <div className={s.empty}>No transactions match this view.</div>}
+        {rows.length === 0 && <div className={s.empty}>{translate('No transactions match this view.')}</div>}
       </div>
     </div>
   );

@@ -8,12 +8,14 @@ import { USER } from '@/lib/mock/dashboard';
 import { BRAND } from '@/lib/brand';
 import p from '@/components/ds/Page.module.css';
 import t from '@/components/dashboard/TransactionsTable.module.css';
+import { useT } from '@/components/i18n/I18nProvider';
 
 export default function MyProfilePage() {
+  const translate = useT();
   const initials = `${USER.firstName[0]}${USER.lastName[0]}`;
 
   return (
-    <Page title="My profile">
+    <Page title={translate('My profile')}>
       <Card style={{ maxWidth: 760, marginBottom: 24 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
           <span
@@ -36,7 +38,7 @@ export default function MyProfilePage() {
         </div>
       </Card>
 
-      <SectionTitle>Personal details</SectionTitle>
+      <SectionTitle>{translate('Personal details')}</SectionTitle>
       <div style={{ display: 'grid', gap: 12, maxWidth: 760 }}>
         {PROFILE_FIELDS.map((f) => (
           <Card key={f.label} style={{ padding: 16 }}>
@@ -67,9 +69,7 @@ export default function MyProfilePage() {
       </div>
 
       <SectionTitle>{BRAND.name} accounts</SectionTitle>
-      <p style={{ fontSize: 15, color: 'var(--ds-text-secondary)', marginTop: 0 }}>
-        Every account directly connected to this profile.
-      </p>
+      <p style={{ fontSize: 15, color: 'var(--ds-text-secondary)', marginTop: 0 }}>{translate('Every account directly connected to this profile.')}</p>
       <div style={{ display: 'grid', gap: 12, maxWidth: 760 }}>
         {PROFILE_ACCOUNTS.map((a) => (
           <Card key={a.org} style={{ padding: 16 }}>
@@ -82,10 +82,8 @@ export default function MyProfilePage() {
         ))}
       </div>
 
-      <SectionTitle>Linked profiles</SectionTitle>
-      <p style={{ fontSize: 15, color: 'var(--ds-text-secondary)', marginTop: 0 }}>
-        Switch between accounts connected to any of these profiles.
-      </p>
+      <SectionTitle>{translate('Linked profiles')}</SectionTitle>
+      <p style={{ fontSize: 15, color: 'var(--ds-text-secondary)', marginTop: 0 }}>{translate('Switch between accounts connected to any of these profiles.')}</p>
       <Card style={{ maxWidth: 760 }}>
         {LINKED_PROFILES.map((email, i) => (
           <div
@@ -97,7 +95,7 @@ export default function MyProfilePage() {
           >
             <Icon name="user" size={15} />
             <span style={{ flex: 1, fontSize: 16 }}>{email}</span>
-            <button className={p.btn} type="button">Manage</button>
+            <button className={p.btn} type="button">{translate('Manage')}</button>
           </div>
         ))}
       </Card>

@@ -9,12 +9,14 @@ import { CUSTOMERS, CATALOG } from '@/lib/mock/invoicingExtras';
 import p from '@/components/ds/Page.module.css';
 import t from '@/components/dashboard/TransactionsTable.module.css';
 import f from '@/app/send-money/transfer/Transfer.module.css';
+import { useT } from '@/components/i18n/I18nProvider';
 
 interface Line { id: number; item: string; quantity: number; unitPrice: number }
 
 let nextId = 1;
 
 export default function CreateInvoicePage() {
+  const translate = useT();
   const [customer, setCustomer] = useState('');
   const [lines, setLines] = useState<Line[]>([
     { id: nextId++, item: CATALOG[0]?.item ?? '', quantity: 1, unitPrice: CATALOG[0]?.unitPrice ?? 0 },
@@ -32,16 +34,16 @@ export default function CreateInvoicePage() {
   }
 
   return (
-    <Page title="Create invoice" actions={[{ label: 'Send invoice', icon: 'paper-plane', primary: true, href: '/invoicing' }]}>
+    <Page title={translate('Create invoice')} actions={[{ label: translate('Send invoice'), icon: 'paper-plane', primary: true, href: '/invoicing' }]}>
       <Card style={{ maxWidth: 820 }}>
-        <label className={f.label} htmlFor="customer">Customer</label>
+        <label className={f.label} htmlFor="customer">{translate('Customer')}</label>
         <select
           id="customer"
           className={f.select}
           value={customer}
           onChange={(e) => setCustomer(e.target.value)}
         >
-          <option value="">Select a customer</option>
+          <option value="">{translate('Select a customer')}</option>
           {CUSTOMERS.map((c) => (
             <option key={c.email} value={c.name}>{c.name}</option>
           ))}
@@ -51,10 +53,10 @@ export default function CreateInvoicePage() {
           <table className={t.table} style={{ minWidth: 520 }}>
             <thead>
               <tr>
-                <th>Item</th>
-                <th className={t.numeric}>Quantity</th>
-                <th className={t.numeric}>Unit price</th>
-                <th className={t.numeric}>Total</th>
+                <th>{translate('Item')}</th>
+                <th className={t.numeric}>{translate('Quantity')}</th>
+                <th className={t.numeric}>{translate('Unit price')}</th>
+                <th className={t.numeric}>{translate('Total')}</th>
                 <th />
               </tr>
             </thead>
@@ -80,7 +82,7 @@ export default function CreateInvoicePage() {
                       min={1}
                       value={l.quantity}
                       onChange={(e) => updateLine(l.id, { quantity: Math.max(1, Number(e.target.value)) })}
-                      aria-label="Quantity"
+                      aria-label={translate('Quantity')}
                     />
                   </td>
                   <td className={t.numeric}><Money value={l.unitPrice} /></td>
@@ -89,7 +91,7 @@ export default function CreateInvoicePage() {
                     <button
                       className={p.btn}
                       type="button"
-                      aria-label="Remove line"
+                      aria-label={translate('Remove line')}
                       onClick={() => setLines((prev) => prev.filter((x) => x.id !== l.id))}
                       disabled={lines.length === 1}
                     >
@@ -99,7 +101,7 @@ export default function CreateInvoicePage() {
                 </tr>
               ))}
               <tr>
-                <td colSpan={3} className={t.numeric} style={{ fontWeight: 400 }}>Total</td>
+                <td colSpan={3} className={t.numeric} style={{ fontWeight: 400 }}>{translate('Total')}</td>
                 <td className={t.numeric}><Money value={total} /></td>
                 <td />
               </tr>
@@ -118,8 +120,7 @@ export default function CreateInvoicePage() {
             ])
           }
         >
-          <Icon name="plus" size={13} /> Add line
-        </button>
+          <Icon name="plus" size={13} />{translate('Add line')}</button>
       </Card>
     </Page>
   );

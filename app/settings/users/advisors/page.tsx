@@ -6,6 +6,7 @@ import { DataTable, Status, NameCell, type Column } from '@/components/ds/DataTa
 import { ADVISORS, ADVISOR_PENDING, type Advisor } from '@/lib/mock/advisors';
 import p from '@/components/ds/Page.module.css';
 import t from '@/components/dashboard/TransactionsTable.module.css';
+import { useT } from '@/components/i18n/I18nProvider';
 
 const columns: Column<Advisor>[] = [
   { key: 'firm', header: 'Firm', muted: true, sortValue: (r) => r.firm ?? '', cell: (r) => r.firm ?? '-' },
@@ -16,10 +17,11 @@ const columns: Column<Advisor>[] = [
 ];
 
 export default function AdvisorsPage() {
-  const tabs = useTabs([{ label: 'Advisors', count: ADVISORS.length }, { label: 'Pending approvals', count: 1 }]);
+  const translate = useT();
+  const tabs = useTabs([{ label: translate('Advisors'), count: ADVISORS.length }, { label: translate('Pending approvals'), count: 1 }]);
 
   return (
-    <Page title="Advisors" actions={[{ label: 'Roles', icon: 'shield-check', href: '/settings/users/advisors/roles' }, { label: 'Invite advisor team', icon: 'user-plus', primary: true, href: '/settings/users/invite/advisors/details' }]}>
+    <Page title={translate('Advisors')} actions={[{ label: translate('Roles'), icon: 'shield-check', href: '/settings/users/advisors/roles' }, { label: translate('Invite advisor team'), icon: 'user-plus', primary: true, href: '/settings/users/invite/advisors/details' }]}>
       {tabs.node}
       {tabs.active === 'Advisors' ? (
         <DataTable rows={ADVISORS} columns={columns} searchable
@@ -27,15 +29,15 @@ export default function AdvisorsPage() {
           countLabel={(n) => `${n} advisors`} />
       ) : (
         <>
-          <SectionTitle>Pending approvals</SectionTitle>
+          <SectionTitle>{translate('Pending approvals')}</SectionTitle>
           <Card style={{ maxWidth: 700 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
               <div style={{ flex: 1 }}>
                 <div style={{ fontSize: 16, color: 'var(--ds-text-emphasized)' }}>{ADVISOR_PENDING.firm}</div>
                 <div className={t.muted} style={{ fontSize: 13 }}>{ADVISOR_PENDING.note}</div>
               </div>
-              <button className={p.btn} type="button">Decline</button>
-              <button className={`${p.btn} ${p.btnPrimary}`} type="button">Review</button>
+              <button className={p.btn} type="button">{translate('Decline')}</button>
+              <button className={`${p.btn} ${p.btnPrimary}`} type="button">{translate('Review')}</button>
             </div>
           </Card>
         </>

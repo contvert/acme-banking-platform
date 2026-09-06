@@ -5,6 +5,7 @@ import { Card } from '@/components/ds/Card';
 import { Icon } from '@/components/ds/Icon';
 import p from '@/components/ds/Page.module.css';
 import t from '@/components/dashboard/TransactionsTable.module.css';
+import { useT } from '@/components/i18n/I18nProvider';
 
 const ITEMS = [
   { icon: 'key', label: 'Password', value: 'Last changed 4 months ago', action: 'Change' },
@@ -14,9 +15,10 @@ const ITEMS = [
 ];
 
 export default function AccountSecurityPage() {
+  const translate = useT();
   return (
-    <Page title="Account security">
-      <SectionTitle>Sign-in</SectionTitle>
+    <Page title={translate('Account security')}>
+      <SectionTitle>{translate('Sign-in')}</SectionTitle>
       <div style={{ display: 'grid', gap: 12, maxWidth: 760 }}>
         {ITEMS.map((i) => (
           <Card key={i.label} style={{ padding: 16 }}>
@@ -31,7 +33,7 @@ export default function AccountSecurityPage() {
               <span style={{ flex: 1, minWidth: 0 }}>
                 <span style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 16, color: 'var(--ds-text-emphasized)' }}>
                   {i.label}
-                  {i.ok && <span className={`${t.status} ${t.statusOk}`}>On</span>}
+                  {i.ok && <span className={`${t.status} ${t.statusOk}`}>{translate('On')}</span>}
                 </span>
                 <span className={t.muted} style={{ fontSize: 13 }}>{i.value}</span>
               </span>

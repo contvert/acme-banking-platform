@@ -14,7 +14,13 @@
 !.env.example
 data/users.json
 data/.session-secret
+data/.otp-secret
 data/app-config.json
+data/recipient-verifications.json
+data/dev-email-outbox.json
+data/email-delivery-log.json
+data/client-provisioning-queue.json
+data/dispatch.log
 
 # Generated scraper artifacts
 /scraper/out/

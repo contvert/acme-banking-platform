@@ -3,6 +3,7 @@
 import { Page, Money } from '@/components/ds/Page';
 import { DataTable, NameCell, type Column } from '@/components/ds/DataTable';
 import { DRAWDOWNS, type Drawdown } from '@/lib/mock/payments';
+import { useT } from '@/components/i18n/I18nProvider';
 
 const columns: Column<Drawdown>[] = [
   { key: 'created', header: 'Created on', muted: true, sortValue: (r) => r.created },
@@ -16,8 +17,9 @@ const columns: Column<Drawdown>[] = [
 ];
 
 export default function WireDrawdownsPage() {
+  const t = useT();
   return (
-    <Page title="Wire Drawdowns" actions={[{ label: 'Create authorization', icon: 'plus', primary: true, href: '/wire-drawdowns/recipient-details' }]}>
+    <Page title={t('Wire Drawdowns')} actions={[{ label: t('Create authorization'), icon: 'plus', primary: true, href: '/wire-drawdowns/recipient-details' }]}>
       <DataTable rows={DRAWDOWNS} columns={columns} countLabel={(n) => `${n} authorizations`} />
     </Page>
   );

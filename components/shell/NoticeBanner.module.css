@@ -1,0 +1,127 @@
+.banner {
+  background: #8a1048;
+  color: #ffffff;
+  padding: 9px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  position: relative;
+  z-index: 999;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  animation: slideDown 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideDown {
+  from { transform: translateY(-100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-width: 0;
+}
+
+.icon {
+  flex: 0 0 auto;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.message {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.message strong {
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.timer {
+  margin-left: 10px;
+  font-family: var(--ds-font-family-monospace, monospace);
+  font-size: 12.5px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+  white-space: nowrap;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.certifBtn {
+  background: transparent;
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 500;
+  font-size: 13px;
+  padding: 5px 6px;
+  border: 0;
+  cursor: pointer;
+  white-space: nowrap;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color 0.15s ease;
+}
+
+.certifBtn:hover {
+  color: #ffffff;
+}
+
+.actionBtn {
+  background: #ffffff;
+  color: #8a1048;
+  font-weight: 600;
+  font-size: 13px;
+  padding: 6px 14px;
+  border-radius: 6px;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.15s ease;
+}
+
+.actionBtn:hover {
+  background: #ffeef5;
+}
+
+.closeBtn {
+  background: transparent;
+  border: 0;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 4px;
+  display: grid;
+  place-items: center;
+  transition: all 0.15s ease;
+}
+
+.closeBtn:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+@media (max-width: 720px) {
+  .banner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+  .timer {
+    display: block;
+    margin-left: 0;
+    margin-top: 2px;
+  }
+}

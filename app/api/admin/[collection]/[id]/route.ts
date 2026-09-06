@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { requireUser, isDenied } from '@/lib/auth/guard';
 import { updateConfig } from '@/lib/config/store';
 import { COLLECTIONS, type CollectionName } from '@/lib/config/types';
+import { getTranslator } from '@/lib/i18n/server';
 
 export const dynamic = 'force-dynamic';
 
@@ -21,6 +22,7 @@ type Ctx = { params: Promise<{ collection: string; id: string }> };
 
 /** Merge fields into one item. */
 export async function PATCH(request: Request, ctx: Ctx) {
+  const t = await getTranslator();
   const auth = await requireUser('admin');
   if (isDenied(auth)) return auth.response;
 
@@ -32,7 +34,7 @@ export async function PATCH(request: Request, ctx: Ctx) {
   try {
     body = await request.json();
   } catch {
-    return NextResponse.json({ error: 'Body must be JSON' }, { status: 400 });
+    return NextResponse.json({ error: t('Body must be JSON.') }, { status: 400 });
   }
 
   let found = false;

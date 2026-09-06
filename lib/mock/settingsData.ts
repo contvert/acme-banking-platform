@@ -25,10 +25,10 @@ export const PLAN = {
 };
 export const VAULT = { fdicLimit: 220_000_000, checkingSavings: 5_000_000, treasuryYield: 3.44 };
 export const COMPANY = {
-  legalName: 'Acme, Incorporated',
-  dba: 'Acme, Incorporated',
+  legalName: '',
+  dba: '',
   ein: '•••••••••',
-  phone: '+1 (800) 000-0000',
+  phone: '',
 };
 export const APPROVAL_RULES = [
   { scope: 'Per-payment', rule: 'If amount is less than $100.00', approver: 'Any admin' },
@@ -36,267 +36,13 @@ export const APPROVAL_RULES = [
   { scope: 'Dual admin', rule: 'Sensitive settings changes', approver: 'Two admins' },
 ];
 
-export const STATEMENTS: Statement[] = [
-  {
-    period: "Aug 2026",
-    account: "Credit"
-  },
-  {
-    period: "Aug 2026",
-    account: "Treasury"
-  },
-  {
-    period: "Aug 2026",
-    account: "Ops / Payroll"
-  },
-  {
-    period: "Aug 2026",
-    account: "AP"
-  },
-  {
-    period: "Aug 2026",
-    account: "AR"
-  },
-  {
-    period: "Aug 2026",
-    account: "Sweep summary"
-  },
-  {
-    period: "Jul 2026",
-    account: "Credit"
-  },
-  {
-    period: "Jul 2026",
-    account: "Treasury"
-  },
-  {
-    period: "Jul 2026",
-    account: "Ops / Payroll"
-  },
-  {
-    period: "Jul 2026",
-    account: "AP"
-  },
-  {
-    period: "Jul 2026",
-    account: "AR"
-  },
-  {
-    period: "Jul 2026",
-    account: "Sweep summary"
-  },
-  {
-    period: "Jun 2026",
-    account: "Credit"
-  },
-  {
-    period: "Jun 2026 More info",
-    account: "Treasury"
-  },
-  {
-    period: "Jun 2026 More info",
-    account: "Treasury"
-  },
-  {
-    period: "Jun 2026 More info",
-    account: "Treasury"
-  },
-  {
-    period: "Jun 2026",
-    account: "Ops / Payroll"
-  },
-  {
-    period: "Jun 2026",
-    account: "AP"
-  },
-  {
-    period: "Jun 2026",
-    account: "AR"
-  },
-  {
-    period: "Jun 2026",
-    account: "Sweep summary"
-  },
-  {
-    period: "May 2026",
-    account: "Credit"
-  },
-  {
-    period: "May 2026",
-    account: "Treasury"
-  },
-  {
-    period: "May 2026",
-    account: "Ops / Payroll"
-  },
-  {
-    period: "May 2026",
-    account: "AP"
-  },
-  {
-    period: "May 2026",
-    account: "AR"
-  },
-  {
-    period: "Apr 2026",
-    account: "Credit"
-  },
-  {
-    period: "Apr 2026",
-    account: "Treasury"
-  },
-  {
-    period: "Apr 2026",
-    account: "Ops / Payroll"
-  },
-  {
-    period: "Apr 2026",
-    account: "AP"
-  },
-  {
-    period: "Apr 2026",
-    account: "AR"
-  },
-  {
-    period: "Mar 2026",
-    account: "Credit"
-  },
-  {
-    period: "Mar 2026",
-    account: "Treasury"
-  },
-  {
-    period: "Mar 2026",
-    account: "Ops / Payroll"
-  },
-  {
-    period: "Mar 2026",
-    account: "AP"
-  },
-  {
-    period: "Mar 2026",
-    account: "AR"
-  },
-  {
-    period: "Feb 2026",
-    account: "Credit"
-  },
-  {
-    period: "Feb 2026",
-    account: "Treasury"
-  },
-  {
-    period: "Feb 2026",
-    account: "Ops / Payroll"
-  },
-  {
-    period: "Feb 2026",
-    account: "AP"
-  },
-  {
-    period: "Feb 2026",
-    account: "AR"
-  },
-  {
-    period: "Jan 2026",
-    account: "Credit"
-  },
-  {
-    period: "Jan 2026",
-    account: "Treasury"
-  },
-  {
-    period: "Jan 2026",
-    account: "Ops / Payroll"
-  },
-  {
-    period: "Jan 2026",
-    account: "AP"
-  },
-  {
-    period: "Jan 2026",
-    account: "AR"
-  }
-];
+export const STATEMENTS: Statement[] = [];
 
-export const API_TOKENS: ApiToken[] = [
-  {
-    nickname: "Token with long IPv6 address",
-    permissions: "Read/Write",
-    lastUsed: "May 16, 2019",
-    createdBy: "jane@acme.example",
-    created: "Mar 14, 2019",
-    ips: "1 IP whitelisted"
-  },
-  {
-    nickname: "My read-write Acme API token",
-    permissions: "Read/Write",
-    lastUsed: "Apr 15, 2019",
-    createdBy: "jane@acme.example",
-    created: "Mar 14, 2019",
-    ips: "2 IPs whitelisted"
-  },
-  {
-    nickname: "My read-only Acme API token",
-    permissions: "Read",
-    lastUsed: "Mar 14, 2019",
-    createdBy: "landon@acme.example",
-    created: "Mar 14, 2019",
-    ips: "1 IP whitelisted"
-  }
-];
+export const API_TOKENS: ApiToken[] = [];
 
-export const WEBHOOKS: Webhook[] = [
-  {
-    url: "https://api.acme.example/webhooks/acme",
-    status: "Active",
-    events: "3 events",
-    created: "Nov 2, 2025"
-  },
-  {
-    url: "https://hooks.acme.example/ingest",
-    status: "Active",
-    events: "All events",
-    created: "Sep 15, 2025"
-  },
-  {
-    url: "https://internal.corp.example/webhook-receiver",
-    status: "Paused",
-    events: "2 events",
-    created: "Dec 1, 2025"
-  },
-  {
-    url: "https://old-service.example/hooks",
-    status: "Disabled",
-    events: "1 event",
-    created: "Jun 10, 2025"
-  },
-  {
-    url: "https://payments.acme.example/events",
-    status: "Active",
-    events: "4 events",
-    created: "Jan 20, 2026"
-  },
-  {
-    url: "https://very-long-subdomain.enterprise-platform.example/api/v2/integrations/acme/webhook-receiver/incoming-events",
-    status: "Active",
-    events: "All events",
-    created: "Feb 1, 2026"
-  }
-];
+export const WEBHOOKS: Webhook[] = [];
 
-export const CONNECTED_INTEGRATIONS: Integration[] = [
-  {
-    name: "Gmail",
-    description: "Automatically match receipts to your transactions",
-    status: "Connected"
-  },
-  {
-    name: "Zapier",
-    description: "Link your automated workflows",
-    status: "Connected"
-  }
-];
+export const CONNECTED_INTEGRATIONS: Integration[] = [];
 
 export const AVAILABLE_INTEGRATIONS: Integration[] = [
   {
@@ -340,8 +86,8 @@ export const AVAILABLE_INTEGRATIONS: Integration[] = [
     category: "Other"
   },
   {
-    name: "Acme MCP",
-    description: "Model Context Protocol server to connect LLM clients with Acme.",
+    name: "Mercury MCP",
+    description: "Model Context Protocol server to connect LLM clients with Mercury.",
     category: "Other"
   }
 ];

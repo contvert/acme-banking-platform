@@ -1,4 +1,4 @@
-# Acme Banking
+# Mercury Banking
 
 Application bancaire Next.js avec deux portails isolés : administration et espace client.
 
@@ -34,6 +34,10 @@ Le profil reste modifiable depuis le menu du compte. Le dashboard affiche le nom
 préféré complet. Les clients ne voient que les comptes qui leur sont attribués et
 ne peuvent pas accéder aux routes d’administration.
 
+Avant un transfert externe, le client ajoute le RIB du bénéficiaire. L’IBAN et le
+BIC sont validés côté serveur, puis le bénéficiaire est enregistré uniquement dans
+l’espace de ce client et devient sélectionnable dans le parcours de transfert.
+
 ## Sessions séparées
 
 Les cookies de session sont liés à l’hôte. Un administrateur et un client peuvent
@@ -68,22 +72,50 @@ Pour réinitialiser ou recréer un administrateur :
 npm run admin:reset [username] [password]
 ```
 
+## Provisioning client depuis un tunnel externe
+
+Un tunnel externe (le parcours gagnant « LT ») peut faire créer un accès client
+lorsqu'un dossier est enregistré. À la page de succès, LT appelle l'API de
+provisioning ; l'accès est créé immédiatement dans l'administration (email =
+identifiant, mot de passe généré), mais l'email d'identifiants n'est **pas**
+envoyé sur le champ : il est mis en file et expédié quelques heures plus tard,
+laissant à un administrateur le temps de revoir le nouvel accès.
+
+- `POST /api/provisioning/client` — crée l'accès et met l'email en file.
+  Authentification par en-tête `Authorization: Bearer <PROVISIONING_SHARED_SECRET>`.
+  Corps JSON : `{ "email", "firstName", "lastName" }`. Idempotent par email.
+- `POST /api/provisioning/dispatch` — envoie tous les emails d'identifiants dont
+  le délai est écoulé. Même secret bearer.
+
+Variables d'environnement (voir `.env.example`) :
+
+```bash
+PROVISIONING_SHARED_SECRET=...        # ≥ 16 caractères, partagé avec LT
+PROVISIONING_DELAY_HOURS=3            # délai avant l'envoi des identifiants
+PROVISIONING_LOGIN_URL=http://client.localhost:3210/login
+```
+
+Le mot de passe généré est conservé en clair dans
+`data/client-provisioning-queue.json` (git-ignoré) uniquement jusqu'à l'envoi,
+puis effacé ; le compte lui-même ne stocke que le hash scrypt.
+
+L'envoi différé doit être déclenché périodiquement (le serveur doit tourner) :
+
+```bash
+npm run provisioning:dispatch        # à planifier via cron / Planificateur de tâches
+```
+
+Sur Windows, créer une tâche planifiée récurrente (par ex. toutes les 15 min)
+qui exécute `node scripts/dispatch-provisioning.mjs` avec `PROVISIONING_SHARED_SECRET`
+dans l'environnement.
+
 ## Vérifications
 
 ```bash
 npm run typecheck
 npm run build
-npm run test:ui
-npm run test:sessions
-npm run smoke
-npm run audit:mobile
-npm run audit:theme
 npm run check
 ```
-
-La suite couvre notamment l’authentification, l’isolation des rôles, les sessions
-simultanées, le profil client, les cartes, les virements, les coordonnées bancaires,
-les menus responsive, les thèmes et l’administration.
 
 ## Structure
 
@@ -93,6 +125,6 @@ components/           Composants d’interface
 lib/auth/             Sessions, rôles et profils
 lib/config/           Configuration persistante et périmètre client
 lib/mock/             Données d’exemple non sensibles
-scraper/              Tests fonctionnels et audits
+scripts/              Utilitaires (i18n, reset admin, dispatch provisioning)
 styles/               Styles globaux et variables visuelles
 ```

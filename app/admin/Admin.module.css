@@ -58,6 +58,7 @@
 .grid { display: grid; gap: var(--ds-space-200); }
 @media (min-width: 700px) { .grid2 { grid-template-columns: 1fr 1fr; } }
 @media (min-width: 900px) { .grid3 { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 1000px) { .grid4 { grid-template-columns: repeat(4, 1fr); } }
 
 .label {
   display: block;
@@ -161,3 +162,28 @@
   color: var(--ds-text-tertiary);
   font-size: 15px;
 }
+
+/* An access and its edit panel form one block. The separator moves to the
+   block, because each row is now the only one of its type in its wrapper and
+   `.row:first-of-type` would clear every border instead of just the first. */
+.userBlock + .userBlock { border-top: 1px solid var(--ds-border-default); }
+.userBlock .row { border-top: 0; }
+
+.editPanel {
+  margin: 0 0 var(--ds-space-200);
+  padding: var(--ds-space-250);
+  border: 1px solid var(--ds-border-default);
+  border-radius: var(--ds-border-radius-medium);
+  background: var(--ds-background-secondary);
+}
+
+/* One account inside the client panel: its name, then its three figures. */
+.balanceRow {
+  display: flex;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: var(--ds-space-150);
+  padding: var(--ds-space-150) 0;
+  border-top: 1px solid var(--ds-border-default);
+}
+.balanceRow:first-of-type { border-top: 0; }

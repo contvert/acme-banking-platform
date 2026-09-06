@@ -2,11 +2,13 @@
 
 import { useCallback, useState } from 'react';
 import { useConfig } from '@/components/config/ConfigProvider';
+import { useT } from '@/components/i18n/I18nProvider';
 import type { CollectionName, AppConfig } from '@/lib/config/types';
 
 /** Thin wrapper over the admin API that keeps the shared config in sync. */
 export function useAdmin() {
   const { config, refresh } = useConfig();
+  const t = useT();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [saved, setSaved] = useState<string | null>(null);
@@ -44,13 +46,13 @@ export function useAdmin() {
     error,
     saved,
     patchConfig: (patch: Partial<AppConfig>) =>
-      call('/api/admin/config', { method: 'PATCH', body: JSON.stringify(patch) }, 'Enregistré'),
+      call('/api/admin/config', { method: 'PATCH', body: JSON.stringify(patch) }, t('Saved')),
     create: (collection: CollectionName, item: Record<string, unknown>) =>
-      call(`/api/admin/${collection}`, { method: 'POST', body: JSON.stringify(item) }, 'Ajouté'),
+      call(`/api/admin/${collection}`, { method: 'POST', body: JSON.stringify(item) }, t('Added')),
     update: (collection: CollectionName, id: string, patch: Record<string, unknown>) =>
-      call(`/api/admin/${collection}/${id}`, { method: 'PATCH', body: JSON.stringify(patch) }, 'Mis à jour'),
+      call(`/api/admin/${collection}/${id}`, { method: 'PATCH', body: JSON.stringify(patch) }, t('Updated')),
     remove: (collection: CollectionName, id: string) =>
-      call(`/api/admin/${collection}/${id}`, { method: 'DELETE' }, 'Supprimé'),
-    reset: () => call('/api/admin/config', { method: 'DELETE' }, 'Réinitialisé'),
+      call(`/api/admin/${collection}/${id}`, { method: 'DELETE' }, t('Deleted')),
+    reset: () => call('/api/admin/config', { method: 'DELETE' }, t('Reset done')),
   };
 }

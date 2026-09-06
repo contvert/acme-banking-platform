@@ -11,8 +11,10 @@ import { TEAM } from '@/lib/mock/team';
 import { CARDS } from '@/lib/mock/cards';
 import p from '@/components/ds/Page.module.css';
 import t from '@/components/dashboard/TransactionsTable.module.css';
+import { useT } from '@/components/i18n/I18nProvider';
 
 export default function TeamMemberPage({ params }: { params: Promise<{ id: string }> }) {
+  const translate = useT();
   const { id } = use(params);
   const index = Number(id.replace(/\D/g, ''));
   const member = TEAM[Number.isFinite(index) ? index % TEAM.length : 0];
@@ -22,17 +24,16 @@ export default function TeamMemberPage({ params }: { params: Promise<{ id: strin
   const initials = member.name.split(/\s+/).slice(0, 2).map((w) => w[0]).join('');
 
   const fields = [
-    { label: 'Email', value: member.email },
-    { label: 'Role', value: member.role },
-    { label: 'Job title', value: member.title ?? '—' },
-    { label: 'Department', value: member.department ?? '—' },
+    { label: translate('Email'), value: member.email },
+    { label: translate('Role'), value: member.role },
+    { label: translate('Job title'), value: member.title ?? '—' },
+    { label: translate('Department'), value: member.department ?? '—' },
   ];
 
   return (
-    <Page title={member.name} actions={[{ label: 'Edit access', icon: 'shield-check', primary: true, href: '/settings/roles' }]}>
+    <Page title={member.name} actions={[{ label: translate('Edit access'), icon: 'shield-check', primary: true, href: '/settings/roles' }]}>
       <Link href="/settings/users" className={p.btn} style={{ marginBottom: 20 }}>
-        <Icon name="chevron-left" size={12} /> Team
-      </Link>
+        <Icon name="chevron-left" size={12} />{translate('Team')}</Link>
 
       <Card style={{ maxWidth: 700, marginBottom: 24 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
@@ -49,7 +50,7 @@ export default function TeamMemberPage({ params }: { params: Promise<{ id: strin
         </div>
       </Card>
 
-      <SectionTitle>Access</SectionTitle>
+      <SectionTitle>{translate('Access')}</SectionTitle>
       <Card style={{ maxWidth: 700, marginBottom: 24 }}>
         {fields.map((f, i) => (
           <div key={f.label} style={{
@@ -62,7 +63,7 @@ export default function TeamMemberPage({ params }: { params: Promise<{ id: strin
         ))}
       </Card>
 
-      <SectionTitle>Cards</SectionTitle>
+      <SectionTitle>{translate('Cards')}</SectionTitle>
       {cards.length ? (
         <Card style={{ maxWidth: 700 }}>
           {cards.map((c, i) => (
@@ -78,7 +79,7 @@ export default function TeamMemberPage({ params }: { params: Promise<{ id: strin
         </Card>
       ) : (
         <Card style={{ maxWidth: 700 }}>
-          <span className={t.muted} style={{ fontSize: 15 }}>No cards issued to this member.</span>
+          <span className={t.muted} style={{ fontSize: 15 }}>{translate('No cards issued to this member.')}</span>
         </Card>
       )}
     </Page>

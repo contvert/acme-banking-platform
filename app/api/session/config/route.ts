@@ -4,16 +4,18 @@ import { findById } from '@/lib/auth/store';
 import { toPublicUser } from '@/lib/auth/types';
 import { readConfig } from '@/lib/config/store';
 import { scopeConfig } from '@/lib/config/scope';
+import { getTranslator } from '@/lib/i18n/server';
 
 export const dynamic = 'force-dynamic';
 
 /** The config as the signed-in user is allowed to see it. */
 export async function GET() {
+  const t = await getTranslator();
   const session = await getSession();
-  if (!session) return NextResponse.json({ error: 'Non authentifié' }, { status: 401 });
+  if (!session) return NextResponse.json({ error: t('Not signed in.') }, { status: 401 });
 
   const user = await findById(session.userId);
-  if (!user || user.disabled) return NextResponse.json({ error: 'Non authentifié' }, { status: 401 });
+  if (!user || user.disabled) return NextResponse.json({ error: t('Not signed in.') }, { status: 401 });
 
   const config = await readConfig();
   return NextResponse.json({

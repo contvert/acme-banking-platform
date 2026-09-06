@@ -5,10 +5,18 @@ import { Page, SectionTitle } from '@/components/ds/Page';
 import { Icon } from '@/components/ds/Icon';
 import { BRAND } from '@/lib/brand';
 import s from './Settings.module.css';
+import { useT } from '@/components/i18n/I18nProvider';
+import type { Message } from '@/lib/i18n/messages/catalog';
 
-interface Entry { label: string; href: string; icon: string; description: string }
+interface Entry {
+  /** Catalogued: this table is defined once, and read in five languages. */
+  label: Message;
+  href: string;
+  icon: string;
+  description: Message;
+}
 
-const GROUPS: { title: string; entries: Entry[] }[] = [
+const GROUPS: { title: Message; entries: Entry[] }[] = [
   {
     title: 'Company',
     entries: [
@@ -48,18 +56,19 @@ const GROUPS: { title: string; entries: Entry[] }[] = [
 ];
 
 export default function SettingsPage() {
+  const t = useT();
   return (
-    <Page title="Settings">
+    <Page title={t('Settings')}>
       {GROUPS.map((g) => (
         <div key={g.title}>
-          <SectionTitle>{g.title}</SectionTitle>
+          <SectionTitle>{t(g.title)}</SectionTitle>
           <div className={s.grid}>
             {g.entries.map((e) => (
               <Link key={e.href} href={e.href} className={s.entry}>
                 <span className={s.entryIcon}><Icon name={e.icon} size={16} /></span>
                 <span className={s.entryText}>
-                  <span className={s.entryLabel}>{e.label}</span>
-                  <span className={s.entryDesc}>{e.description}</span>
+                  <span className={s.entryLabel}>{t(e.label)}</span>
+                  <span className={s.entryDesc}>{t(e.description)}</span>
                 </span>
                 <Icon name="chevron-right" size={13} />
               </Link>

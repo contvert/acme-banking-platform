@@ -55,9 +55,10 @@ export interface IconProps {
   size?: number;
   className?: string;
   strokeWidth?: number;
+  style?: React.CSSProperties;
 }
 
-export function Icon({ name, size = 16, className, strokeWidth = 1.75 }: IconProps) {
+export function Icon({ name, size = 16, className, strokeWidth = 1.75, style }: IconProps) {
   const C = MAP[name] ?? CircleAlert;
-  return <C size={size} className={className} strokeWidth={strokeWidth} aria-hidden />;
+  return <C size={size} className={className} strokeWidth={strokeWidth} style={style} aria-hidden />;
 }

@@ -3,6 +3,7 @@
 import { Page, StatTiles, SectionTitle, Money } from '@/components/ds/Page';
 import { DataTable, Status, NameCell, type Column } from '@/components/ds/DataTable';
 import { REFERRALS, REFERRAL_STATS, REFERRAL_TIERS, type Referral } from '@/lib/mock/referrals';
+import { useT } from '@/components/i18n/I18nProvider';
 
 const columns: Column<Referral>[] = [
   { key: 'company', header: 'Company', sortValue: (r) => r.company, cell: (r) => <NameCell name={r.company} /> },
@@ -13,17 +14,18 @@ const columns: Column<Referral>[] = [
 ];
 
 export default function ReferralsPage() {
+  const translate = useT();
   return (
-    <Page title="Referrals" actions={[{ label: 'Invite via email', icon: 'envelope', primary: true }]}>
+    <Page title={translate('Referrals')} actions={[{ label: translate('Invite via email'), icon: 'envelope', primary: true }]}>
       <StatTiles
         tiles={[
-          { label: 'Referral bonus', value: <Money value={REFERRAL_STATS.bonus} />, meta: 'Each, when they deposit $10K within 90 days' },
-          { label: 'Applied', value: REFERRAL_STATS.applied },
-          { label: 'Account opened', value: REFERRAL_STATS.accountOpened },
-          { label: 'Total earned', value: <Money value={REFERRAL_STATS.totalEarned} /> },
+          { label: translate('Referral bonus'), value: <Money value={REFERRAL_STATS.bonus} />, meta: 'Each, when they deposit $10K within 90 days' },
+          { label: translate('Applied'), value: REFERRAL_STATS.applied },
+          { label: translate('Account opened'), value: REFERRAL_STATS.accountOpened },
+          { label: translate('Total earned'), value: <Money value={REFERRAL_STATS.totalEarned} /> },
         ]}
       />
-      <SectionTitle>Tiers</SectionTitle>
+      <SectionTitle>{translate('Tiers')}</SectionTitle>
       <StatTiles
         tiles={REFERRAL_TIERS.map((t) => ({
           label: t.name,
@@ -31,7 +33,7 @@ export default function ReferralsPage() {
           meta: t.needed === 1 ? '1 referral' : `${t.needed} referrals`,
         }))}
       />
-      <SectionTitle>Your referrals</SectionTitle>
+      <SectionTitle>{translate('Your referrals')}</SectionTitle>
       <DataTable rows={REFERRALS} columns={columns} searchable searchKeys={(r) => r.company}
         countLabel={(n) => `${n} referrals`} />
     </Page>

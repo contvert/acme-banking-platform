@@ -1,38 +1,48 @@
 'use client';
 
-import { Page, useTabs, Money } from '@/components/ds/Page';
+import Link from 'next/link';
+import { Page } from '@/components/ds/Page';
 import { DataTable, Status, NameCell, type Column } from '@/components/ds/DataTable';
-import { RECIPIENTS, type Recipient } from '@/lib/mock/recipients';
+import { useConfig } from '@/components/config/ConfigProvider';
+import { formatIban } from '@/lib/config/iban';
+import type { RecipientConfig } from '@/lib/config/types';
+import p from '@/components/ds/Page.module.css';
+import { useT } from '@/components/i18n/I18nProvider';
 
-const columns: Column<Recipient>[] = [
+const columns: Column<RecipientConfig>[] = [
   { key: 'name', header: 'Name', sortValue: (r) => r.name, cell: (r) => <NameCell name={r.name} /> },
   {
-    key: 'totalPaid', header: 'Total paid', numeric: true,
-    sortValue: (r) => r.totalPaid ?? 0,
-    cell: (r) => <Money value={r.totalPaid} />,
+    key: 'iban', header: 'IBAN', sortValue: (r) => r.iban,
+    cell: (r) => <span style={{ fontVariantNumeric: 'tabular-nums' }}>{formatIban(r.iban)}</span>,
   },
-  { key: 'lastPaid', header: 'Last paid', sortValue: (r) => r.lastPaid, muted: true },
-  { key: 'status', header: 'Status', cell: (r) => <Status value={r.status} /> },
+  { key: 'bankName', header: 'Bank', sortValue: (r) => r.bankName, muted: true,
+    cell: (r) => r.bankName || '—' },
+  { key: 'currency', header: 'Currency', sortValue: (r) => r.currency },
+  {
+    key: 'status',
+    header: 'Status',
+    cell: (recipient) => recipient.verificationStatus === 'verified' && recipient.verifiedAt
+      ? <Status value="Ready" />
+      : <Link className={p.btn} href={`/payments/recipients/${recipient.id}/verify`}>Verify RIB</Link>,
+  },
 ];
 
 export default function RecipientsPage() {
-  const tabs = useTabs([
-    { label: 'All', count: RECIPIENTS.length },
-    { label: 'Has Tax Docs' },
-    { label: 'Needs Tax Docs' },
-  ]);
+  const tr = useT();
+  const { config } = useConfig();
+  const recipients = config.recipients ?? [];
 
   return (
     <Page
-      title="Recipients"
-      actions={[{ label: 'Create recipient', icon: 'user-plus', primary: true, href: '/payments/recipients/create/request' }]}
+      title={tr('Recipients')}
+      actions={[{ label: tr('Add recipient RIB'), icon: 'user-plus', primary: true, href: '/payments/recipients/create' }]}
     >
-      {tabs.node}
       <DataTable
-        rows={RECIPIENTS}
+        rows={recipients}
         columns={columns}
         searchable
-        searchKeys={(r) => r.name}
+        searchKeys={(r) => `${r.name} ${r.iban} ${r.bic} ${r.bankName}`}
+        emptyMessage="No recipients yet. Add a RIB to make your first transfer."
         countLabel={(n) => `${n} ${n === 1 ? 'recipient' : 'recipients'}`}
       />
     </Page>

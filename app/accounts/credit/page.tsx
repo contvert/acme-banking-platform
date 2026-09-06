@@ -3,25 +3,27 @@
 import { Page, StatTiles, SectionTitle, Money } from '@/components/ds/Page';
 import { TransactionsTable } from '@/components/dashboard/TransactionsTable';
 import { CREDIT } from '@/lib/mock/dashboard';
+import { useT } from '@/components/i18n/I18nProvider';
 
 export default function CreditAccountPage() {
+  const tr = useT();
   return (
     <Page
-      title="Credit Card"
+      title={tr('Credit Card')}
       actions={[
-        { label: 'Edit autopay', icon: 'repeat', href: '/send-money/transfer' },
-        { label: 'Pay', icon: 'paper-plane', primary: true, href: '/send-money/transfer' },
+        { label: tr('Edit autopay'), icon: 'repeat', href: '/send-money/transfer' },
+        { label: tr('Pay'), icon: 'paper-plane', primary: true, href: '/send-money/transfer' },
       ]}
     >
       <StatTiles
         tiles={[
-          { label: 'Balance', value: <Money value={CREDIT.balance} /> },
-          { label: 'Available', value: <Money value={CREDIT.available} noCents /> },
-          { label: 'Limit', value: <Money value={CREDIT.limit} noCents /> },
-          { label: 'Autopay', value: CREDIT.autopayDate, meta: 'Next scheduled payment' },
+          { label: tr('Balance'), value: <Money value={CREDIT.balance} /> },
+          { label: tr('Available'), value: <Money value={CREDIT.available} noCents /> },
+          { label: tr('Limit'), value: <Money value={CREDIT.limit} noCents /> },
+          { label: tr('Autopay'), value: CREDIT.autopayDate, meta: 'Next scheduled payment' },
         ]}
       />
-      <SectionTitle>Transactions</SectionTitle>
+      <SectionTitle>{tr('Transactions')}</SectionTitle>
       <TransactionsTable showViews={false} showToolbar />
     </Page>
   );

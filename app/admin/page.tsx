@@ -11,44 +11,45 @@ import { BankDetailsPanel } from './BankDetails';
 import { AccessPanel } from './Access';
 import p from '@/components/ds/Page.module.css';
 import s from './Admin.module.css';
+import { useT } from '@/components/i18n/I18nProvider';
 
 type TabId =
   | 'company' | 'accounts' | 'bank' | 'cards' | 'transactions' | 'access'
   | 'notifications' | 'chat' | 'sections' | 'currency' | 'reset';
 
 export default function AdminPage() {
+  const translate = useT();
   const admin = useAdmin();
   const [tab, setTab] = useState<TabId>('accounts');
 
   const tabs: { id: TabId; label: string; icon: string; count?: number }[] = [
-    { id: 'accounts', label: 'Comptes', icon: 'building-columns', count: admin.config.accounts.length },
-    { id: 'bank', label: 'Coordonnées bancaires', icon: 'building-columns', count: (admin.config.bankDetails ?? []).length },
-    { id: 'cards', label: 'Cartes', icon: 'credit-card', count: admin.config.cards.length },
-    { id: 'transactions', label: 'Transactions', icon: 'right-left', count: admin.config.transactions.length },
-    { id: 'notifications', label: 'Notifications', icon: 'bell', count: admin.config.notifications.length },
-    { id: 'chat', label: 'Messagerie', icon: 'message-lines', count: admin.config.chat.length },
-    { id: 'access', label: 'Accès clients', icon: 'users' },
-    { id: 'company', label: 'Entreprise', icon: 'file-lines' },
-    { id: 'sections', label: 'Sections', icon: 'grid-2' },
-    { id: 'currency', label: 'Devise', icon: 'circle-dollar' },
-    { id: 'reset', label: 'Réinitialiser', icon: 'arrow-rotate-left' },
+    { id: 'accounts', label: translate('Accounts'), icon: 'building-columns', count: admin.config.accounts.length },
+    { id: 'bank', label: translate('Bank details'), icon: 'building-columns', count: (admin.config.bankDetails ?? []).length },
+    { id: 'cards', label: translate('Cards'), icon: 'credit-card', count: admin.config.cards.length },
+    { id: 'transactions', label: translate('Transactions'), icon: 'right-left', count: admin.config.transactions.length },
+    { id: 'notifications', label: translate('Notifications'), icon: 'bell', count: admin.config.notifications.length },
+    { id: 'chat', label: translate('Chat'), icon: 'message-lines', count: admin.config.chat.length },
+    { id: 'access', label: translate('Client access'), icon: 'users' },
+    { id: 'company', label: translate('Company'), icon: 'file-lines' },
+    { id: 'sections', label: translate('Sections'), icon: 'grid-2' },
+    { id: 'currency', label: translate('Currency'), icon: 'circle-dollar' },
+    { id: 'reset', label: translate('Reset'), icon: 'arrow-rotate-left' },
   ];
 
   return (
-    <Page title="Administration">
+    <Page title={translate('Administration')}>
       <div className={s.toolbar}>
         <Link className={p.btn} href="/dashboard">
-          <Icon name="eye" size={13} /> Voir le tableau de bord
-        </Link>
+          <Icon name="eye" size={13} />{translate('View the dashboard')}</Link>
         <span className={s.status}>
-          {admin.busy && <span className={s.rowMeta}>Enregistrement…</span>}
+          {admin.busy && <span className={s.rowMeta}>{translate('Saving…')}</span>}
           {!admin.busy && admin.saved && <span className={s.ok}>{admin.saved}</span>}
           {admin.error && <span className={s.err}>{admin.error}</span>}
         </span>
       </div>
 
       <div className={s.layout}>
-        <nav className={s.rail} role="tablist" aria-label="Sections d’administration">
+        <nav className={s.rail} role="tablist" aria-label={translate('Administration sections')}>
           {tabs.map((t) => (
             <button
               key={t.id}

@@ -78,3 +78,43 @@
   background: var(--ds-background-success);
   color: var(--ds-text-success);
 }
+
+/* The language strip belongs to the phone layout: on a wider screen the
+   picker lives in the top bar, and repeating it here would be noise. */
+.languageRow { display: none; }
+
+@media (max-width: 700px) {
+  .languageRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--ds-space-100);
+    padding: 8px var(--ds-space-option-inset-inline-md, 8px) 6px;
+  }
+
+  .languageLabel {
+    color: var(--ds-text-tertiary);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .languageFlags { display: flex; gap: 2px; }
+
+  .languageBtn {
+    display: grid;
+    place-items: center;
+    width: 36px;
+    min-height: 44px;
+    padding: 0;
+    border: 0;
+    border-radius: var(--ds-border-radius-small);
+    background: none;
+    cursor: pointer;
+    opacity: 0.5;
+  }
+
+  .languageBtn:disabled { cursor: default; }
+  .languageActive { opacity: 1; background: var(--ds-background-secondary); }
+}

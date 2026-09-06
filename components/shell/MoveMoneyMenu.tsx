@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { Icon } from '@/components/ds/Icon';
 import { QUICK_ACTIONS } from '@/lib/mock/nav';
 import { useDismissable } from './useDismissable';
+import { useT } from '@/components/i18n/I18nProvider';
 import s from './MoveMoneyMenu.module.css';
 
 /**
@@ -13,19 +14,20 @@ import s from './MoveMoneyMenu.module.css';
  */
 export function MoveMoneyMenu() {
   const { open, ref, toggle, close } = useDismissable();
+  const t = useT();
 
   return (
     <div className={s.wrap} ref={ref}>
       <button
         className={s.trigger}
         type="button"
-        aria-label="Move money"
+        aria-label={t('Move money')}
         aria-haspopup="menu"
         aria-expanded={open}
         onClick={toggle}
       >
         <Icon name="arrow-right-arrow-left" size={14} />
-        <span className={s.triggerLabel}>Move money</span>
+        <span className={s.triggerLabel}>{t('Move money')}</span>
         <Icon name="chevron-down" size={11} />
       </button>
 
@@ -42,7 +44,7 @@ export function MoveMoneyMenu() {
               onClick={close}
             >
               <Icon name={action.icon} size={15} />
-              <span className={s.itemLabel}>{action.label}</span>
+              <span className={s.itemLabel}>{t(action.label)}</span>
             </Link>
           ))}
         </div>

@@ -12,10 +12,12 @@ import { CreditCardWidget, BillPayWidget, InvoicingWidget, MoneyMovement } from 
 import { QUICK_ACTIONS } from '@/lib/mock/nav';
 import { USER } from '@/lib/mock/dashboard';
 import { Card } from '@/components/ds/Card';
+import { useT } from '@/components/i18n/I18nProvider';
 import s from '@/components/dashboard/Dashboard.module.css';
 
 export default function DashboardPage() {
   const { config, user, isAdmin } = useConfig();
+  const t = useT();
   const { sections } = config;
   const greetingName = user?.displayName.trim() || USER.firstName;
 
@@ -23,7 +25,7 @@ export default function DashboardPage() {
     <>
       <TopBar />
       <main className={s.page}>
-        <h1 className={s.greeting}>Bonjour, {greetingName}</h1>
+        <h1 className={s.greeting}>{t('Hello, {name}', { name: greetingName })}</h1>
 
         <div className={s.actionRow}>
           {QUICK_ACTIONS.map((a, i) => (
@@ -33,13 +35,13 @@ export default function DashboardPage() {
               className={[s.pill, i === 0 && s.pillPrimary].filter(Boolean).join(' ')}
             >
               <Icon name={a.icon} size={13} />
-              {a.label}
+              {t(a.label)}
             </Link>
           ))}
           {isAdmin && (
             <Link className={s.ghost} href="/admin">
               <Icon name="gear" size={13} />
-              Configurer
+              {t('Configure')}
             </Link>
           )}
         </div>
@@ -75,7 +77,7 @@ export default function DashboardPage() {
 
         {sections.transactions && (
           <>
-            <h2 className={s.sectionTitle}>Transactions</h2>
+            <h2 className={s.sectionTitle}>{t('Transactions')}</h2>
             <LiveTransactions />
           </>
         )}

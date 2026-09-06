@@ -5,12 +5,14 @@ import { Card } from '@/components/ds/Card';
 import { POLICIES } from '@/lib/mock/policies';
 import p from '@/components/ds/Page.module.css';
 import t from '@/components/dashboard/TransactionsTable.module.css';
+import { useT } from '@/components/i18n/I18nProvider';
 
 export default function PoliciesPage() {
-  const tabs = useTabs([{ label: 'Card spend' }, { label: 'Reimbursements' }]);
+  const tr = useT();
+  const tabs = useTabs([{ label: tr('Card spend') }, { label: tr('Reimbursements') }]);
 
   return (
-    <Page title="Spend Policies">
+    <Page title={tr('Spend Policies')}>
       {tabs.node}
       <SectionTitle>{tabs.active} requirements</SectionTitle>
       <div style={{ display: 'grid', gap: 16 }}>
@@ -26,7 +28,7 @@ export default function PoliciesPage() {
                 </div>
                 {policy.excluded.length > 0 && (
                   <div style={{ marginTop: 10, display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-                    <span className={t.muted} style={{ fontSize: 13 }}>Excluded merchants:</span>
+                    <span className={t.muted} style={{ fontSize: 13 }}>{tr('Excluded merchants:')}</span>
                     {policy.excluded.map((m) => (
                       <span key={m} className={`${t.status} ${t.statusNeutral}`}>{m}</span>
                     ))}
@@ -34,8 +36,8 @@ export default function PoliciesPage() {
                 )}
               </div>
               <div style={{ display: 'flex', gap: 8 }}>
-                <button className={p.btn} type="button">Disable</button>
-                <button className={p.btn} type="button">Edit</button>
+                <button className={p.btn} type="button">{tr('Disable')}</button>
+                <button className={p.btn} type="button">{tr('Edit')}</button>
               </div>
             </div>
           </Card>

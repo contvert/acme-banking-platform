@@ -5,6 +5,7 @@ import { randomBytes, scrypt as scryptCb, timingSafeEqual } from 'node:crypto';
 import { promisify } from 'node:util';
 import path from 'node:path';
 import type { Role, User } from './types';
+import type { Message } from '@/lib/i18n/messages/catalog';
 
 const scrypt = promisify(scryptCb);
 const FILE = path.join(process.cwd(), 'data', 'users.json');
@@ -82,26 +83,44 @@ export async function findById(id: string) {
   return users.find((u) => u.id === id) ?? null;
 }
 
+/**
+ * A sign-in identity: an email address, or one of the short usernames the
+ * seeded accounts still use. Shared so creating and renaming an access apply
+ * exactly the same rule.
+ */
+export function normaliseUsername(value: string) {
+  return value.trim().toLowerCase();
+}
+
+export function checkUsername(username: string): Message | null {
+  const isLegacyUsername = /^[a-z0-9._-]{3,32}$/.test(username);
+  const isEmail =
+    username.length <= 254 &&
+    /^[a-z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)+$/.test(username);
+  return isLegacyUsername || isEmail
+    ? null
+    : 'Enter a valid email address, or a username of 3 to 32 characters.';
+}
+
+/**
+ * Refusals come back as catalogue keys rather than sentences: the store has
+ * no idea which language the caller is answering in.
+ */
 export async function createUser(input: {
   username: string;
   password: string;
   displayName: string;
   role: Role;
   accountIds: string[];
-}): Promise<{ user: User } | { error: string }> {
-  const username = input.username.trim().toLowerCase();
-  const isLegacyUsername = /^[a-z0-9._-]{3,32}$/.test(username);
-  const isEmail =
-    username.length <= 254 &&
-    /^[a-z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)+$/.test(username);
-  if (!isLegacyUsername && !isEmail) {
-    return { error: 'Saisissez une adresse e-mail valide ou un identifiant de 3 à 32 caractères' };
-  }
+}): Promise<{ user: User } | { error: Message }> {
+  const username = normaliseUsername(input.username);
+  const badUsername = checkUsername(username);
+  if (badUsername) return { error: badUsername };
   if (input.password.length < 8) {
-    return { error: 'Le mot de passe doit faire au moins 8 caractères' };
+    return { error: 'The password must be at least 8 characters.' };
   }
   if (await findByUsername(username)) {
-    return { error: 'Cet identifiant existe déjà' };
+    return { error: 'That username already exists.' };
   }
 
   const { passwordHash, salt } = await hashPassword(input.password);

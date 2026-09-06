@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { TopBar } from '@/components/shell/TopBar';
 import { Icon } from '@/components/ds/Icon';
 import s from './Command.module.css';
+import { useT } from '@/components/i18n/I18nProvider';
 
 const PROMPTS = [
   'Issue new card',
@@ -13,6 +14,7 @@ const PROMPTS = [
 ];
 
 export default function CommandPage() {
+  const t = useT();
   const [value, setValue] = useState('');
 
   return (
@@ -20,7 +22,7 @@ export default function CommandPage() {
       <TopBar />
       <main className={s.main}>
         <div className={s.inner}>
-          <h1 className={s.heading}>Where do you want to start?</h1>
+          <h1 className={s.heading}>{t('Where do you want to start?')}</h1>
 
           <form
             className={s.composer}
@@ -34,15 +36,15 @@ export default function CommandPage() {
               className={s.input}
               value={value}
               onChange={(e) => setValue(e.target.value)}
-              placeholder="Ask anything about your finances"
-              aria-label="Command message"
+              placeholder={t('Ask anything about your finances')}
+              aria-label={t('Command message')}
             />
-            <button className={s.send} type="submit" aria-label="Send message" disabled={!value.trim()}>
+            <button className={s.send} type="submit" aria-label={t('Send message')} disabled={!value.trim()}>
               <Icon name="arrow-right" size={15} />
             </button>
           </form>
 
-          <div className={s.promptsLabel}>Try one of these prompts out:</div>
+          <div className={s.promptsLabel}>{t('Try one of these prompts out:')}</div>
           <div className={s.prompts}>
             {PROMPTS.map((p) => (
               <button key={p} className={s.prompt} type="button" onClick={() => setValue(p)}>

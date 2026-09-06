@@ -385,3 +385,54 @@
     transition: none;
   }
 }
+
+/* Confirmation step: a single six-digit field, spaced so each digit is legible. */
+.otpBody {
+  padding: var(--ds-space-300);
+}
+
+.otpLabel {
+  display: block;
+  margin-bottom: var(--ds-space-100);
+  color: var(--ds-text-secondary);
+  font-size: 13px;
+}
+
+.otpInput {
+  width: 100%;
+  max-width: 260px;
+  padding: var(--ds-space-150);
+  border: 1px solid var(--ds-border-input);
+  border-radius: var(--ds-border-radius-medium);
+  background: var(--ds-background-input);
+  color: var(--ds-text-emphasized);
+  font-family: var(--ds-font-family-monospace);
+  font-size: 26px;
+  letter-spacing: 10px;
+  text-align: center;
+  min-height: 56px;
+}
+.otpInput:focus {
+  outline: none;
+  border-color: var(--ds-border-input-focused-underline);
+  background: var(--ds-background-input-focused);
+}
+.otpInput::placeholder { color: var(--ds-text-placeholder); letter-spacing: 10px; }
+
+.secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 var(--ds-space-250);
+  border: 1px solid var(--ds-border-default);
+  border-radius: var(--ds-border-radius-medium);
+  background: var(--ds-background-surface-raised);
+  color: var(--ds-text-default);
+  font: inherit;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background var(--ds-motion-duration-100, 0.1s) linear;
+}
+.secondary:hover:not(:disabled) { background: var(--ds-background-default-hovered); }
+.secondary:disabled { opacity: 0.55; cursor: default; }

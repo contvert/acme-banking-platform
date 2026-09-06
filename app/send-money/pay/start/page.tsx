@@ -8,8 +8,10 @@ import { Icon } from '@/components/ds/Icon';
 import { RECENTLY_PAID } from '@/lib/mock/payFlow';
 import p from '@/components/ds/Page.module.css';
 import s from './PayStart.module.css';
+import { useT } from '@/components/i18n/I18nProvider';
 
 export default function PayStartPage() {
+  const tr = useT();
   const [query, setQuery] = useState('');
 
   const results = useMemo(() => {
@@ -23,35 +25,33 @@ export default function PayStartPage() {
   }, [query]);
 
   return (
-    <FlowLayout title="How would you like to start?" wide>
-      <h2 className={s.sectionTitle}>Upload a bill</h2>
+    <FlowLayout title={tr('How would you like to start?')} wide>
+      <h2 className={s.sectionTitle}>{tr('Upload a bill')}</h2>
       <p className={s.sectionHint}>
         Use this to automatically pre-fill your recipient&rsquo;s payment details.
       </p>
-      <DropZone hint="Upload images, PDFs, or spreadsheets" />
+      <DropZone hint={tr('Upload images, PDFs, or spreadsheets')} />
 
-      <div className={f.divider}>OR</div>
+      <div className={f.divider}>{tr('OR')}</div>
 
-      <h2 className={s.sectionTitle}>Select a recipient</h2>
-      <Field label="Search">
+      <h2 className={s.sectionTitle}>{tr('Select a recipient')}</h2>
+      <Field label={tr('Search')}>
         <input
           className={s.search}
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          aria-label="Search recipients"
+          aria-label={tr('Search recipients')}
         />
       </Field>
 
       <div className={s.actionRow}>
-        <Link className={p.btn} href="/payments/recipients">
-          <Icon name="plus" size={13} /> Create recipient
-        </Link>
+        <Link className={p.btn} href="/payments/recipients/create">
+          <Icon name="plus" size={13} />{tr('Create recipient')}</Link>
         <Link className={p.btn} href="/payments/recipients/create/request">
-          <Icon name="envelope" size={13} /> Invite recipient
-        </Link>
+          <Icon name="envelope" size={13} />{tr('Invite recipient')}</Link>
       </div>
 
-      <div className={s.listLabel}>Recently paid</div>
+      <div className={s.listLabel}>{tr('Recently paid')}</div>
       <div className={s.list}>
         {results.map((r) => (
           <Link key={r.name} href="/send-money/pay/recipient-details" className={s.row}>

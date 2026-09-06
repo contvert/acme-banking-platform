@@ -8,6 +8,7 @@ import { checkIban, checkBic, formatIban, normaliseIban } from '@/lib/config/iba
 import type { useAdmin } from './useAdmin';
 import p from '@/components/ds/Page.module.css';
 import s from './Admin.module.css';
+import { useT } from '@/components/i18n/I18nProvider';
 
 type Admin = ReturnType<typeof useAdmin>;
 
@@ -27,6 +28,7 @@ const EMPTY = {
 };
 
 export function BankDetailsPanel({ admin }: { admin: Admin }) {
+  const tr = useT();
   const [draft, setDraft] = useState(EMPTY);
   const [editing, setEditing] = useState<string | null>(null);
 
@@ -57,29 +59,33 @@ export function BankDetailsPanel({ admin }: { admin: Admin }) {
     <>
       <Card style={{ marginBottom: 20 }}>
         <h2 style={{ fontSize: 18, fontWeight: 400, margin: '0 0 16px', color: 'var(--ds-text-emphasized)' }}>
-          {editing ? 'Modifier les coordonnées' : 'Ajouter des coordonnées bancaires'}
+          {editing ? tr('Edit the details') : tr('Add bank details')}
         </h2>
 
         <div className={`${s.grid} ${s.grid2}`}>
-          <Field label="Libellé interne">
-            <input className={s.input} value={draft.label} placeholder="Compte courant"
+          <Field label={tr('Internal label')}>
+            <input className={s.input} value={draft.label} placeholder={tr('Checking account')}
               onChange={(e) => setDraft({ ...draft, label: e.target.value })} />
           </Field>
-          <Field label="Titulaire du compte">
-            <input className={s.input} value={draft.holder} placeholder="Raison sociale"
+          <Field label={tr('Account holder')}>
+            <input className={s.input} value={draft.holder} placeholder={tr('Legal name')}
               onChange={(e) => setDraft({ ...draft, holder: e.target.value })} />
           </Field>
         </div>
 
         <div style={{ marginTop: 16 }}>
           <Field
-            label="IBAN"
+            label={tr('IBAN')}
             hint={
               !draft.iban
-                ? 'Vérifié par la clé de contrôle mod-97 (ISO 7064).'
+                ? tr('Checked with the mod-97 check digits (ISO 7064).')
                 : ibanCheck.valid
-                  ? `IBAN valide${ibanCheck.country ? ` (${ibanCheck.country})` : ''}`
+                  ? ibanCheck.country
+                    ? tr('Valid IBAN ({country})', { country: ibanCheck.country })
+                    : tr('Valid IBAN')
                   : ibanCheck.reason
+                    ? tr(ibanCheck.reason, ibanCheck.reasonValues)
+                    : undefined
             }
           >
             <input
@@ -95,16 +101,20 @@ export function BankDetailsPanel({ admin }: { admin: Admin }) {
         </div>
 
         <div className={`${s.grid} ${s.grid3}`} style={{ marginTop: 16 }}>
-          <Field label="BIC / SWIFT" hint={draft.bic && !bicCheck.valid ? bicCheck.reason : '8 ou 11 caractères'}>
+          <Field label={tr('BIC / SWIFT')} hint={
+              draft.bic && !bicCheck.valid && bicCheck.reason
+                ? tr(bicCheck.reason)
+                : tr('8 or 11 characters')
+            }>
             <input className={s.input} value={draft.bic} placeholder="AGRIFRPP"
               aria-invalid={!!draft.bic && !bicCheck.valid}
               onChange={(e) => setDraft({ ...draft, bic: e.target.value.toUpperCase() })} />
           </Field>
-          <Field label="Banque">
-            <input className={s.input} value={draft.bankName} placeholder="Nom de la banque"
+          <Field label={tr('Bank')}>
+            <input className={s.input} value={draft.bankName} placeholder={tr('Bank name')}
               onChange={(e) => setDraft({ ...draft, bankName: e.target.value })} />
           </Field>
-          <Field label="Devise">
+          <Field label={tr('Currency')}>
             <select className={s.select} value={draft.currency}
               onChange={(e) => setDraft({ ...draft, currency: e.target.value as Currency })}>
               {CURRENCIES.map((c) => <option key={c.code} value={c.code}>{c.code}</option>)}
@@ -113,7 +123,7 @@ export function BankDetailsPanel({ admin }: { admin: Admin }) {
         </div>
 
         <div style={{ marginTop: 16 }}>
-          <Field label="Adresse de la banque">
+          <Field label={tr('Bank address')}>
             <input className={s.input} value={draft.bankAddress} placeholder="1 rue de la Banque, 75002 Paris"
               onChange={(e) => setDraft({ ...draft, bankAddress: e.target.value })} />
           </Field>
@@ -121,9 +131,7 @@ export function BankDetailsPanel({ admin }: { admin: Admin }) {
 
         <div className={p.headActions} style={{ marginTop: 20 }}>
           {editing && (
-            <button className={p.btn} type="button" onClick={() => { setDraft(EMPTY); setEditing(null); }}>
-              Annuler
-            </button>
+            <button className={p.btn} type="button" onClick={() => { setDraft(EMPTY); setEditing(null); }}>{tr('Cancel')}</button>
           )}
           <button className={`${p.btn} ${p.btnPrimary}`} type="button" disabled={admin.busy || !canSave} onClick={save}>
             <Icon name={editing ? 'check' : 'plus'} size={13} />
@@ -133,13 +141,13 @@ export function BankDetailsPanel({ admin }: { admin: Admin }) {
       </Card>
 
       <Card>
-        {list.length === 0 && <p className={s.empty}>Aucune coordonnée enregistrée.</p>}
+        {list.length === 0 && <p className={s.empty}>{tr('No bank details saved.')}</p>}
         {list.map((b) => (
           <div key={b.id} className={s.row}>
             <div className={s.rowMain}>
               <div className={s.rowTitle}>
                 {b.label}
-                {b.primary && <span className={s.tabCount} style={{ marginLeft: 8 }}>principal</span>}
+                {b.primary && <span className={s.tabCount} style={{ marginLeft: 8 }}>{tr('primary')}</span>}
               </div>
               <div className={s.rowMeta} style={{ fontVariantNumeric: 'tabular-nums' }}>
                 {formatIban(b.iban)}
@@ -154,9 +162,7 @@ export function BankDetailsPanel({ admin }: { admin: Admin }) {
                 className={p.btn}
                 type="button"
                 onClick={() => admin.update('bankDetails', b.id, { primary: true })}
-              >
-                Définir comme principal
-              </button>
+              >{tr('Set as primary')}</button>
             )}
             <button
               className={p.btn}
@@ -169,8 +175,7 @@ export function BankDetailsPanel({ admin }: { admin: Admin }) {
                 });
               }}
             >
-              <Icon name="pencil" size={13} /> Modifier
-            </button>
+              <Icon name="pencil" size={13} />{tr('Edit')}</button>
             <button
               className={`${p.btn} ${s.danger}`}
               type="button"

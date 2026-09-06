@@ -1,3 +1,8 @@
 app-config.json
 users.json
 .session-secret
+.otp-secret
+recipient-verifications.json
+dev-email-outbox.json
+client-provisioning-queue.json
+dispatch.log

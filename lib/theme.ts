@@ -1,6 +1,6 @@
 export type Theme = 'light' | 'dark' | 'system';
 
-export const THEME_KEY = 'acme-theme';
+export const THEME_KEY = 'Mercury-theme';
 
 /**
  * Applies a theme by setting (or clearing) `data-theme` on <html>.

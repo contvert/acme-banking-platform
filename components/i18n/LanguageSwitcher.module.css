@@ -1,0 +1,85 @@
+.wrap { position: relative; display: inline-flex; }
+
+.trigger {
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 7px;
+  border: 0;
+  background: transparent;
+  border-radius: var(--ds-border-radius-medium);
+  color: var(--ds-text-secondary);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: background var(--ds-motion-duration-100, 0.1s) linear;
+}
+.trigger:hover { background: var(--ds-background-default-hovered); color: var(--ds-text-default); }
+.trigger[aria-expanded='true'] { background: var(--ds-background-secondary); color: var(--ds-text-default); }
+
+/* Outside the top bar — the sign-in page — the control needs its own edge. */
+.standalone {
+  border: 1px solid var(--ds-border-default);
+  background: var(--ds-background-surface-raised);
+}
+
+.code { line-height: 1; }
+
+.menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: var(--popup-menu-z-index, 4);
+  min-width: 190px;
+  padding: var(--ds-space-listbox-inset-block, 4px) var(--ds-space-listbox-inset-inline, 4px);
+  border: 1px solid var(--ds-border-default);
+  border-radius: var(--ds-border-radius-medium);
+  background: var(--ds-background-surface-floating);
+  box-shadow: 0 8px 24px var(--ds-neutral-magic-600-alpha-3), 0 1px 2px var(--ds-neutral-magic-600-alpha-2);
+}
+
+.menuTitle {
+  margin: 0;
+  padding: 6px var(--ds-space-option-inset-inline-md, 8px) 7px;
+  color: var(--ds-text-tertiary);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-gap-inline-md);
+  width: 100%;
+  padding: var(--ds-space-option-inset-block-md, 4px) var(--ds-space-option-inset-inline-md, 8px);
+  border: 0;
+  background: none;
+  border-radius: var(--ds-border-radius-small);
+  color: var(--ds-text-default);
+  font: inherit;
+  font-size: 15px;
+  cursor: pointer;
+  text-align: left;
+  transition: background var(--ds-motion-duration-100, 0.1s) linear;
+}
+.item:hover:not(:disabled) { background: var(--ds-background-default-hovered); }
+.item[aria-checked='true'] { color: var(--ds-text-emphasized); font-weight: 500; }
+.item:disabled { cursor: default; }
+.itemLabel { flex: 1; }
+
+@media (pointer: coarse) {
+  .trigger { min-height: 44px; }
+  .item { min-height: 44px; }
+}
+
+/* The top bar is full at phone width — nine controls do not fit in 390px
+   without squeezing a tap target below its size. There the language choice
+   moves into the account menu, where a per-reader preference belongs. */
+@media (max-width: 700px) {
+  .barOnly { display: none; }
+}

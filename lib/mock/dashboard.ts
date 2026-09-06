@@ -1,72 +1,63 @@
 // Dashboard figures, transcribed from the reference interface.
 
-export const USER = { firstName: 'Jane', lastName: 'Black' };
+export const USER = { firstName: '', lastName: '' };
 
-export const TOTAL_BALANCE = 5_216_471.18;
+export const TOTAL_BALANCE = 0;
 
-export const BALANCE_RANGE = { label: 'Last 30 days', high: 1_800_000, low: -488_000 };
+export const BALANCE_RANGE = { label: 'Last 30 days', high: 455851, low: 300000 };
 
-/**
- * 30-day balance series. The reference interface renders this as an area chart with a
- * rising trend and a late pullback; values are reconstructed to that shape and
- * scaled to the card's own axis, not to the account total.
- */
+/** Normalised (0–1) points; the tooltip maps them onto BALANCE_RANGE. */
 export const BALANCE_SERIES: { date: string; value: number }[] = [
-  { date: 'Aug 5', value: 0.30 }, { date: 'Aug 6', value: 0.28 }, { date: 'Aug 7', value: 0.33 },
-  { date: 'Aug 8', value: 0.31 }, { date: 'Aug 9', value: 0.35 }, { date: 'Aug 10', value: 0.34 },
-  { date: 'Aug 11', value: 0.38 }, { date: 'Aug 12', value: 0.36 }, { date: 'Aug 13', value: 0.41 },
-  { date: 'Aug 14', value: 0.43 }, { date: 'Aug 15', value: 0.40 }, { date: 'Aug 16', value: 0.46 },
-  { date: 'Aug 17', value: 0.48 }, { date: 'Aug 18', value: 0.45 }, { date: 'Aug 19', value: 0.52 },
-  { date: 'Aug 20', value: 0.58 }, { date: 'Aug 21', value: 0.55 }, { date: 'Aug 22', value: 0.57 },
-  { date: 'Aug 23', value: 0.62 }, { date: 'Aug 24', value: 0.60 }, { date: 'Aug 25', value: 0.66 },
-  { date: 'Aug 26', value: 0.71 }, { date: 'Aug 27', value: 0.74 }, { date: 'Aug 28', value: 0.79 },
-  { date: 'Aug 29', value: 0.86 }, { date: 'Aug 30', value: 0.93 }, { date: 'Aug 31', value: 0.90 },
-  { date: 'Sep 1', value: 0.88 }, { date: 'Sep 2', value: 0.91 }, { date: 'Sep 3', value: 0.89 },
+  { date: '2026-08-09', value: 0.10 },
+  { date: '2026-08-11', value: 0.16 },
+  { date: '2026-08-13', value: 0.14 },
+  { date: '2026-08-15', value: 0.22 },
+  { date: '2026-08-17', value: 0.30 },
+  { date: '2026-08-19', value: 0.28 },
+  { date: '2026-08-21', value: 0.38 },
+  { date: '2026-08-23', value: 0.45 },
+  { date: '2026-08-25', value: 0.52 },
+  { date: '2026-08-27', value: 0.50 },
+  { date: '2026-08-29', value: 0.61 },
+  { date: '2026-08-31', value: 0.69 },
+  { date: '2026-09-02', value: 0.78 },
+  { date: '2026-09-04', value: 0.90 },
+  { date: '2026-09-06', value: 1.0 },
 ];
 
 export const CREDIT = {
-  balance: 12_505.87,
-  available: 21_249,
-  limit: 35_000,
-  pending: 1_245.13,
-  autopayDate: 'Sep 8',
+  balance: 0,
+  available: 0,
+  limit: 0,
+  pending: 0,
+  autopayDate: '',
 };
 
 export const BILL_PAY = {
-  outstanding: 11,
-  overdue: 1,
+  outstanding: 0,
+  overdue: 0,
   dueSoon: null as number | null,
-  inboxItems: 3,
-  inboxAmount: 10_000,
+  inboxItems: 0,
+  inboxAmount: 0,
 };
 
 export const INVOICING = {
-  overdueCount: 4, overdueAmount: 950,
-  paidCount: 12, paidAmount: 6_000,
-  openCount: 12, openAmount: 12_300,
+  overdueCount: 0, overdueAmount: 0,
+  paidCount: 0, paidAmount: 0,
+  openCount: 0, openAmount: 0,
 };
 
 export const MONEY_MOVEMENT = {
-  period: 'Sep 2026',
+  period: '',
   in: {
-    total: 37_953.33,
-    threeMonthAverage: 624_000,
-    top: [
-      { name: 'Google', amount: 12_094.22 },
-      { name: 'Milgram Brokerage', amount: 5_955.63 },
-      { name: 'Orange, Inc.', amount: 5_533.51 },
-      { name: 'Monarch Books', amount: 3_330.97 },
-    ],
+    total: 0,
+    threeMonthAverage: 0,
+    top: [],
   },
   out: {
-    total: -57_291.17,
-    threeMonthAverage: -272_000,
-    top: [
-      { name: 'Google', amount: -10_457.99 },
-      { name: 'Milgram Brokerage', amount: -9_633.57 },
-      { name: 'Orange, Inc.', amount: -5_697.64 },
-      { name: 'Lighthouse Properties #3431', amount: -5_250.00 },
-    ],
+    total: 0,
+    threeMonthAverage: 0,
+    top: [],
   },
 };
 

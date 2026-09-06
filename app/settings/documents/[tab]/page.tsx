@@ -7,10 +7,12 @@ import { Page, Tabs } from '@/components/ds/Page';
 import { DataTable, type Column } from '@/components/ds/DataTable';
 import { DOC_TABS } from '@/lib/mock/documents';
 import p from '@/components/ds/Page.module.css';
+import { useT } from '@/components/i18n/I18nProvider';
 
 interface Row { cells: string[] }
 
 export default function DocumentTabPage({ params }: { params: Promise<{ tab: string }> }) {
+  const translate = useT();
   const { tab } = use(params);
   const router = useRouter();
   const current = DOC_TABS.find((t) => t.slug === tab);
@@ -20,22 +22,21 @@ export default function DocumentTabPage({ params }: { params: Promise<{ tab: str
   const headers = current.headers.length ? current.headers : ['Document'];
   const columns: Column<Row>[] = headers.map((h, i) => ({
     key: `c${i}`,
-    header: h,
+    headerText: h,
     muted: i > 0,
     sortValue: (r) => r.cells[i] ?? '',
     cell: (r) => r.cells[i] ?? '',
   }));
   columns.push({
     key: 'download',
-    header: '',
     numeric: true,
-    cell: () => <button className={p.btn} type="button">Download</button>,
+    cell: () => <button className={p.btn} type="button">{translate('Download')}</button>,
   });
 
   const rows: Row[] = current.rows.map((cells) => ({ cells }));
 
   return (
-    <Page title="Documents & Data" actions={[{ label: 'Export all', icon: 'arrow-down-to-line', href: '/settings/documents/statements' }]}>
+    <Page title={translate('Documents & Data')} actions={[{ label: translate('Export all'), icon: 'arrow-down-to-line', href: '/settings/documents/statements' }]}>
       <Tabs
         tabs={DOC_TABS.map((t) => ({ label: t.label }))}
         active={current.label}

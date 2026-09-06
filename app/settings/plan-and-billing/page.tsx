@@ -5,14 +5,16 @@ import { Card } from '@/components/ds/Card';
 import { Icon } from '@/components/ds/Icon';
 import { PLAN } from '@/lib/mock/settingsData';
 import { BRAND } from '@/lib/brand';
+import { useT } from '@/components/i18n/I18nProvider';
 
 export default function PlanPage() {
+  const tr = useT();
   return (
-    <Page title="Plan & Billing" actions={[{ label: 'Manage', icon: 'gear', primary: true }]}>
+    <Page title={tr('Plan & Billing')} actions={[{ label: tr('Manage'), icon: 'gear', primary: true }]}>
       <StatTiles
         tiles={[
-          { label: 'Your plan', value: `${BRAND.name} ${PLAN.name}` },
-          { label: 'Pricing', value: <><Money value={PLAN.price} noCents />/mo</> },
+          { label: tr('Your plan'), value: `${BRAND.name} ${PLAN.name}` },
+          { label: tr('Pricing'), value: <><Money value={PLAN.price} noCents />/mo</> },
         ]}
       />
       <SectionTitle>Included with {BRAND.name} {PLAN.name}</SectionTitle>

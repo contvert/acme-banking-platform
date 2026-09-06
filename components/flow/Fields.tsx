@@ -2,8 +2,9 @@
 
 import { Icon } from '@/components/ds/Icon';
 import { Money } from '@/components/ds/Money';
-import { ACCOUNTS } from '@/lib/mock/accounts';
+import { useAccounts } from '@/lib/config/adapters';
 import s from './Fields.module.css';
+import { useT } from '@/components/i18n/I18nProvider';
 
 export function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
@@ -24,6 +25,7 @@ export function AmountInput({
   onChange: (v: string) => void;
   id?: string;
 }) {
+  const t = useT();
   return (
     <div className={s.amountWrap}>
       <span className={s.currency}>$</span>
@@ -34,7 +36,7 @@ export function AmountInput({
         placeholder="0.00"
         value={value}
         onChange={(e) => onChange(e.target.value.replace(/[^\d.,]/g, ''))}
-        aria-label="Amount"
+        aria-label={t('Amount')}
       />
     </div>
   );
@@ -52,8 +54,10 @@ export function AccountSelect({
   exclude?: string;
   id?: string;
 }) {
-  const options = ACCOUNTS.filter((a) => a.name !== exclude);
-  const selected = ACCOUNTS.find((a) => a.name === value);
+  const t = useT();
+  const accounts = useAccounts();
+  const options = accounts.filter((a) => a.name !== exclude);
+  const selected = accounts.find((a) => a.name === value);
 
   return (
     <div className={s.selectWrap}>
@@ -62,9 +66,9 @@ export function AccountSelect({
         className={s.select}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        aria-label="Select an account"
+        aria-label={t('Select an account')}
       >
-        <option value="">Select an account</option>
+        <option value="">{t('Select an account')}</option>
         {options.map((a) => (
           <option key={a.name} value={a.name}>{a.name}</option>
         ))}
@@ -79,7 +83,7 @@ export function AccountSelect({
             </span>
           </>
         ) : (
-          <span className={s.placeholder}>Select an account</span>
+          <span className={s.placeholder}>{t('Select an account')}</span>
         )}
       </span>
       <span className={s.chevron} aria-hidden><Icon name="chevron-down" size={14} /></span>
@@ -113,12 +117,13 @@ export function Toggle({
 }
 
 export function DropZone({ hint }: { hint: string }) {
+  const t = useT();
   return (
     <label className={s.drop}>
       <input type="file" className={s.fileInput} />
       <Icon name="file-arrow-up" size={20} />
       <span className={s.dropText}>
-        <span className={s.dropTitle}>Drag and drop here or click to upload</span>
+        <span className={s.dropTitle}>{t('Drag and drop here or click to upload')}</span>
         <span className={s.dropHint}>{hint}</span>
       </span>
     </label>

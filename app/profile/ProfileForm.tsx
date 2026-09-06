@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { BRAND } from '@/lib/brand';
 import {
   normalizeClientProfile,
@@ -9,6 +9,7 @@ import {
   type ClientProfileErrors,
 } from '@/lib/auth/profile';
 import s from './Profile.module.css';
+import { useT } from '@/components/i18n/I18nProvider';
 
 type FieldName = keyof ClientProfileDraft;
 type Touched = Partial<Record<FieldName, boolean>>;
@@ -50,6 +51,7 @@ export function ProfileForm({
   initialComplete: boolean;
   today: string;
 }) {
+  const tr = useT();
   const [form, setForm] = useState(initialProfile);
   const [sameAsResidential, setSameAsResidential] = useState(
     Boolean(
@@ -62,6 +64,17 @@ export function ProfileForm({
   const [serverErrors, setServerErrors] = useState<ClientProfileErrors>({});
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  // Once the details are saved, the form hands over to a confirmation step.
+  const [pending, setPending] = useState<{ destination: string } | null>(null);
+  const [code, setCode] = useState('');
+  const [resendIn, setResendIn] = useState(0);
+
+  // Tick the resend cooldown down so the button says when it will work again.
+  useEffect(() => {
+    if (resendIn <= 0) return;
+    const timer = window.setInterval(() => setResendIn((value) => Math.max(0, value - 1)), 1000);
+    return () => window.clearInterval(timer);
+  }, [resendIn > 0]);
 
   const effectiveProfile = useMemo(
     () =>
@@ -124,10 +137,57 @@ export function ProfileForm({
         return;
       }
 
-      // Rebuild the server layout with the refreshed profile-complete session.
+      if (body.status === 'verification-sent') {
+        setPending({ destination: body.verification?.destination ?? tr('your address') });
+        setResendIn(60);
+        return;
+      }
+
+      // Already confirmed: rebuild the layout with the refreshed session.
       window.location.replace('/dashboard');
     } catch {
       setError('Unable to save your profile. Check your connection and try again.');
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function confirmCode(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setError(null);
+    setBusy(true);
+    try {
+      const response = await fetch('/api/auth/profile/confirm', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ code }),
+      });
+      const body = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        setError(body.error ?? 'Code incorrect.');
+        setCode('');
+        return;
+      }
+      window.location.replace('/dashboard');
+    } catch {
+      setError(tr('Could not confirm. Check your connection.'));
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function resendCode() {
+    setError(null);
+    setBusy(true);
+    try {
+      const response = await fetch('/api/auth/profile/resend', { method: 'POST' });
+      const body = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        setError(body.error ?? tr('Could not send.'));
+        setResendIn(body.retryAfterSeconds ?? 60);
+        return;
+      }
+      setResendIn(60);
     } finally {
       setBusy(false);
     }
@@ -145,18 +205,85 @@ export function ProfileForm({
   const residentialError = fieldError('residentialAddress');
   const mailingError = sameAsResidential ? undefined : fieldError('mailingAddress');
 
+  const chrome = (
+    <header className={s.header}>
+      <div className={s.brand}>
+        <img src="/logo.png" alt={BRAND.productName} className="logo-img" style={{ height: 28 }} />
+      </div>
+      <div className={s.account}>
+        <span className={s.email}>{email}</span>
+        <button className={s.signOut} type="button" onClick={signOut}>{tr('Sign out')}</button>
+      </div>
+    </header>
+  );
+
+  // Details are saved; the address now has to be confirmed before the profile
+  // counts as complete.
+  if (pending) {
+    return (
+      <div className={s.screen}>
+        {chrome}
+        <main className={s.main}>
+          <div className={s.intro}>
+            <div>
+              <p className={s.eyebrow}>{tr('CONFIRMATION')}</p>
+              <h1 className={s.title}>{tr('Confirm your email address')}</h1>
+              <p className={s.lede}>
+                {tr('A six-digit code has just been sent to {destination}. Enter it to finish your profile.', {
+                  destination: pending.destination,
+                })}
+                <br /><br />
+                <strong>{tr('Please check your spam folder if you do not see it in your inbox.')}</strong>
+              </p>
+            </div>
+          </div>
+
+          <form className={s.card} onSubmit={confirmCode}>
+            {error && <p className={s.errorBanner} role="alert">{error}</p>}
+
+            {/* The card itself carries no padding — every section supplies its own. */}
+            <div className={s.otpBody}>
+              <label className={s.otpLabel} htmlFor="profile-otp">{tr('Confirmation code')}</label>
+              <input
+                id="profile-otp"
+                className={s.otpInput}
+                inputMode="numeric"
+                autoComplete="one-time-code"
+                maxLength={6}
+                value={code}
+                onChange={(event) => setCode(event.target.value.replace(/\D/g, '').slice(0, 6))}
+                placeholder="000000"
+                aria-describedby="profile-otp-hint"
+                autoFocus
+              />
+              <p className={s.helper} id="profile-otp-hint">{tr('The code expires after 10 minutes and can only be used once.')}</p>
+              <p className={s.helper}>{tr('Wrong address? Contact your administrator to correct it.')}</p>
+            </div>
+
+            <div className={s.actions}>
+              <button className={s.submit} type="submit" disabled={code.length !== 6 || busy}>
+                {busy ? tr('Checking…') : tr('Confirm')}
+              </button>
+              <button
+                className={s.secondary}
+                type="button"
+                onClick={resendCode}
+                disabled={busy || resendIn > 0}
+              >
+                {resendIn > 0
+                  ? tr('Resend the code ({seconds}s)', { seconds: resendIn })
+                  : tr('Resend the code')}
+              </button>
+            </div>
+          </form>
+        </main>
+      </div>
+    );
+  }
+
   return (
     <div className={s.screen}>
-      <header className={s.header}>
-        <div className={s.brand}>
-          <span className={s.brandMark}>{BRAND.name.charAt(0)}</span>
-          <span>{BRAND.productName}</span>
-        </div>
-        <div className={s.account}>
-          <span className={s.email}>{email}</span>
-          <button className={s.signOut} type="button" onClick={signOut}>Sign out</button>
-        </div>
-      </header>
+      {chrome}
 
       <main className={s.main}>
         <div className={s.intro}>
@@ -170,8 +297,8 @@ export function ProfileForm({
             </p>
           </div>
           {!initialComplete && (
-            <div className={s.progress} aria-label="Onboarding progress: step 1 of 1">
-              <span>Step 1 of 1</span>
+            <div className={s.progress} aria-label={tr('Onboarding progress: step 1 of 1')}>
+              <span>{tr('Step 1 of 1')}</span>
               <span className={s.progressTrack}><span /></span>
             </div>
           )}
@@ -181,12 +308,12 @@ export function ProfileForm({
           {error && <div className={s.errorBanner} role="alert">{error}</div>}
 
           <fieldset className={s.fieldset}>
-            <legend>Personal information</legend>
-            <p className={s.sectionHint}>All fields are required.</p>
+            <legend>{tr('Personal information')}</legend>
+            <p className={s.sectionHint}>{tr('All fields are required.')}</p>
 
             <div className={s.grid}>
               <div className={s.field}>
-                <label htmlFor="preferredName">Preferred name</label>
+                <label htmlFor="preferredName">{tr('Preferred name')}</label>
                 <input
                   id="preferredName"
                   name="preferredName"
@@ -207,7 +334,7 @@ export function ProfileForm({
               </div>
 
               <div className={s.field}>
-                <label htmlFor="legalName">Legal name</label>
+                <label htmlFor="legalName">{tr('Legal name')}</label>
                 <input
                   id="legalName"
                   name="legalName"
@@ -228,7 +355,7 @@ export function ProfileForm({
               </div>
 
               <div className={s.field}>
-                <label htmlFor="dateOfBirth">Date of birth</label>
+                <label htmlFor="dateOfBirth">{tr('Date of birth')}</label>
                 <input
                   id="dateOfBirth"
                   name="dateOfBirth"
@@ -249,7 +376,7 @@ export function ProfileForm({
               </div>
 
               <div className={s.field}>
-                <label htmlFor="phoneNumber">Phone number</label>
+                <label htmlFor="phoneNumber">{tr('Phone number')}</label>
                 <input
                   id="phoneNumber"
                   name="phoneNumber"
@@ -274,10 +401,10 @@ export function ProfileForm({
           </fieldset>
 
           <fieldset className={s.fieldset}>
-            <legend>Address information</legend>
+            <legend>{tr('Address information')}</legend>
             <div className={s.addressGrid}>
               <div className={s.field}>
-                <label htmlFor="residentialAddress">Residential address</label>
+                <label htmlFor="residentialAddress">{tr('Residential address')}</label>
                 <textarea
                   id="residentialAddress"
                   name="residentialAddress"
@@ -308,13 +435,13 @@ export function ProfileForm({
                   onChange={(event) => setSameAsResidential(event.target.checked)}
                 />
                 <span>
-                  <strong>Mailing address is the same</strong>
-                  <small>Use your residential address for correspondence.</small>
+                  <strong>{tr('Mailing address is the same')}</strong>
+                  <small>{tr('Use your residential address for correspondence.')}</small>
                 </span>
               </label>
 
               <div className={s.field}>
-                <label htmlFor="mailingAddress">Mailing address</label>
+                <label htmlFor="mailingAddress">{tr('Mailing address')}</label>
                 <textarea
                   id="mailingAddress"
                   name="mailingAddress"
@@ -343,7 +470,7 @@ export function ProfileForm({
           </fieldset>
 
           <div className={s.actions}>
-            <p>Your details are saved to your profile.</p>
+            <p>{tr('Your details are saved to your profile.')}</p>
             <button className={s.submit} type="submit" disabled={busy || !canSubmit}>
               {busy ? 'Saving…' : initialComplete ? 'Save and return to dashboard' : 'Continue to dashboard'}
             </button>

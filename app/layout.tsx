@@ -5,6 +5,9 @@ import { ShellProvider } from '@/components/shell/ShellContext';
 import { BRAND } from '@/lib/brand';
 import { THEME_INIT_SCRIPT } from '@/lib/theme';
 import { ConfigProvider } from '@/components/config/ConfigProvider';
+import { I18nProvider } from '@/components/i18n/I18nProvider';
+import { catalogFor } from '@/lib/i18n/catalogs';
+import { getLocale } from '@/lib/i18n/server';
 import { readConfig } from '@/lib/config/store';
 import { scopeConfig } from '@/lib/config/scope';
 import { getSession } from '@/lib/auth/session';
@@ -43,18 +46,23 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const publicUser = user && !user.disabled ? toPublicUser(user) : null;
   const config = scopeConfig(await readConfig(), publicUser);
 
+  // Resolved here so the very first paint is already in the reader's language.
+  const locale = await getLocale();
+
   return (
-    <html lang="en" className={inter.variable} suppressHydrationWarning>
+    <html lang={locale} className={inter.variable} suppressHydrationWarning>
       <head>
         {/* Paints the stored theme before first paint, so there is no flash. */}
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
       </head>
       <body>
-        <ConfigProvider initial={config} user={publicUser}>
-          <ShellProvider>
-            <AppFrame>{children}</AppFrame>
-          </ShellProvider>
-        </ConfigProvider>
+        <I18nProvider locale={locale} catalog={catalogFor(locale)}>
+          <ConfigProvider initial={config} user={publicUser}>
+            <ShellProvider>
+              <AppFrame>{children}</AppFrame>
+            </ShellProvider>
+          </ConfigProvider>
+        </I18nProvider>
       </body>
     </html>
   );

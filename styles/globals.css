@@ -46,3 +46,23 @@ button { font: inherit; color: inherit; }
 *::-webkit-scrollbar { width: 8px; height: 8px; }
 *::-webkit-scrollbar-thumb { background: var(--ds-neutral-magic-400-alpha-4); border-radius: 9999px; }
 *::-webkit-scrollbar-track { background: transparent; }
+
+[data-theme='dark'] .logo-img {
+  filter: invert(1);
+}
+
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme='light']) .logo-img {
+    filter: invert(1);
+  }
+}
+
+/* Privacy mode: the eye toggle in the top bar sets body[data-private='true'].
+   `.amount` marks money values rendered as plain text (the money() formatter),
+   complementing the Money component's own blur so every figure hides at once. */
+body[data-private='true'] .amount {
+  filter: blur(7px);
+  user-select: none;
+  pointer-events: none;
+  transition: filter 0.12s ease;
+}

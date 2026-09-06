@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { requireUser, isDenied } from '@/lib/auth/guard';
 import { readConfig, updateConfig } from '@/lib/config/store';
 import { COLLECTIONS, type CollectionName } from '@/lib/config/types';
+import { getTranslator } from '@/lib/i18n/server';
 
 export const dynamic = 'force-dynamic';
 
@@ -34,6 +35,7 @@ export async function GET(_: Request, ctx: { params: Promise<{ collection: strin
 
 /** Append one item. The id is generated here so clients cannot collide. */
 export async function POST(request: Request, ctx: { params: Promise<{ collection: string }> }) {
+  const t = await getTranslator();
   const auth = await requireUser('admin');
   if (isDenied(auth)) return auth.response;
 
@@ -45,7 +47,7 @@ export async function POST(request: Request, ctx: { params: Promise<{ collection
   try {
     body = await request.json();
   } catch {
-    return NextResponse.json({ error: 'Body must be JSON' }, { status: 400 });
+    return NextResponse.json({ error: t('Body must be JSON.') }, { status: 400 });
   }
 
   const id = `${key.slice(0, 3)}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`;

@@ -4,6 +4,7 @@ import { Page, useTabs } from '@/components/ds/Page';
 import { DataTable, Status, NameCell, type Column } from '@/components/ds/DataTable';
 import { TEAM, type TeamMember } from '@/lib/mock/team';
 import t from '@/components/dashboard/TransactionsTable.module.css';
+import { useT } from '@/components/i18n/I18nProvider';
 
 const columns: Column<TeamMember>[] = [
   {
@@ -25,14 +26,15 @@ const columns: Column<TeamMember>[] = [
 ];
 
 export default function TeamPage() {
-  const tabs = useTabs([{ label: 'All', count: TEAM.length }, { label: 'Needs review' }]);
+  const translate = useT();
+  const tabs = useTabs([{ label: translate('All'), count: TEAM.length }, { label: translate('Needs review') }]);
 
   return (
     <Page
-      title="Team"
+      title={translate('Team')}
       actions={[
-        { label: 'Roles', icon: 'shield-check', href: '/settings/roles' },
-        { label: 'Invite', icon: 'user-plus', primary: true, href: '/settings/users/invite/advisors/details' },
+        { label: translate('Roles'), icon: 'shield-check', href: '/settings/roles' },
+        { label: translate('Invite'), icon: 'user-plus', primary: true, href: '/settings/users/invite/advisors/details' },
       ]}
     >
       {tabs.node}

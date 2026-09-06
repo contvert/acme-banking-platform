@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { requireUser, isDenied } from '@/lib/auth/guard';
 import { readConfig, updateConfig, resetConfig } from '@/lib/config/store';
 import type { AppConfig } from '@/lib/config/types';
+import { getTranslator } from '@/lib/i18n/server';
 
 export const dynamic = 'force-dynamic';
 
@@ -14,6 +15,7 @@ export async function GET() {
 
 /** Patch the top-level blocks: company, currency, sections. */
 export async function PATCH(request: Request) {
+  const t = await getTranslator();
   const auth = await requireUser('admin');
   if (isDenied(auth)) return auth.response;
 
@@ -21,7 +23,7 @@ export async function PATCH(request: Request) {
   try {
     body = await request.json();
   } catch {
-    return NextResponse.json({ error: 'Body must be JSON' }, { status: 400 });
+    return NextResponse.json({ error: t('Body must be JSON.') }, { status: 400 });
   }
 
   const next = await updateConfig((config) => ({

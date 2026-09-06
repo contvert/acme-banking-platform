@@ -7,6 +7,7 @@ import { Page, Tabs } from '@/components/ds/Page';
 import { Card } from '@/components/ds/Card';
 import { APPROVAL_RULES } from '@/lib/mock/settingsData';
 import p from '@/components/ds/Page.module.css';
+import { useT } from '@/components/i18n/I18nProvider';
 
 const RULES = [
   { slug: 'paymentApprovals', label: 'Per-payment' },
@@ -15,6 +16,7 @@ const RULES = [
 ];
 
 export default function ApprovalRulePage({ params }: { params: Promise<{ rule: string }> }) {
+  const t = useT();
   const { rule } = use(params);
   const router = useRouter();
   const current = RULES.find((r) => r.slug === rule);
@@ -23,7 +25,7 @@ export default function ApprovalRulePage({ params }: { params: Promise<{ rule: s
   const detail = APPROVAL_RULES.find((r) => r.scope === current.label);
 
   return (
-    <Page title="Approval Rules" actions={[{ label: 'Add rule', icon: 'plus', primary: true }]}>
+    <Page title={t('Approval Rules')} actions={[{ label: t('Add rule'), icon: 'plus', primary: true }]}>
       <Tabs
         tabs={RULES.map((r) => ({ label: r.label }))}
         active={current.label}
@@ -32,9 +34,7 @@ export default function ApprovalRulePage({ params }: { params: Promise<{ rule: s
           if (next) router.push(`/settings/approvals/${next.slug}`);
         }}
       />
-      <p style={{ fontSize: 15, color: 'var(--ds-text-secondary)', marginTop: 0 }}>
-        Separation of duties prevents a payment requester from approving their own payment.
-      </p>
+      <p style={{ fontSize: 15, color: 'var(--ds-text-secondary)', marginTop: 0 }}>{t('Separation of duties prevents a payment requester from approving their own payment.')}</p>
       <Card style={{ maxWidth: 640 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
           <div style={{ flex: 1 }}>
@@ -48,7 +48,7 @@ export default function ApprovalRulePage({ params }: { params: Promise<{ rule: s
               Require approval from {detail?.approver ?? 'any admin'}
             </div>
           </div>
-          <button className={p.btn} type="button">Edit</button>
+          <button className={p.btn} type="button">{t('Edit')}</button>
         </div>
       </Card>
     </Page>

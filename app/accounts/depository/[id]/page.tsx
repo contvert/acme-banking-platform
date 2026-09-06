@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation';
 import { Page, StatTiles, SectionTitle } from '@/components/ds/Page';
 import { useConfig } from '@/components/config/ConfigProvider';
 import { TransactionsTable } from '@/components/dashboard/TransactionsTable';
+import { useT } from '@/components/i18n/I18nProvider';
 
 /**
  * Accounts are addressed by their config id. Legacy `party-bankidN` links
@@ -25,6 +26,7 @@ function resolve(id: string, accounts: { id: string }[]) {
 }
 
 export default function DepositoryAccountPage({ params }: { params: Promise<{ id: string }> }) {
+  const tr = useT();
   const { id } = use(params);
   const { config, money } = useConfig();
 
@@ -36,27 +38,27 @@ export default function DepositoryAccountPage({ params }: { params: Promise<{ id
     <Page
       title={account.name}
       actions={[
-        { label: 'Relevés', icon: 'file-lines', href: '/settings/documents/statements' },
-        { label: 'Virement', icon: 'arrow-right-arrow-left', primary: true, href: '/send-money/transfer' },
+        { label: tr('Statements'), icon: 'file-lines', href: '/settings/documents/statements' },
+        { label: tr('Wire transfer'), icon: 'arrow-right-arrow-left', primary: true, href: '/send-money/transfer' },
       ]}
     >
       <StatTiles
         tiles={[
-          { label: 'Solde', value: money(account.balance, account.currency) },
-          { label: 'Disponible', value: money(account.available, account.currency) },
+          { label: tr('Balance'), value: money(account.balance, account.currency) },
+          { label: tr('Available'), value: money(account.available, account.currency) },
           {
-            label: 'En attente',
+            label: tr('Pending'),
             value: money(account.pending, account.currency),
-            meta: account.pending ? 'Autorisé, pas encore débité' : undefined,
+            meta: account.pending ? tr('Authorised, not yet debited') : undefined,
           },
           {
-            label: 'Compte',
+            label: tr('Account'),
             value: account.last4 ? `••${account.last4}` : '—',
             meta: `${account.kind} · ${account.status}`,
           },
         ]}
       />
-      <SectionTitle>Transactions</SectionTitle>
+      <SectionTitle>{tr('Transactions')}</SectionTitle>
       <TransactionsTable showViews={false} showToolbar />
     </Page>
   );

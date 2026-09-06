@@ -1,7 +1,7 @@
 {
-  "name": "acme-banking",
+  "name": "Mercury-banking",
   "version": "1.0.0",
-  "description": "Acme business banking portal",
+  "description": "Mercury business banking portal",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -9,13 +9,9 @@
     "build": "next build",
     "start": "next start -p 3210",
     "typecheck": "tsc --noEmit",
-    "audit:mobile": "node scraper/audit-mobile.mjs",
-    "audit:theme": "node scraper/audit-dark.mjs",
-    "smoke": "node scraper/smoke.mjs",
-    "test:ui": "node scraper/test-auth.mjs && node scraper/test-parallel-sessions.mjs && node scraper/test-movemoney.mjs && node scraper/test-cards.mjs && node scraper/test-rib.mjs && node scraper/test-drawer.mjs && node scraper/test-toggle.mjs && node scraper/test-header-actions.mjs && node scraper/test-admin.mjs",
-    "test:sessions": "node scraper/test-parallel-sessions.mjs",
-    "check": "python scraper/check-links.py && python scraper/check-actions.py",
-    "admin:reset": "node scripts/reset-admin.mjs"
+    "check": "python scripts/check-i18n.py && python scripts/i18n-french.py",
+    "admin:reset": "node scripts/reset-admin.mjs",
+    "provisioning:dispatch": "node scripts/dispatch-provisioning.mjs"
   },
   "keywords": [],
   "author": "",

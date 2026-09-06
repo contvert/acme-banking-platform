@@ -6,12 +6,14 @@ import { Card } from '@/components/ds/Card';
 import { Money } from '@/components/ds/Money';
 import s from '@/components/dashboard/Dashboard.module.css';
 import t from '@/components/dashboard/TransactionsTable.module.css';
+import { useT } from '@/components/i18n/I18nProvider';
 
 const KIND_LABEL: Record<string, string> = {
   checking: 'Checking', savings: 'Savings', credit: 'Credit', treasury: 'Treasury', other: '',
 };
 
 export default function AccountsPage() {
+  const translate = useT();
   const ACCOUNTS = useAccounts();
   const total = ACCOUNTS.filter((a) => a.kind !== 'credit')
     .reduce((sum, a) => sum + (a.balance ?? 0), 0);
@@ -20,9 +22,9 @@ export default function AccountsPage() {
     <>
       <TopBar />
       <main className={s.page}>
-        <h1 className={s.greeting}>Accounts</h1>
+        <h1 className={s.greeting}>{translate('Accounts')}</h1>
         <Card style={{ marginBottom: 24, maxWidth: 380 }}>
-          <div className={s.balanceLabel}>Total balance</div>
+          <div className={s.balanceLabel}>{translate('Total balance')}</div>
           <div className={s.balanceValue}><Money value={total} /></div>
         </Card>
 
@@ -31,10 +33,10 @@ export default function AccountsPage() {
             <table className={t.table}>
               <thead>
                 <tr>
-                  <th>Account</th>
-                  <th>Type</th>
-                  <th className={t.numeric}>Balance</th>
-                  <th>Auto transfer rules</th>
+                  <th>{translate('Account')}</th>
+                  <th>{translate('Type')}</th>
+                  <th className={t.numeric}>{translate('Balance')}</th>
+                  <th>{translate('Auto transfer rules')}</th>
                 </tr>
               </thead>
               <tbody>

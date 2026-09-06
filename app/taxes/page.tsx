@@ -6,6 +6,7 @@ import { Icon } from '@/components/ds/Icon';
 import { TAX_ALERTS, TAX_FILERS, TAX_YEAR, IRS_DEADLINE, type TaxFiler } from '@/lib/mock/taxes';
 import t from '@/components/dashboard/TransactionsTable.module.css';
 import p from '@/components/ds/Page.module.css';
+import { useT } from '@/components/i18n/I18nProvider';
 
 const columns: Column<TaxFiler>[] = [
   { key: 'name', header: 'Name', sortValue: (r) => r.name, cell: (r) => <NameCell name={r.name} /> },
@@ -15,27 +16,28 @@ const columns: Column<TaxFiler>[] = [
 ];
 
 export default function TaxesPage() {
-  const tabs = useTabs([{ label: '1099 Filing' }, { label: 'Tax Documents' }]);
+  const translate = useT();
+  const tabs = useTabs([{ label: translate('1099 Filing') }, { label: translate('Tax Documents') }]);
 
   return (
     <Page
-      title="Taxes"
+      title={translate('Taxes')}
       pill="Pro"
       actions={[
         { label: `Tax Year: ${TAX_YEAR}`, icon: 'calendar' },
-        { label: 'Add recipient', icon: 'user-plus', primary: true, href: '/payments/recipients/create/request' },
+        { label: translate('Add recipient'), icon: 'user-plus', primary: true, href: '/payments/recipients/create/request' },
       ]}
     >
       <div className={p.note} style={{ background: 'var(--ds-background-warning)' }}>
         <Icon name="clock" size={15} />
-        <span>IRS deadline <strong>{IRS_DEADLINE}</strong></span>
+        <span>{translate('IRS deadline')}<strong>{IRS_DEADLINE}</strong></span>
       </div>
 
       {tabs.node}
 
       {tabs.active === '1099 Filing' ? (
         <>
-          <SectionTitle>Filing updates and tasks</SectionTitle>
+          <SectionTitle>{translate('Filing updates and tasks')}</SectionTitle>
           <div className={t.wrap} style={{ marginBottom: 24 }}>
             {TAX_ALERTS.map((a) => (
               <div
@@ -62,7 +64,7 @@ export default function TaxesPage() {
           />
         </>
       ) : (
-        <Empty>Tax documents appear here once filings are complete.</Empty>
+        <Empty>{translate('Tax documents appear here once filings are complete.')}</Empty>
       )}
     </Page>
   );

@@ -11,6 +11,7 @@ import { RECEIPT_POLICY } from '@/lib/mock/cardFlow';
 import p from '@/components/ds/Page.module.css';
 import t from '@/components/dashboard/TransactionsTable.module.css';
 import s from './Cards.module.css';
+import { useT } from '@/components/i18n/I18nProvider';
 
 /** Budget chips, or an em dash when a card is not tied to one. */
 function Budgets({ card }: { card: Card }) {
@@ -27,13 +28,14 @@ function Budgets({ card }: { card: Card }) {
 }
 
 export default function CardsPage() {
+  const translate = useT();
   const CARDS = useCards();
-  const tabs = useTabs([{ label: 'Manage' }, { label: 'Subscriptions' }]);
+  const tabs = useTabs([{ label: translate('Manage') }, { label: translate('Subscriptions') }]);
   const [receiptPolicy, setReceiptPolicy] = useState(false);
   const [dismissed, setDismissed] = useState(false);
 
   return (
-    <Page title="Cards" actions={[{ label: 'Create card', icon: 'plus', primary: true, href: '/issue-card' }]}>
+    <Page title={translate('Cards')} actions={[{ label: translate('Create card'), icon: 'plus', primary: true, href: '/issue-card' }]}>
       {!dismissed && (
         <section className={s.callout}>
           <div className={s.calloutBody}>
@@ -54,7 +56,7 @@ export default function CardsPage() {
             <p className={s.calloutText}>
               Recommended because the IRS requires receipts for transactions $75 and over to be
               eligible for tax deductions. Change this setting at any time from your{' '}
-              <Link href={RECEIPT_POLICY.policiesHref} className={s.link}>Policies page</Link>.
+              <Link href={RECEIPT_POLICY.policiesHref} className={s.link}>{translate('Policies page')}</Link>.
             </p>
           </div>
 
@@ -62,19 +64,18 @@ export default function CardsPage() {
           <div className={s.calloutArt} aria-hidden>
             <div className={s.artPanel}>
               <div className={s.artRow}>
-                <span className={s.artLabel}>Attachments</span>
+                <span className={s.artLabel}>{translate('Attachments')}</span>
                 <span className={s.artFlag}>
-                  <Icon name="triangle-exclamation" size={10} /> Receipt required
-                </span>
+                  <Icon name="triangle-exclamation" size={10} />{translate('Receipt required')}</span>
               </div>
               <div className={s.artDrop}>
                 <Icon name="file-arrow-up" size={14} />
-                <span>Drag and drop here or click to upload</span>
+                <span>{translate('Drag and drop here or click to upload')}</span>
               </div>
             </div>
           </div>
 
-          <button className={s.dismiss} type="button" aria-label="Dismiss" onClick={() => setDismissed(true)}>
+          <button className={s.dismiss} type="button" aria-label={translate('Dismiss')} onClick={() => setDismissed(true)}>
             <Icon name="xmark" size={14} />
           </button>
         </section>
@@ -86,9 +87,8 @@ export default function CardsPage() {
         <>
           <div className={s.filterBar}>
             <button className={p.btn} type="button">
-              <Icon name="filter" size={13} /> Add filter
-            </button>
-            <span className={t.muted}>No filters applied</span>
+              <Icon name="filter" size={13} />{translate('Add filter')}</button>
+            <span className={t.muted}>{translate('No filters applied')}</span>
           </div>
 
           <div className={t.wrap}>
@@ -96,12 +96,12 @@ export default function CardsPage() {
               <table className={t.table}>
                 <thead>
                   <tr>
-                    <th>Cardholder</th>
-                    <th>Card</th>
-                    <th>Budgets</th>
-                    <th className={t.numeric}>Spent this month</th>
-                    <th>Type</th>
-                    <th>Account</th>
+                    <th>{translate('Cardholder')}</th>
+                    <th>{translate('Card')}</th>
+                    <th>{translate('Budgets')}</th>
+                    <th className={t.numeric}>{translate('Spent this month')}</th>
+                    <th>{translate('Type')}</th>
+                    <th>{translate('Account')}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -114,7 +114,7 @@ export default function CardsPage() {
                         {startsGroup && c.holder && (
                           <span className={s.holder}>
                             {c.holder}
-                            {c.holder === 'Jane Black' && <span className={s.you}>You</span>}
+                            {c.holder === 'Jane Black' && <span className={s.you}>{translate('You')}</span>}
                           </span>
                         )}
                       </td>
@@ -144,7 +144,7 @@ export default function CardsPage() {
         </>
       ) : (
         <div className={t.wrap}>
-          <div className={t.empty}>No card subscriptions detected yet.</div>
+          <div className={t.empty}>{translate('No card subscriptions detected yet.')}</div>
         </div>
       )}
     </Page>

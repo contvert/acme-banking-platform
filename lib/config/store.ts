@@ -33,6 +33,13 @@ export async function readConfig(): Promise<AppConfig> {
       notifications: parsed.notifications ?? [],
       chat: parsed.chat ?? [],
       bankDetails: parsed.bankDetails ?? DEFAULT_CONFIG.bankDetails,
+      // RIBs saved before OTP was introduced are deliberately put back into
+      // verification: they must not become transferable without confirmation.
+      recipients: (parsed.recipients ?? []).map((recipient) => ({
+        ...recipient,
+        verificationStatus: recipient.verificationStatus ?? 'pending',
+        verifiedAt: recipient.verifiedAt ?? null,
+      })),
     };
   } catch (err) {
     if ((err as NodeJS.ErrnoException).code === 'ENOENT') {
